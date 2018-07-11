@@ -1,0 +1,7 @@
+{
+  "name": "real-time-racer",
+  "version": "1.0.0",
+  "description": "Race in real-time",
+  "main": "server.js",
+  "license": "MIT"
+}
