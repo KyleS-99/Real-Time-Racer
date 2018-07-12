@@ -1,6 +1,6 @@
 module.exports = {
     signUp: async (req, res, next) => {
-        console.log('Contentt of req.value.body', req.value.body);
+        console.log('Content of req.value.body', req.value.body);
         console.log('UsersController.signUp() called!')
     },
     signIn: async (req, res, next) => {

@@ -1,9 +1,9 @@
 const router = require('express-promise-router')();
 
-const { validateBody, schemas } = require('../helpers/routeHelpers');
+const { registerBody } = require('../helpers/routeHelpers');
 const { signIn, signUp, secret } = require('../controllers/users');
 
-router.post('/signup', validateBody(schemas.authSchema), signUp);
+router.post('/signup', registerBody(), signUp);
 
 router.post('/signin', signIn);
 
