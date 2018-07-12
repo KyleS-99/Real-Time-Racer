@@ -1,15 +1,27 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
+
+// db cred
+const { mongoURI } = require('./config/keys');
+
+const users = require('./routes/users');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Connect to database
+mongoose
+    .connect(mongoURI, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB Connected!'))
+    .catch(e => console.log(e));
+
 // Routes
-app.use('/users', require('./routes/users'));
+app.use('/users', users);
 
 // Start the server
 const port = process.env.PORT || 5000;
