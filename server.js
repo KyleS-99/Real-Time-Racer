@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes
-app.use('/users', require('./routes/users'));
+
 
 // Start the server
 const port = process.env.PORT || 5000;
