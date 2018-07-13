@@ -4,12 +4,12 @@ const { secret } = require('../config/keys');
 
 const signToken = user => {
     // Create token
-    return JWT.sign({
+    return `bearer ${JWT.sign({
         iss: 'Real Time Racer',
-        sub: user.id,
+        id: user.id,
         iat: new Date().getTime(), // current time
         exp: new Date().setDate(new Date().getDate() + 1) // current time but 1 day ahead
-    }, secret);
+    }, secret)}`;
 };
 
 module.exports = {
@@ -39,6 +39,6 @@ module.exports = {
 
     },
     secret: async (req, res, next) => {
-        
+        console.log('secret route called', req.user);
     }
 };
