@@ -1,6 +1,5 @@
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
-const LocalStrategy = require('passport-local').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 
 const { secret } = require('./config/keys');
@@ -26,23 +25,5 @@ passport.use(
         } catch (error) {
             done(error, false);
         }
-    })
-);
-
-// Local Strategy
-passport.use(
-    new LocalStrategy({
-        usernameField: 'email'
-    }, async (email, password, done) => {
-        // Find the user given the email
-        const user = await User.findOne({ email });
-
-        // Not found
-        if (!user) {
-            return done(null, false);
-        }
-
-        // Check if password is correct
-        
     })
 );

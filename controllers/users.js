@@ -5,7 +5,6 @@ const { secret } = require('../config/keys');
 const signToken = user => {
     // Create token
     return `bearer ${JWT.sign({
-        iss: 'Real Time Racer',
         id: user.id,
         iat: new Date().getTime(), // current time
         exp: new Date().setDate(new Date().getDate() + 1) // current time but 1 day ahead
@@ -13,7 +12,7 @@ const signToken = user => {
 };
 
 module.exports = {
-    signUp: async (req, res, next) => {
+    signUp: async (req, res) => {
         const { first, last, email, password, password2 } = req.value.body;
 
         // Check if user already exists with entered email
@@ -21,7 +20,7 @@ module.exports = {
 
         // Respond with status 403 with error message if user found with that email
         if (foundUser) {
-            return res.status(403).json({ error: 'Email is already in use' });
+            return res.status(403).json({ emailinuse: 'Email is already in use' });
         }
 
         // Create a new user
@@ -34,11 +33,31 @@ module.exports = {
         // Respond with token
         res.json({ token });
     },
-    signIn: async (req, res, next) => {
-        // Generate Token
+    signIn: async (req, res) => {
+        const { email, password } = req.body;
 
+        // Find the user given the email
+        const user = await User.findOne({ email });
+
+        // Not found
+        if (!user) {
+            return res.status(404).json({ emailnotfound: 'No user found' });
+        }
+
+        const isMatch = await user.isValidPassword(password);
+
+        // Check if password does not match
+        if (!isMatch) {
+            return res.status(400).json({ password: 'Password incorrect' });
+        }
+
+        // Generate token
+        const token = signToken(user);
+
+        // Send back user and token
+        res.json({ user, token });
     },
-    secret: async (req, res, next) => {
+    secret: async (req, res) => {
         console.log('secret route called', req.user);
     }
 };
