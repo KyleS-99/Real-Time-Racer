@@ -30,18 +30,19 @@ passport.use(
 );
 
 // Local Strategy
-// passport.use(
-//     new LocalStrategy({
-//         usernameField: 'email'
-//     }, async (email, password, done) => {
-//         // Find the user given the email
-//         const user = await User.findOne({ email });
+passport.use(
+    new LocalStrategy({
+        usernameField: 'email'
+    }, async (email, password, done) => {
+        // Find the user given the email
+        const user = await User.findOne({ email });
 
-//         // Not found
-//         if (!user) {
-//             return done(null, false);
-//         }
+        // Not found
+        if (!user) {
+            return done(null, false);
+        }
 
-//         // Check if password is correct
-//     })
-// );
+        // Check if password is correct
+        
+    })
+);
