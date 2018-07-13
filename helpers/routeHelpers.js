@@ -71,5 +71,40 @@ module.exports = {
             // call next because it passed our middleware
             next();
         }
+    },
+    loginBody: () => {
+        return (req, res, next) => {
+            let errors = {};
+            let { email, password } = req.body;
+
+            email = !isEmpty(email) ? email : '';
+            password = !isEmpty(password) ? password : '';
+    
+            // Email field validation
+            if (!Validator.isEmail(email)) {
+                errors.email = 'Email is invalid';
+            }
+            
+            if (Validator.isEmpty(email)) {
+                errors.email = 'Email field is required';
+            }
+            
+            // Password field validation
+            if (Validator.isEmpty(password)) {
+                errors.password = 'Password field is required';
+            }
+
+            // If there's errors return 400 and send back errors
+            if (!isEmpty(errors)) {
+                return res.status(400).json(errors);
+            }
+
+            // create req.value and set it equal to an empty object
+            if (!req.value) { req.value = {}; }
+            req.value['body'] = req.body;
+
+            // call next because it passed our middleware
+            next();
+        }
     }
 };
