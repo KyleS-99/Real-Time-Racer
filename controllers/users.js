@@ -55,16 +55,18 @@ module.exports = {
         const token = signToken(user);
 
         // Send back user and token
-        res.json({ user: user.local, token });
+        res.json({ method: user.method, user: user.local, token });
     },
-    googleOAuth: async (req, res) => {
+    generateOAuthToken:  async (req, res) => {
         // Set user and generate token
         const { user } = req;
         const token = signToken(user);
 
-        res.json({ user: user.google, token });
+        // Send user data and token back to user
+        res.json({ method: user.method, user: user[user.method], token });
     },
     secret: async (req, res) => {
+        res.json({ message: "You're an authenticated user"});
         console.log('secret route called', req.user);
     }
 };

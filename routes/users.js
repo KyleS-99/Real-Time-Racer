@@ -3,15 +3,18 @@ const passport = require('passport');
 require('../passport');
 
 const { registerBody, loginBody } = require('../helpers/routeHelpers');
-const { signIn, signUp, googleOAuth, secret } = require('../controllers/users');
+const { signIn, signUp, generateOAuthToken, secret } = require('../controllers/users');
 const passportJWT = passport.authenticate('jwt', { session: false });
-const passportGoogle =passport.authenticate('googleToken', { session: false });
+const passportGoogle = passport.authenticate('googleToken', { session: false });
+const passportFacebook = passport.authenticate('facebookToken', { session: false });
 
 router.post('/signup', registerBody(), signUp);
 
 router.post('/login', loginBody(), signIn);
 
-router.post('/oauth/google', passportGoogle, googleOAuth);
+router.post('/oauth/google', passportGoogle, generateOAuthToken);
+
+router.post('/oauth/facebook', passportFacebook, generateOAuthToken);
 
 router.get('/secret', passportJWT, secret);
 
