@@ -16,7 +16,7 @@ module.exports = {
         const { first, last, email, password, password2 } = req.value.body;
 
         // Check if user already exists with entered email
-        const foundUser = await User.findOne({ email });
+        const foundUser = await User.findOne({ 'local.email': email });
 
         // Respond with status 403 with error message if user found with that email
         if (foundUser) {
@@ -24,7 +24,7 @@ module.exports = {
         }
 
         // Create a new user
-        const newUser = new User({ first, last, email, password });
+        const newUser = new User({ method: 'local', local: { first, last, email, password } });
         await newUser.save();
 
         // Generate the token
@@ -37,7 +37,7 @@ module.exports = {
         const { email, password } = req.body;
 
         // Find the user given the email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ 'local.email': email });
 
         // Not found
         if (!user) {
@@ -55,7 +55,14 @@ module.exports = {
         const token = signToken(user);
 
         // Send back user and token
-        res.json({ user, token });
+        res.json({ user: user.local, token });
+    },
+    googleOAuth: async (req, res) => {
+        // Set user and generate token
+        const { user } = req;
+        const token = signToken(user);
+
+        res.json({ user: user.google, token });
     },
     secret: async (req, res) => {
         console.log('secret route called', req.user);

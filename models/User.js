@@ -4,50 +4,104 @@ const Schema = mongoose.Schema;
 
 // Create a schema
 const userSchema = new Schema({
-    first: {
+    method: {
         type: String,
+        enum: ["local", "google", "facebook"],
         required: true
     },
-    last: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: Date,
-        default: Date.now()
-    },
-    img: String,
-    races: [{
-        title: String,
-        wpm: Number,
-        opponent: {
-            first: String,
-            last: String,
+    local: {
+        first: {
+            type: String
+        },
+        last: {
+            type: String
+        },
+        email: {
+            type: String,
+            lowercase: true
+        },
+        password: {
+            type: String
+        },
+        img: String,
+        races: [{
+            title: String,
             wpm: Number,
-            img: String
-        }
-    }]
+            opponent: {
+                first: String,
+                last: String,
+                wpm: Number,
+                img: String
+            }
+        }]
+    },
+    google: {
+        id: {
+            type: String
+        },
+        first: {
+            type: String
+        },
+        last: {
+            type: String
+        },
+        email: {
+            type: String,
+            lowercase: true
+        },
+        img: String,
+        races: [{
+            title: String,
+            wpm: Number,
+            opponent: {
+                first: String,
+                last: String,
+                wpm: Number,
+                img: String
+            }
+        }]
+    },
+    facebook: {
+        id: {
+            type: String
+        },
+        first: {
+            type: String
+        },
+        last: {
+            type: String
+        },
+        email: {
+            type: String,
+            lowercase: true
+        },
+        img: String,
+        races: [{
+            title: String,
+            wpm: Number,
+            opponent: {
+                first: String,
+                last: String,
+                wpm: Number,
+                img: String
+            }
+        }]
+    }
 });
 
 userSchema.pre('save', async function(next) {
     try {
+        if (this.method !== 'local') {
+            next();
+        }
+
         // Generate salt
         const salt = await bcrypt.genSalt(10);
         // Generate hashed password (salt + hash)
-        const hashedPassword = await bcrypt.hash(this.password, salt);
+        const hashedPassword = await bcrypt.hash(this.local.password, salt);
 
         // set plain-text password to hashed password
-        this.password = hashedPassword;
+        this.local.password = hashedPassword;
         next();
     } catch (error) {
         next(error);
@@ -56,7 +110,7 @@ userSchema.pre('save', async function(next) {
 
 userSchema.methods.isValidPassword = async function(password) {
     try {
-        return await bcrypt.compare(password, this.password);
+        return await bcrypt.compare(password, this.local.password);
     } catch (error) {
         throw new Error(error);
     }
