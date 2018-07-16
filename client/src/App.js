@@ -6,7 +6,7 @@ import Loadable from 'react-loadable';
 // Redux store
 import store from './store';
 
-import Navbar from './components/Navbar/Navbar';
+import Header from './components/Header/Header';
 import Landing from './components/Landing/Landing';
 
 import './App.css';
@@ -18,7 +18,7 @@ class App extends Component {
 			<Provider store={store}>
 				<BrowserRouter>
 					<div>
-						<Navbar />
+						<Route path="/" render={(props) => (props.location.pathname !== '/') && <Header />} />
 						<Switch>
 							<Route exact path="/" component={Landing} />
 						</Switch>
