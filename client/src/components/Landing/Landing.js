@@ -7,7 +7,7 @@ import Login from '../Auth/Login';
 
 const LandingContainer = styled.div`
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 40% 60%;
     height: 100vh;
 `;
 

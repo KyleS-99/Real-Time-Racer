@@ -20,7 +20,7 @@ module.exports = {
 
         // Respond with status 403 with error message if user found with that email
         if (foundUser) {
-            return res.status(403).json({ emailinuse: 'Email is already in use' });
+            return res.status(403).json({ email: 'Email is already in use' });
         }
 
         // Create a new user
@@ -31,7 +31,7 @@ module.exports = {
         const token = signToken(newUser);
 
         // Respond with token
-        res.json({ token });
+        res.json({ method: newUser.method, user: newUser.local, token });
     },
     signIn: async (req, res) => {
         const { email, password } = req.body;
@@ -41,14 +41,14 @@ module.exports = {
 
         // Not found
         if (!user) {
-            return res.status(404).json({ emailnotfound: 'No user found' });
+            return res.status(404).json({ loginEmail: 'No user found' });
         }
 
         const isMatch = await user.isValidPassword(password);
 
         // Check if password does not match
         if (!isMatch) {
-            return res.status(400).json({ password: 'Password incorrect' });
+            return res.status(400).json({ loginPassword: 'Password incorrect' });
         }
 
         // Generate token

@@ -34,29 +34,29 @@ module.exports = {
             
             // Email field validation            
             if (!Validator.isEmail(email)) {
-                errors.email = 'Email is invalid';
+                errors.signupEmail = 'Email is invalid';
             }
 
             if (Validator.isEmpty(email)) {
-                errors.email = 'Email field is required';
+                errors.signupEmail = 'Email field is required';
             }
 
             // Password field validation
             if (!Validator.isLength(password, { min: 6, max: 30 })) {
-                errors.password = 'Password must be between 6 and 30 characters';
+                errors.signupPassword = 'Password must be between 6 and 30 characters';
             }
 
             if (Validator.isEmpty(password)) {
-                errors.password = 'Password field is required';
+                errors.signupPassword = 'Password field is required';
             }
 
             // Password2 field validation
             if (Validator.isEmpty(password2)) {
-                errors.password2 = 'Confirm password field is required';
+                errors.signupPassword2 = 'Confirm password field is required';
             }
 
             if (!Validator.equals(password, password2)) {
-                errors.password2 = 'Passwords must match';
+                errors.signupPassword2 = 'Passwords must match';
             }
 
             // If there's errors send them back with a 400 status
@@ -82,16 +82,16 @@ module.exports = {
     
             // Email field validation
             if (!Validator.isEmail(email)) {
-                errors.email = 'Email is invalid';
+                errors.loginEmail = 'Email is invalid';
             }
             
             if (Validator.isEmpty(email)) {
-                errors.email = 'Email field is required';
+                errors.loginEmail = 'Email field is required';
             }
             
             // Password field validation
             if (Validator.isEmpty(password)) {
-                errors.password = 'Password field is required';
+                errors.loginPassword = 'Password field is required';
             }
 
             // If there's errors return 400 and send back errors

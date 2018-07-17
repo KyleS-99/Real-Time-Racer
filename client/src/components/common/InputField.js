@@ -10,7 +10,7 @@ const InputFieldContainer = styled.div`
 `;
 
 const Input = styled.input`
-    border: ${(props) => props.error !== undefined ? '1px solid red' : '1px solid #eee'}
+    border: ${(props) => props.error !== undefined ? '1px solid #ff0066' : '1px solid #eee'}
     outline: none;
     font-size: 1.25rem;
     padding: .375rem .75rem;
@@ -20,7 +20,7 @@ const Input = styled.input`
 
 const ErrorFeedback = styled.div`
     padding-top: 5px;
-    color: red;
+    color: #ff0066;
     font-size: 0.8rem;
     justify-self: start;
     position: relative;
