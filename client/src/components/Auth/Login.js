@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom'
+
+import { signupOrLogin } from '../../actions/authActions';
 
 import InputField from '../common/InputField';
 import Button from '../styled/Button';
@@ -15,8 +19,20 @@ class Login extends Component {
     }
     onSubmit = (e) => {
         e.preventDefault();
+        const { email, password } = this.state;
 
+        // Login credentials
+        const loginCredentials = {
+            email,
+            password
+        };
 
+        this.props.signupOrLogin(loginCredentials, 'login', this.props.history);
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.errors !== this.props.errors) {
+            this.setState({errors: this.props.errors});
+        }
     }
     render() {
         const { errors } = this.state;
@@ -27,7 +43,7 @@ class Login extends Component {
                     value={this.state.email}
                     name="email"
                     placeholder="Email" 
-                    error={errors.email}  
+                    error={errors.loginEmail}  
                 />
                 <InputField 
                     onChange={this.onChange} 
@@ -35,7 +51,7 @@ class Login extends Component {
                     name="password"
                     type="password"
                     placeholder="Password" 
-                    error={errors.password}  
+                    error={errors.loginPassword}  
                 />
                 <Button type="submit">Submit</Button>
             </form>
@@ -43,4 +59,15 @@ class Login extends Component {
     }
 }
 
-export default Login;
+Login.propTypes = {
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+    signupOrLogin: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, { signupOrLogin })(withRouter(Login));

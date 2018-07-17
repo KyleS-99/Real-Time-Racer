@@ -19,7 +19,12 @@ const Input = styled.input`
 `;
 
 const ErrorFeedback = styled.div`
-    padding: 0px;
+    padding-top: 5px;
+    color: red;
+    font-size: 0.8rem;
+    justify-self: start;
+    position: relative;
+    left: -10px;
 `;
 
 const InputField = ({ 
