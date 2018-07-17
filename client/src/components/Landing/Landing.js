@@ -157,7 +157,7 @@ class Landing extends Component {
                     <div style={{ background: 'transparent' }}>
                         <SmallTitle>Race against strangers or friends<Cursor color="#fff" fontSize="1.4rem">|</Cursor></SmallTitle>
                         <BlockQuote>
-                            I'm greate at fake typing but in real life terrible.
+                            I'm great at fake typing but in real life terrible.
                         </BlockQuote>
                         <By>- Elden Henson</By>
                     </div>
