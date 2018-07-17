@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import Cursor from '../common/Logo';
+import Cursor from '../styled/Cursor';
 import Signup from '../Auth/Signup';
+import Login from '../Auth/Login';
 
 const LandingContainer = styled.div`
     display: grid;
     grid-template-columns: 35% 65%;
     height: 100vh;
-`;
-
-const LargeCursor = styled(Cursor)`
-    font-size: 2.2rem;
 `;
 
 const LogoContainer = styled.div`
@@ -30,10 +27,17 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
-    background: pink;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background: #ff0066;
+    background-image: linear-gradient(135deg, rgba(255, 0, 102, 0.7) 0%, rgba(164, 69, 178, 0.7) 100%), url("https://i.imgur.com/RILc0Sw.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 `;
 
-const SignupContainer = styled.div`
+const SignupFormContainer = styled.div`
     width: 80%;
     display: grid;
     justify-items: center;
@@ -49,6 +53,10 @@ const SignupContainer = styled.div`
         transform: translateY(-2px);
         box-shadow: 0px 20px 34px -4px rgba(0,0,0,0.10);
     }
+`;
+
+const LoginFormContainer = SignupFormContainer.extend`
+    margin-bottom: 7vh;
 `;
 
 const ColorBorder = styled.div`
@@ -67,7 +75,7 @@ const Blur = styled.div`
     position: relative;
 `;
 
-const SignupTitle = styled.h2`
+const Title = styled.h2`
     text-align: center;
     font-weight: 300;
     text-transform: uppercase;
@@ -75,12 +83,40 @@ const SignupTitle = styled.h2`
     margin: 2.25rem 0 1rem 0;
 `;
 
-const ShrinkSignup = styled.div`
+const SmallTitle = styled.p`
+    background: transparent;
+    color: #fff;
+    font-size: 1.25rem;
+    text-align: center;
+`;
+
+const FormDiv = styled.div`
     width: 80%;
 `;
 
-const Or = SignupTitle.extend`
-    
+const Or = Title.extend`
+    font-size: 1.7rem;
+    margin: 3rem 0;
+    position: relative;
+`;
+
+const BlockQuote = styled.blockquote`
+    font-size: 2rem;
+    color: #fff;
+    background: transparent;
+    text-align: center;
+
+    &::before {
+        content: open-quote;
+    }
+
+    &::after {
+        content: close-quote;
+    }
+`;
+
+const By = SmallTitle.extend`
+    font-size: 1.5rem;
 `;
 
 class Landing extends Component {
@@ -92,21 +128,39 @@ class Landing extends Component {
             <LandingContainer>
                 <Left>
                     <LogoContainer>
-                        <Logo>Real Time Racer.</Logo><LargeCursor>|</LargeCursor>
+                        <Logo>Real Time Racer.</Logo><Cursor fontSize="2.2rem">|</Cursor>
                     </LogoContainer>
                     
-                    <SignupContainer>
+                    <SignupFormContainer>
                         <ColorBorder />
                         <Blur />
-                        <SignupTitle>Sign Up</SignupTitle>
-                        <ShrinkSignup>
+                        <Title>Sign Up</Title>
+                        <FormDiv>
                             <Signup />
-                        </ShrinkSignup>
-                    </SignupContainer>
-                    <Or />
+                        </FormDiv>
+                    </SignupFormContainer>
+
+                    <Or>
+                        OR
+                    </Or>
+
+                    <LoginFormContainer>
+                        <ColorBorder />
+                        <Blur />
+                        <Title>Login</Title>
+                        <FormDiv>
+                            <Login />
+                        </FormDiv>
+                    </LoginFormContainer>
                 </Left>
                 <Right>
-                    Right
+                    <div style={{ background: 'transparent' }}>
+                        <SmallTitle>Race against strangers or friends<Cursor color="#fff" fontSize="1.4rem">|</Cursor></SmallTitle>
+                        <BlockQuote>
+                            I'm greate at fake typing but in real life terrible.
+                        </BlockQuote>
+                        <By>- Elden Henson</By>
+                    </div>
                 </Right>
             </LandingContainer>
         );

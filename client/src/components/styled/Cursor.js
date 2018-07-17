@@ -10,7 +10,9 @@ const Cursor = styled.span`
     animation: ${blink} 0.7s infinite;
     margin: 0 5px;
     color: #000;
-    font-size: 1.5rem;
+    font-size: ${props => props.fontSize ? props.fontSize : '1.5rem'}
+    background: transparent;
+    color: ${props => props.color ? props.color : '#000'}
 `;
 
 export default Cursor;

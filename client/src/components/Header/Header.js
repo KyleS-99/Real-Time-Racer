@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
 import onClickoutside from 'react-onclickoutside';
 
-import Cursor from '../common/Logo';
+import Cursor from '../styled/Cursor';
 
 const Header = styled.header`
     box-shadow: 0 7px 19px 0 rgba(0,0,0,.01);
