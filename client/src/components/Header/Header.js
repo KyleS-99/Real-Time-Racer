@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
+import onClickoutside from 'react-onclickoutside';
 
 import Cursor from '../common/Logo';
 
@@ -64,7 +65,7 @@ const DropDownContainer = styled.div`
     right: 2%;
     border-radius: 3px;
     width: 150px;
-    height: auth;
+    height: auto;
     background: #000;
     padding: 8px;
 
@@ -94,6 +95,9 @@ class Navbar extends Component {
         // Toggle dropdown menu
         this.setState({ dropDown: !this.state.dropDown });
     }
+    handleClickOutside = e => {
+        this.setState({ dropDown: false });
+    }
     render() {
         return (
             <Header>
@@ -105,7 +109,6 @@ class Navbar extends Component {
                         src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80" 
                         onClick={this.toggleDropDown}
                         display={this.state.dropDown}
-                        onBlur={this.toggleDropDown}
                     />
                 </Nav>
                 <DropDownContainer 
@@ -124,4 +127,4 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar;
+export default onClickoutside(Navbar);
