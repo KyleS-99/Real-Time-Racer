@@ -7,3 +7,9 @@ export const Landing = Loadable({
     loading: Spinner,
     delay: 500
 });
+
+export const Dashboard = Loadable({
+    loader: () => import('../components/Dashboard/Dashboard'),
+    loading: Spinner,
+    delay: 500
+});

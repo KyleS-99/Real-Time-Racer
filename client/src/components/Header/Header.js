@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { NavLink, Link } from 'react-router-dom';
 import onClickoutside from 'react-onclickoutside';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { logoutUser } from '../../actions/authActions';
 
 import Cursor from '../styled/Cursor';
 
@@ -106,7 +110,7 @@ class Navbar extends Component {
                         <Logo>Real Time Racer.<Cursor>|</Cursor></Logo>
                     </StyledNavLink>
                     <Avatar 
-                        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80" 
+                        src={this.props.auth.user.img || "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80"} 
                         onClick={this.toggleDropDown}
                         display={this.state.dropDown}
                     />
@@ -118,7 +122,9 @@ class Navbar extends Component {
                     <StyledLink to="/profile">
                         Profile
                     </StyledLink>
-                    <StyledLink to="/profile">
+                    <StyledLink to="#" onClick={() => {
+                        this.props.logoutUser(this.props.history);
+                    }}>
                         Logout
                     </StyledLink>
                 </DropDownContainer>
@@ -127,4 +133,12 @@ class Navbar extends Component {
     }
 }
 
-export default onClickoutside(Navbar);
+Header.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, { logoutUser })(onClickoutside(Navbar));

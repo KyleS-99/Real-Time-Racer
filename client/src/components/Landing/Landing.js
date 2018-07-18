@@ -208,8 +208,12 @@ class Landing extends Component {
     }
     responseGoogle = response => {
         const { accessToken } = response;
-        console.log(accessToken);
         this.props.signupOrLogin({ access_token: accessToken }, 'users/oauth/google', this.props.history);
+    }
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push('/dashboard');
+        }
     }
     render() {
         return (
@@ -249,7 +253,7 @@ class Landing extends Component {
                                     fields="name,email,picture"
                                     callback={this.responseFacebook} 
                                     scope="public_profile"
-                                    render={() => (<FacebookButton>Facebook</FacebookButton>)}
+                                    render={({...props}) => (<FacebookButton {...props}>Facebook</FacebookButton>)}
                                 />
                             </OAuthContainer>
                         </FormDiv>
@@ -270,7 +274,12 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
-    signupOrLogin: PropTypes.func.isRequired
+    signupOrLogin: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
 };
 
-export default connect(null, { signupOrLogin })(Landing);
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, { signupOrLogin })(Landing);

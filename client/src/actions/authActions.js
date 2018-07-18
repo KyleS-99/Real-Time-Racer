@@ -8,7 +8,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 export const signupOrLogin = (userData, route, history) => dispatch => {
     axios.post(route, userData)
         .then((res) => {
-            const { method, user, token } = res.data;
+            const { token } = res.data;
 
             // Save to localStorage
             localStorage.setItem('jwtToken', token);
@@ -19,16 +19,13 @@ export const signupOrLogin = (userData, route, history) => dispatch => {
             // Decode token
             const decodedToken = jwt_decode(token);
 
+            const { user, method } = decodedToken;
+
             // Set id on user object
             user.id = decodedToken.id;
-            
-            dispatch({
-                type: SET_CURRENT_USER,
-                payload: {
-                    method,
-                    user
-                }
-            });
+
+            // Set current user
+            dispatch(setCurrentUser({ method, user }));
 
             // redirect to dashbaord
             history.push('/dashboard');
@@ -40,4 +37,30 @@ export const signupOrLogin = (userData, route, history) => dispatch => {
                 payload: err.response.data
             })
         );
+};
+
+// Set logged in user
+export const setCurrentUser = userData => ({
+    type: SET_CURRENT_USER,
+    payload: {
+        method: userData.method || '',
+        user: userData.user || {}
+    }
+});
+
+// logout user
+export const logoutUser = history => dispatch => {
+    // Remove token from localStorage
+    localStorage.removeItem('jwtToken');
+
+    // Remove from Authorization header
+    setAuthToken(false);
+
+    // Set current user to {} which will set isAuthenticated to false
+    dispatch(setCurrentUser({}));
+
+    // If history object passed in, after logout is done redirect to homepage
+    if (history) {
+        history.push('/');
+    }
 };
