@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { signupOrLogin } from '../../actions/authActions';
 
 import Cursor from '../styled/Cursor';
 import Signup from '../Auth/Signup';
@@ -9,6 +15,10 @@ const LandingContainer = styled.div`
     display: grid;
     grid-template-columns: 40% 60%;
     height: 100vh;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 100%;
+    }
 `;
 
 const LogoContainer = styled.div`
@@ -35,6 +45,12 @@ const Right = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+
+    @media (max-width: 768px) {
+        grid-row-start: 1;
+        height: 60vh;
+        max-height: 600px;
+    }
 `;
 
 const SignupFormContainer = styled.div`
@@ -119,9 +135,81 @@ const By = SmallTitle.extend`
     font-size: 1.5rem;
 `;
 
+const FacebookButton = styled.button`
+    flex-basis: 100%
+    background: #3b5998;
+    box-shadow: 0px 12px 35px -9px rgba(59,89,152,.4);
+    color: #fff;
+    border-radius: 2px;
+    border: 0;
+    outline: 0;
+    padding: 10px 0px;
+    margin-left: 10px;
+    font-weight: 300;
+    transition: all 100ms ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(0.5px);
+        box-shadow: 0px 12px 35px -9px rgba(59,89,152,0.4);
+        opacity: 0.8;
+    }
+
+    @media (max-width: 850px) {
+        width: 100%;
+    }
+`;
+
+const Google = styled(GoogleLogin)`
+    flex-basis: 100%
+    background: #dd4b39;
+    box-shadow: 0px 12px 35px -9px rgba(221,75,57,1);
+    color: #fff;
+    border-radius: 2px;
+    border: 0;
+    outline: 0;
+    padding: 10px 0px;
+    font-weight: 300;
+    transition: all 100ms ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(0.5px);
+        box-shadow: 0px 12px 35px -9px rgba(221,75,57,0.4);
+        opacity: 0.8;
+    }
+
+    @media (max-width: 850px) {
+        width: 100%;
+    }
+`;
+
+const OAuthContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2vh;
+
+    @media (max-width: 850px) {
+        flex-wrap: wrap;
+
+        & button + button {
+            margin: 15px 0;
+        }
+    }
+`;
+
 class Landing extends Component {
     state = {
-
+        redirect: false
+    }
+    responseFacebook = response => {
+        const { accessToken } = response;
+        this.props.signupOrLogin({ access_token: accessToken }, 'users/oauth/facebook', this.props.history);
+    }
+    responseGoogle = response => {
+        const { accessToken } = response;
+        console.log(accessToken);
+        this.props.signupOrLogin({ access_token: accessToken }, 'users/oauth/google', this.props.history);
     }
     render() {
         return (
@@ -150,6 +238,20 @@ class Landing extends Component {
                         <Title>Login</Title>
                         <FormDiv>
                             <Login />
+                            <OAuthContainer>
+                                <Google
+                                    clientId="475707192337-0fom7s274iocogh9drql9vloohrqv25n.apps.googleusercontent.com"
+                                    buttonText="Google"
+                                    onSuccess={this.responseGoogle}
+                                />
+                                <FacebookLogin
+                                    appId="1903089829756150"
+                                    fields="name,email,picture"
+                                    callback={this.responseFacebook} 
+                                    scope="public_profile"
+                                    render={() => (<FacebookButton>Facebook</FacebookButton>)}
+                                />
+                            </OAuthContainer>
                         </FormDiv>
                     </LoginFormContainer>
                 </Left>
@@ -167,4 +269,8 @@ class Landing extends Component {
     }
 }
 
-export default Landing;
+Landing.propTypes = {
+    signupOrLogin: PropTypes.func.isRequired
+};
+
+export default connect(null, { signupOrLogin })(Landing);

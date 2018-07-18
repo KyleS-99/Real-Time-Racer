@@ -27,7 +27,7 @@ class Login extends Component {
             password
         };
 
-        this.props.signupOrLogin(loginCredentials, 'login', this.props.history);
+        this.props.signupOrLogin(loginCredentials, '/users/login', this.props.history);
     }
     componentDidUpdate(prevProps) {
         if (prevProps.errors !== this.props.errors) {

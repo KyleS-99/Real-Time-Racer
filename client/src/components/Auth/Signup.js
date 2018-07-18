@@ -33,7 +33,7 @@ class Signup extends Component {
             password2
         };
 
-        this.props.signupOrLogin(newUser, 'signup', this.props.history);
+        this.props.signupOrLogin(newUser, '/users/signup', this.props.history);
     }
     componentDidUpdate(prevProps) {
         if (prevProps.errors !== this.props.errors) {

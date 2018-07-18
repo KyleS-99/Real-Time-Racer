@@ -6,7 +6,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 
 // Register a user
 export const signupOrLogin = (userData, route, history) => dispatch => {
-    axios.post(`/users/${route}`, userData)
+    axios.post(route, userData)
         .then((res) => {
             const { method, user, token } = res.data;
 
