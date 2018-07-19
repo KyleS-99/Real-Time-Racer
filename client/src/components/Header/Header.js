@@ -12,6 +12,11 @@ import Cursor from '../styled/Cursor';
 const Header = styled.header`
     box-shadow: 0 7px 19px 0 rgba(0,0,0,.01);
     border-bottom: 1px solid #eee;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
 `;
 
 const Nav = styled.nav`
@@ -20,6 +25,7 @@ const Nav = styled.nav`
     grid-template-rows: 55px;
     justify-items: center;
     align-items: center;
+    background: #fff;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -69,6 +75,8 @@ const Avatar = styled.div`
         font-size: 1.125rem;
         position: absolute;
         right: 100%;
+        width: max-content;
+        line-height: 41px;
     }
 `;
 
@@ -81,11 +89,8 @@ const DropDownContainer = styled.div`
     width: 150px;
     height: auto;
     background: #000;
-    padding: 10px;
-
-    & a + a {
-        margin-top: 10px;
-    }
+    display: flex;
+    flex-direction: column;
 `;
 
 const StyledLink = styled(Link)`
@@ -93,10 +98,12 @@ const StyledLink = styled(Link)`
     font-size: 1.05rem;
     text-decoration: none;
     font-weight: 300;
-    display: block;
+    padding: 10px;
+    transition: .2s;
 
-    & a:hover {
+    &:hover {
         cursor: pointer;
+        border-left: 5px solid #fff;
     }
 `;
 
@@ -107,14 +114,15 @@ class Navbar extends Component {
         this.state = { 
             dropDown: false
         };
-        this.dropDownRef = React.createRef();
     }
     toggleDropDown = () => {
         // Toggle dropdown menu
         this.setState({ dropDown: !this.state.dropDown });
     }
     handleClickOutside = e => {
-        this.setState({ dropDown: false });
+        if (this.state.dropDown) {
+            this.setState({ dropDown: false });
+        }
     }
     render() {
         return (

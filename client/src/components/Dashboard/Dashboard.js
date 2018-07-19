@@ -13,10 +13,15 @@ import {
 const DashboardContainer = styled.div`
     display: flex;
     width: 100%;
-    margin: 7vh 0;
+    margin: 136px auto 80px auto;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    width: 80%;
+
+    @media (max-width: 1100px) {
+        width: 100%;
+    }
 `;
 
 const Title = styled.h1`
