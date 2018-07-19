@@ -3,11 +3,23 @@ const User = require('../models/User');
 const { secret } = require('../config/keys');
 
 const signToken = user => {
+    if (user[user.method].password) {
+        const { email, first, last, races } = user[user.method]
+        user[user.method] = {
+            email,
+            first,
+            last, 
+            races
+        }
+    }
+
     // Create token
     return `bearer ${JWT.sign({
         id: user.id,
         iat: new Date().getTime(), // current time
-        exp: new Date().setDate(new Date().getDate() + 1) // current time but 1 day ahead
+        exp: new Date().setDate(new Date().getDate() + 1), // current time but 1 day ahead
+        method: user.method,
+        user: user[user.method]
     }, secret)}`;
 };
 
@@ -31,7 +43,7 @@ module.exports = {
         const token = signToken(newUser);
 
         // Respond with token
-        res.json({ method: newUser.method, user: newUser.local, token });
+        res.json({ token });
     },
     signIn: async (req, res) => {
         const { email, password } = req.body;
@@ -55,7 +67,7 @@ module.exports = {
         const token = signToken(user);
 
         // Send back user and token
-        res.json({ method: user.method, user: user.local, token });
+        res.json({ token });
     },
     generateOAuthToken:  async (req, res) => {
         // Set user and generate token
@@ -63,7 +75,7 @@ module.exports = {
         const token = signToken(user);
 
         // Send user data and token back to user
-        res.json({ method: user.method, user: user[user.method], token });
+        res.json({ token });
     },
     secret: async (req, res) => {
         res.json({ message: "You're an authenticated user"});

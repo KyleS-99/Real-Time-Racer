@@ -37,7 +37,7 @@ const Avatar = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-image: url(${props => props.src ? props.src : ''});
+    background-image: url(${props => props.src ? props.src : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80"});
     background-size: cover;
     background-position: center center;
     box-shadow: 0 8px 19px -1px rgba(0,0,0,.1);
@@ -59,6 +59,16 @@ const Avatar = styled.div`
         left: 50%;
         margin-left: -15px;
         transform: rotate(45deg);
+    }
+
+    &::before {
+        content: ${({first, last}) => '"' + `${first} ${last}` + '";'}
+        margin-right: 10px;
+        color: #000;
+        font-weight: 300;
+        font-size: 1.125rem;
+        position: absolute;
+        right: 100%;
     }
 `;
 
@@ -110,9 +120,11 @@ class Navbar extends Component {
                         <Logo>Real Time Racer.<Cursor>|</Cursor></Logo>
                     </StyledNavLink>
                     <Avatar 
-                        src={this.props.auth.user.img || "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80"} 
+                        src={this.props.auth.user.img} 
                         onClick={this.toggleDropDown}
                         display={this.state.dropDown}
+                        first={this.props.auth.user.first}
+                        last={this.props.auth.user.last}
                     />
                 </Nav>
                 <DropDownContainer 
@@ -133,7 +145,7 @@ class Navbar extends Component {
     }
 }
 
-Header.propTypes = {
+Navbar.propTypes = {
     auth: PropTypes.object.isRequired
 };
 
