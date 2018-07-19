@@ -81,10 +81,10 @@ const DropDownContainer = styled.div`
     width: 150px;
     height: auto;
     background: #000;
-    padding: 8px;
+    padding: 10px;
 
     & a + a {
-        margin-top: 8px;
+        margin-top: 10px;
     }
 `;
 
@@ -94,6 +94,10 @@ const StyledLink = styled(Link)`
     text-decoration: none;
     font-weight: 300;
     display: block;
+
+    & a:hover {
+        cursor: pointer;
+    }
 `;
 
 class Navbar extends Component {
