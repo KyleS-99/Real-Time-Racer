@@ -33,7 +33,7 @@ const Logo = styled.span`
 `;
 
 const Left = styled.div`
-
+    background: #fff;
 `;
 
 const Right = styled.div`
@@ -60,6 +60,7 @@ const SignupFormContainer = styled.div`
     align-items: center;
     max-width: 430px;
     margin: 0 auto;
+    background: #fff;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 20px 34px -4px;
     border: 1px solid #eee;
     padding-bottom: 1rem;
