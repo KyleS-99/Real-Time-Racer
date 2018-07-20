@@ -78,6 +78,13 @@ const Avatar = styled.div`
         width: max-content;
         line-height: 41px;
     }
+
+    @media (max-width: 500px) {
+        &::before {
+            width: initial;
+            line-height: initial;
+        }
+    }
 `;
 
 const DropDownContainer = styled.div`
