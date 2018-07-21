@@ -96,7 +96,7 @@ const userSchema = new Schema({
             img: String,
             text: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number,
