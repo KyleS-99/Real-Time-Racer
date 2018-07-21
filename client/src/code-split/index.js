@@ -13,3 +13,9 @@ export const Dashboard = Loadable({
     loading: Spinner,
     delay: 500
 });
+
+export const Practice = Loadable({
+    loader: () => import('../components/Practice/Practice'),
+    loading: Spinner,
+    delay: 500
+});

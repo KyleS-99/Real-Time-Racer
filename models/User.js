@@ -25,8 +25,15 @@ const userSchema = new Schema({
         },
         img: String,
         races: [{
-            title: String,
+            first: String,
+            last: String,
+            img: String,
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
             wpm: Number,
+            accuracy: Number,
             opponent: {
                 first: String,
                 last: String,
@@ -51,8 +58,15 @@ const userSchema = new Schema({
         },
         img: String,
         races: [{
-            title: String,
+            first: String,
+            last: String,
+            img: String,
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
             wpm: Number,
+            accuracy: Number,
             opponent: {
                 first: String,
                 last: String,
@@ -77,8 +91,15 @@ const userSchema = new Schema({
         },
         img: String,
         races: [{
-            title: String,
+            first: String,
+            last: String,
+            img: String,
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
             wpm: Number,
+            accuracy: Number,
             opponent: {
                 first: String,
                 last: String,

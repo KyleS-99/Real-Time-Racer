@@ -12,7 +12,8 @@ import PrivateRoute from './components/common/PrivateRoute';
 import Header from './components/Header/Header';
 import { 
 	Landing,
-	Dashboard
+	Dashboard,
+	Practice
 } from './code-split';
 
 import './App.css';
@@ -63,6 +64,7 @@ class App extends Component {
 						<Switch>
 							<Route exact path="/" component={Landing} />
 							<PrivateRoute exact path="/dashboard" component={Dashboard} />
+							<PrivateRoute exact path="/test/practice" component={Practice} />
 						</Switch>
 					</div>
 				</BrowserRouter>
