@@ -16,6 +16,4 @@ router.post('/oauth/google', passportGoogle, generateOAuthToken);
 
 router.post('/oauth/facebook', passportFacebook, generateOAuthToken);
 
-router.get('/secret', passportJWT, secret);
-
 module.exports = router;
