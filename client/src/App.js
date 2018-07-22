@@ -21,9 +21,6 @@ import 'normalize.css';
 
 // Check for token in localStorage
 if (localStorage.jwtToken) {
-	// Set Authorization header with token
-	setAuthToken(localStorage.jwtToken);
-
 	// Decode token and get user info and exp
 	const decodedToken = jwt_decode(localStorage.jwtToken);
 
