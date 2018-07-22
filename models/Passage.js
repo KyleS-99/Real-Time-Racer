@@ -5,16 +5,11 @@ const passageSchema = new Schema({
     passage: String
 });
 
-passageSchema.statics.random = function () {
-    this.countDocuments({}, function (err, count) {
-        const random = Math.floor(Math.random() * count);
-
-        Passage.findOne()
-            .skip(random)
-            .then((passage) => {
-                return passage;
-            });
-    });
+passageSchema.statics.random = async function () {
+    const count = await this.countDocuments();
+    const rand = Math.floor(Math.random() * count);
+    const randomDoc = await this.findOne().skip(rand);
+    return randomDoc;
 }
 
 // Create model

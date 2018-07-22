@@ -9,6 +9,7 @@ const app = express();
 const { mongoURI } = require('./config/keys');
 
 const users = require('./routes/users');
+const passages = require('./routes/passages');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,6 +23,7 @@ mongoose
 
 // Routes
 app.use('/users', users);
+app.use('/passages/', passages);
 
 // Start the server
 const port = process.env.PORT || 5000;
