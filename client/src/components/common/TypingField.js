@@ -57,10 +57,42 @@ const Timer = styled.div`
     top: 12px;
     left: 50%;
     margin-left: -40px;
+
+    @media(max-width: 500px) {
+        top: 70px;
+    }
 `;
 
 const Time = styled.p`
     text-align: center;
+`;
+
+const TypingContainer = styled.div`
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Text = styled.p`
+    font-size: 1.55rem;
+    user-select: none;
+    text-align: center;
+`;
+
+const Input = styled.input`
+    width: 80%;
+    padding: 15px 20px;
+    margin-top: 20px;
+    border: 1px solid #eee;
+    font-size: 20px;
+    font-weight: 300;
+    box-shadow: 0px 8px 33px 0px rgba(0,0,0,0.1);
+    outline: none;
+    border-radius: 5px;
 `;
 
 class TypingField extends Component {
@@ -110,6 +142,9 @@ class TypingField extends Component {
             }
         }, 1000)
     }
+    onPaste = (e) => {
+        e.preventDefault();
+    }
     componentDidMount() {
         this.timeDown();
     }
@@ -125,6 +160,11 @@ class TypingField extends Component {
                         <TimeDown>{this.state.startTimeDown}</TimeDown>
                     </StartTimer>
                 </StartTimerContainer>
+
+                <TypingContainer>
+                    <Text>{this.props.passage}</Text>
+                    <Input placeholder="Type Here" onPaste={this.onPaste} />
+                </TypingContainer>
             </TypingFieldContainer>
         );
     }
