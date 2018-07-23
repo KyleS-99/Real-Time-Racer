@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 
+import Word from './Word';
+
 const TypingFieldContainer = styled.div`
     margin-top: 136px;
     width: 100%;
@@ -99,7 +101,8 @@ class TypingField extends Component {
     state = {
         total: 120,
         timeString: '2:00',
-        startTimeDown: 6
+        startTimeDown: 6,
+        text: ''
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -145,6 +148,9 @@ class TypingField extends Component {
     onPaste = (e) => {
         e.preventDefault();
     }
+    onChange = (e) => {
+
+    }
     componentDidMount() {
         this.timeDown();
     }
@@ -162,8 +168,18 @@ class TypingField extends Component {
                 </StartTimerContainer>
 
                 <TypingContainer>
-                    <Text>{this.props.passage}</Text>
-                    <Input placeholder="Type Here" onPaste={this.onPaste} />
+                    <Text>
+                        {
+                            this.props.passage.split(' ').map((word, index) => <Word word={word} key={index} />)
+                        }
+                    </Text>
+                    <Input 
+                        placeholder="Type Here" 
+                        onPaste={this.onPaste} 
+                        onChange={this.onChange}
+                        value={this.state.text}
+                        name="text"
+                    />
                 </TypingContainer>
             </TypingFieldContainer>
         );
