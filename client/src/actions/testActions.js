@@ -8,7 +8,10 @@ export const setPassage = () => dispatch => {
             dispatch(passageAction(res.data.passage))
         )
         .catch(err => 
-            console.log(err)
+            dispatch({
+                type: GET_ERRORS,
+                payload: 'Unable to fetch text'
+            })
         );
 };
 
