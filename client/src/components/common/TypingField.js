@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
-import PropTypes from 'prop-types';
 
 const TypingFieldContainer = styled.div`
     margin-top: 136px;
@@ -187,9 +186,5 @@ class TypingField extends Component {
         );
     }
 }
-
-TypingField.propTypes = {
-    passage: PropTypes.string.isRequired
-};
 
 export default TypingField;

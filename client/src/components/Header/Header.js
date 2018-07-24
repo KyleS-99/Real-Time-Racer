@@ -68,7 +68,7 @@ const Avatar = styled.div`
     }
 
     &::before {
-        content: ${({first, last}) => '"' + `${first} ${last}` + '";'}
+        content: ${({first, last}) => `"${first} ${last}";` }
         margin-right: 10px;
         color: #000;
         font-weight: 300;
@@ -89,7 +89,7 @@ const Avatar = styled.div`
 
 const DropDownContainer = styled.div`
     position: absolute;
-    visibility: ${(props) => props.display ? 'visible' : 'hidden'};
+    visibility: ${(props) => props.display ? 'visible;' : 'hidden;'}
     top: 65px;
     right: 2%;
     border-radius: 3px;

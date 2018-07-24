@@ -28,7 +28,7 @@ if (localStorage.jwtToken) {
 	// Check for expired token
 	if (decodedToken.exp < currentTime) {
 		// Logout user
-		store.dispatch(logoutUser);
+		store.dispatch(logoutUser());
 
 		// Redirect to homepage
 		window.location.href = '/';

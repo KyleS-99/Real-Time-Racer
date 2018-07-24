@@ -57,7 +57,7 @@ export const logoutUser = history => dispatch => {
     setAuthToken(false);
 
     // Set current user to {} which will set isAuthenticated to false
-    dispatch(setCurrentUser({}));
+    dispatch(setCurrentUser({ method: '', user: {}}));
 
     // If history object passed in, after logout is done redirect to homepage
     if (history) {
