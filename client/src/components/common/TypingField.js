@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 
-import Word from './Word';
-
 const TypingFieldContainer = styled.div`
     margin-top: 136px;
     width: 100%;
@@ -79,12 +77,6 @@ const TypingContainer = styled.div`
     align-items: center;
 `;
 
-const Text = styled.p`
-    font-size: 1.55rem;
-    user-select: none;
-    text-align: center;
-`;
-
 const Input = styled.input`
     width: 80%;
     padding: 15px 20px;
@@ -97,12 +89,18 @@ const Input = styled.input`
     border-radius: 5px;
 `;
 
+const WordContainer = styled.div`
+    text-align: center;
+    font-size: 1.55rem;
+`;
+
 class TypingField extends Component {
     state = {
         total: 120,
         timeString: '2:00',
         startTimeDown: 6,
-        text: ''
+        text: '',
+        passageArray: []
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -151,7 +149,13 @@ class TypingField extends Component {
     onChange = (e) => {
 
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.passage !== this.props.passage) {
+            this.setState({ passageArray: this.props.passage.split('') });
+        }
+    }
     componentDidMount() {
+        // Start time down
         this.timeDown();
     }
     render() {
@@ -168,11 +172,9 @@ class TypingField extends Component {
                 </StartTimerContainer>
 
                 <TypingContainer>
-                    <Text>
-                        {
-                            this.props.passage.split(' ').map((word, index) => <Word word={word} key={index} />)
-                        }
-                    </Text>
+                    <WordContainer>
+                        {this.props.passage}
+                    </WordContainer>
                     <Input 
                         placeholder="Type Here" 
                         onPaste={this.onPaste} 
