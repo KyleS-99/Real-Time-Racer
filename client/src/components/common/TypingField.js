@@ -93,11 +93,6 @@ const WordContainer = styled.div`
     font-size: 1.55rem;
 `;
 
-const Uncompleted = styled.span`
-    text-align: center;
-    font-size: 1.55rem;
-`;
-
 const CurrentWord = styled.span`
     background: pink;
     position: relative;
