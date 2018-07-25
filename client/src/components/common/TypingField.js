@@ -93,13 +93,45 @@ const WordContainer = styled.div`
     font-size: 1.55rem;
 `;
 
+const Uncompleted = styled.span`
+    text-align: center;
+    font-size: 1.55rem;
+`;
+
+const CurrentWord = styled.span`
+    background: pink;
+    position: relative;
+
+    &::before {
+        content: "${props => props.text}";
+        position: absolute;
+        bottom: 100%;
+        color: #f0f8ff;
+        background: #000;
+        padding: 5px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        font-weight: 300;
+        font-size: 20px;
+        transition: 0.3s;
+    }
+`;
+
+const Correct = styled.span`
+    color: #17a589;
+`;
+
 class TypingField extends Component {
     state = {
         total: 120,
         timeString: '2:00',
         startTimeDown: 6,
         text: '',
-        passageArray: []
+        passageArray: [],
+        currentWord: [],
+        finished: [],
+        currentWordString: '',
+        index: 0
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -140,17 +172,49 @@ class TypingField extends Component {
                 this.countDown();
                 return clearInterval(timer);
             }
-        }, 1000)
+        }, 1000);
     }
     onPaste = (e) => {
         e.preventDefault();
     }
     onChange = (e) => {
+        const value = e.target.value;
+        const currentWord = this.state.currentWordString;
+        const length = e.target.value.length;
+        const rest = currentWord.slice(length);
+        const removedCurrent = this.state.passageArray.slice(this.state.index+1);
+        const newRegExp = new RegExp(currentWord.slice(0, value.length));
 
+        if (value.slice(-1) === ' ' && newRegExp.test(value)) {
+            return this.setState({
+                finished: [...this.state.finished, <Correct key={currentWord}>{currentWord}</Correct>],
+                currentWord: [<CurrentWord key={value}>{this.state.passageArray[this.state.index]}</CurrentWord>],
+                currentWordString: this.state.passageArray[this.state.index],
+                passageArray: removedCurrent,
+                [e.target.name]: ''
+            });
+        }
+
+        if (newRegExp.test(value)) {
+            this.setState({
+                currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
+                [e.target.name]: value
+            });
+        }
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.passage !== this.props.passage) {
-            this.setState({ passageArray: this.props.passage.split('') });
+            this.setState({
+                passageArray: this.props.passage.split(' ').map((word, index, arr) => {
+                    if (index < arr.length) {
+                        word += ' ';
+                    }
+
+                    return word;
+                }).slice(1),
+                currentWord: [<CurrentWord key={this.props.passage.split(' ')[0]}>{this.props.passage.split(' ')[0] + ' '}</CurrentWord>],
+                currentWordString: this.props.passage.split(' ')[0] + ' '
+            });
         }
     }
     componentDidMount() {
@@ -172,7 +236,7 @@ class TypingField extends Component {
 
                 <TypingContainer>
                     <WordContainer>
-                        {this.props.passage}
+                        {this.state.finished}{this.state.currentWord}{this.state.passageArray}
                     </WordContainer>
                     <Input 
                         placeholder="Type Here" 
