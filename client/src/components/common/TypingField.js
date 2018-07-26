@@ -103,7 +103,7 @@ const CurrentWord = styled.span`
         bottom: 100%;
         color: #f0f8ff;
         background: #000;
-        padding: 5px;
+        padding: ${props => props.text ? "5px;" : "0px;"}
         box-sizing: border-box;
         border-radius: 5px;
         font-weight: 300;
