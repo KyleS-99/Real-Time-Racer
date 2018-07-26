@@ -125,8 +125,7 @@ class TypingField extends Component {
         passageArray: [],
         currentWord: [],
         finished: [],
-        currentWordString: '',
-        index: 0
+        currentWordString: ''
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -173,23 +172,32 @@ class TypingField extends Component {
         e.preventDefault();
     }
     onChange = (e) => {
+        // Get value of input
         const value = e.target.value;
+        // The current words value from state
         const currentWord = this.state.currentWordString;
-        const length = e.target.value.length;
+        // Get length of the current value of the input field
+        const length = value.length;
+        // Grab the rest of the text from where user left off typing
         const rest = currentWord.slice(length);
-        const removedCurrent = this.state.passageArray.slice(this.state.index+1);
-        const newRegExp = new RegExp(currentWord.slice(0, value.length));
+        // Remove the word that was finished from the array
+        const removedCurrent = this.state.passageArray.slice(1);
+        // Create a regex based on the length of the input field
+        const newRegExp = new RegExp(currentWord.slice(0, length));
 
+        // If user types space test to see if it matches the current word
+        // If so shift state
         if (value.slice(-1) === ' ' && newRegExp.test(value)) {
             return this.setState({
                 finished: [...this.state.finished, <Correct key={currentWord}>{currentWord}</Correct>],
-                currentWord: [<CurrentWord key={value}>{this.state.passageArray[this.state.index]}</CurrentWord>],
-                currentWordString: this.state.passageArray[this.state.index],
+                currentWord: [<CurrentWord key={value}>{this.state.passageArray[0]}</CurrentWord>],
+                currentWordString: this.state.passageArray[0],
                 passageArray: removedCurrent,
                 [e.target.name]: ''
             });
         }
 
+        // Test individual character against regex if not a space
         if (newRegExp.test(value)) {
             this.setState({
                 currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
