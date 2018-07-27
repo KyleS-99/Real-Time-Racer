@@ -98,7 +98,7 @@ const CurrentWord = styled.span`
     position: relative;
 
     &::before {
-        content: "${props => props.text}";
+        content: "${props => props.text ? props.text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : ""}";
         position: absolute;
         bottom: 100%;
         white-space: nowrap;
@@ -215,6 +215,7 @@ class TypingField extends Component {
 
         // Test individual character against regex if not a space
         if (newRegExp.test(value)) {
+            console.log('passing');
             this.setState({
                 currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value
