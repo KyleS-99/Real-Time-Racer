@@ -91,29 +91,37 @@ const Input = styled.input`
 const WordContainer = styled.div`
     text-align: center;
     font-size: 1.55rem;
+    line-height: 1.15;
 `;
 
 const CurrentWord = styled.span`
-    background: pink;
     position: relative;
 
     &::before {
         content: "${props => props.text}";
         position: absolute;
         bottom: 100%;
+        white-space: nowrap;
         color: #f0f8ff;
-        background: #000;
+        background: rgba(0, 0, 0, .8);
         padding: ${props => props.text ? "5px;" : "0px;"}
         box-sizing: border-box;
         border-radius: 5px;
         font-weight: 300;
         font-size: 20px;
         transition: 0.3s;
+        ${props => props.wrong ? "text-decoration: line-through;" : null}
     }
 `;
 
 const Correct = styled.span`
     color: #17a589;
+`;
+
+const Wrong = styled.span`
+    background: hsla(6, 78%, 66%, .5);
+    color: #b03a2e;
+    transition: .2s;
 `;
 
 class TypingField extends Component {
@@ -125,7 +133,8 @@ class TypingField extends Component {
         passageArray: [],
         currentWord: [],
         finished: [],
-        currentWordString: ''
+        currentWordString: '',
+        backspace: false
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -171,6 +180,9 @@ class TypingField extends Component {
     onPaste = (e) => {
         e.preventDefault();
     }
+    onKeyDown = (e) => {
+        this.setState({ backspace: e.keyCode === 8 });
+    }
     onChange = (e) => {
         // Get value of input
         const value = e.target.value;
@@ -184,6 +196,10 @@ class TypingField extends Component {
         const removedCurrent = this.state.passageArray.slice(1);
         // Create a regex based on the length of the input field
         const newRegExp = new RegExp(currentWord.slice(0, length));
+
+        if (value[0] === ' ') {
+            return;
+        }
 
         // If user types space test to see if it matches the current word
         // If so shift state
@@ -201,7 +217,32 @@ class TypingField extends Component {
         if (newRegExp.test(value)) {
             this.setState({
                 currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
-                [e.target.name]: value
+                text: value
+            });
+        }
+
+        // Error handling
+        if (!newRegExp.test(value)) {
+            // init var
+            let correctLength;
+
+            // Loop through value, see at what length it isn't correct against the current word
+            for(let i = 0; i < currentWord.slice(0, length).length; i++) {
+                if (currentWord.slice(0, length)[i] !== value[i]) {
+                    correctLength = i;
+                    break;
+                }
+            }
+
+            this.setState({
+                currentWord: [
+                    <CurrentWord key={value} text={value.slice(correctLength)} wrong={true}>
+                        <Correct>{correctLength === 0 ? null : currentWord.slice(0, correctLength)}</Correct>
+                        <Wrong>{currentWord[correctLength]}</Wrong>
+                        {currentWord.slice(correctLength + 1)}
+                    </CurrentWord>
+                ],
+                text: value.length === 0 && this.state.backspace ? '' : value
             });
         }
     }
@@ -211,6 +252,10 @@ class TypingField extends Component {
                 passageArray: this.props.passage.split(' ').map((word, index, arr) => {
                     if (index < arr.length) {
                         word += ' ';
+                    }
+
+                    if (index + 1 === arr.length) {
+                        word = word.trim();
                     }
 
                     return word;
@@ -247,6 +292,8 @@ class TypingField extends Component {
                         onChange={this.onChange}
                         value={this.state.text}
                         name="text"
+                        autoComplete="off"
+                        onKeyDown={this.onKeyDown}
                     />
                 </TypingContainer>
             </TypingFieldContainer>
