@@ -20,7 +20,7 @@ const StartTimerContainer = styled.div`
     height: 100vh;
     position: absolute;
     top: 0;
-    display: ${props => props.count !== 0 ? 'flex;' : 'none;'}
+    display: ${props => props.count !== 0 ? 'flex' : 'none'};
     justify-content: center;
     align-items: center;
     z-index: 5;
@@ -98,13 +98,13 @@ const CurrentWord = styled.span`
     position: relative;
 
     &::before {
-        content: "${props => props.text ? props.text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : ""}";
+        content: "${props => props.text ? props.text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&").replace(/\\([\s\S])|(")/g, "\\$1$2") : ""}";
         position: absolute;
         bottom: 100%;
         white-space: nowrap;
         color: #f0f8ff;
         background: rgba(0, 0, 0, .8);
-        padding: ${props => props.text ? "5px;" : "0px;"}
+        padding: ${props => props.text ? "5px" : "0px"};
         box-sizing: border-box;
         border-radius: 5px;
         font-weight: 300;
@@ -134,7 +134,10 @@ class TypingField extends Component {
         currentWord: [],
         finished: [],
         currentWordString: '',
-        backspace: false
+        backspace: false,
+        grossWPM: 0,
+        netWPM: 0,
+        errors: 0
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -203,7 +206,7 @@ class TypingField extends Component {
 
         // If user types space test to see if it matches the current word
         // If so shift state
-        if (value.slice(-1) === ' ' && newRegExp.test(value)) {
+        if (value.slice(-1) === ' ' && newRegExp.test(value) && currentWord.length === length) {
             return this.setState({
                 finished: [...this.state.finished, <Correct key={currentWord}>{currentWord}</Correct>],
                 currentWord: [<CurrentWord key={value}>{this.state.passageArray[0]}</CurrentWord>],
@@ -243,7 +246,8 @@ class TypingField extends Component {
                         {currentWord.slice(correctLength + 1)}
                     </CurrentWord>
                 ],
-                text: value.length === 0 && this.state.backspace ? '' : value
+                text: value.length === 0 && this.state.backspace ? '' : value,
+                errors: this.state.errors + 1
             });
         }
     }
