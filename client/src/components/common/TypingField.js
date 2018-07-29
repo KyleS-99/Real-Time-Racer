@@ -98,13 +98,15 @@ const CurrentWord = styled.span`
     position: relative;
 
     &::before {
-        content: "${props => props.text ? props.text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&").replace(/\\([\s\S])|(")/g, "\\$1$2") : ""}";
+        content: "${props => props.text ? props.text.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&') : ""}";
         position: absolute;
         bottom: 100%;
         white-space: nowrap;
         color: #f0f8ff;
         background: rgba(0, 0, 0, .8);
-        padding: ${props => props.text ? "5px" : "0px"};
+        padding: ${props => props.text && props.text !== '' ? "5px" : "0px"};
+        height: ${props => props.text && props.text.includes(' ') ? "33px" : "auto"};
+        width: ${props => props.text && props.text.includes(' ') ? "33px" : "auto"};
         box-sizing: border-box;
         border-radius: 5px;
         font-weight: 300;
@@ -125,21 +127,26 @@ const Wrong = styled.span`
 `;
 
 class TypingField extends Component {
-    state = {
-        total: 120,
-        typingTime: 0,
-        timeString: '2:00',
-        startTimeDown: 6,
-        text: '',
-        passageArray: [],
-        currentWord: [],
-        finished: [],
-        currentWordString: '',
-        backspace: false,
-        totalChars: 0,
-        grossWPM: 0,
-        netWPM: 0,
-        errors: 0
+    constructor(props) {
+        super(props);
+
+        this.inputRef = React.createRef();
+        this.state = {
+            total: 120,
+            typingTime: 0,
+            timeString: '2:00',
+            startTimeDown: 6,
+            text: '',
+            passageArray: [],
+            currentWord: [],
+            finished: [],
+            currentWordString: '',
+            backspace: false,
+            totalChars: 0,
+            totalPassageChars: 0,
+            grossWPM: 0,
+            errors: 0
+        }
     }
     countDown = () => {
         const timer = setInterval(() => {
@@ -180,6 +187,7 @@ class TypingField extends Component {
             // Check if time is 0 if so start the clock & clear interval
             if (time === 0) {
                 this.countDown();
+                this.inputRef.current.focus();
                 return clearInterval(timer);
             }
         }, 1000);
@@ -218,8 +226,7 @@ class TypingField extends Component {
                 passageArray: removedCurrent,
                 text: '',
                 totalChars: this.state.totalChars + 1,
-                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
-                netWPM: ((this.state.totalChars / 5) / this.state.typingTime * 100) - this.state.errors / this.state.typingTime * 100
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
             });
         }
 
@@ -229,8 +236,7 @@ class TypingField extends Component {
                 currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
                 totalChars: this.state.totalChars + 1,
-                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
-                netWPM: ((this.state.totalChars / 5) / this.state.typingTime * 100) - this.state.errors / this.state.typingTime * 100
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
             });
         }
 
@@ -277,7 +283,8 @@ class TypingField extends Component {
                     return word;
                 }).slice(1),
                 currentWord: [<CurrentWord key={this.props.passage.split(' ')[0]}>{this.props.passage.split(' ')[0] + ' '}</CurrentWord>],
-                currentWordString: this.props.passage.split(' ')[0] + ' '
+                currentWordString: this.props.passage.split(' ')[0] + ' ',
+                totalPassageChars: this.props.passage.length
             });
         }
     }
@@ -310,6 +317,7 @@ class TypingField extends Component {
                         name="text"
                         autoComplete="off"
                         onKeyDown={this.onKeyDown}
+                        innerRef={this.inputRef}
                     />
                 </TypingContainer>
             </TypingFieldContainer>
