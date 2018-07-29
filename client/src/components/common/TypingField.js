@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import GUID from '../../utils/keyGenerator';
+
 const TypingFieldContainer = styled.div`
     margin-top: 136px;
     width: 100%;
@@ -98,7 +100,7 @@ const CurrentWord = styled.span`
     position: relative;
 
     &::before {
-        content: "${props => props.text ? props.text.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&') : ""}";
+        ${props => props.text ? "content:" + `"${props.text.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&').replace(/\\([\s\S])|(")/g,"\\$1$2")}";` : null}
         position: absolute;
         bottom: 100%;
         white-space: nowrap;
@@ -220,8 +222,8 @@ class TypingField extends Component {
         // If so shift state
         if (value.slice(-1) === ' ' && newRegExp.test(value) && currentWord.length === length) {
             return this.setState({
-                finished: [...this.state.finished, <Correct key={currentWord}>{currentWord}</Correct>],
-                currentWord: [<CurrentWord key={value+this.state.total.toString()}>{this.state.passageArray[0]}</CurrentWord>],
+                finished: [...this.state.finished, <Correct key={GUID()}>{currentWord}</Correct>],
+                currentWord: [<CurrentWord key={GUID()}>{this.state.passageArray[0]}</CurrentWord>],
                 currentWordString: this.state.passageArray[0],
                 passageArray: removedCurrent,
                 text: '',
@@ -233,7 +235,7 @@ class TypingField extends Component {
         // Test individual character against regex if not a space
         if (newRegExp.test(value)) {
             this.setState({
-                currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
+                currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
                 totalChars: this.state.totalChars + 1,
                 grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
@@ -241,7 +243,7 @@ class TypingField extends Component {
         }
 
         // Error handling
-        if (!newRegExp.test(value)) {
+        if (!newRegExp.test(value.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'))) {
             // init var
             let correctLength;
 
@@ -282,7 +284,7 @@ class TypingField extends Component {
 
                     return word;
                 }).slice(1),
-                currentWord: [<CurrentWord key={this.props.passage.split(' ')[0]}>{this.props.passage.split(' ')[0] + ' '}</CurrentWord>],
+                currentWord: [<CurrentWord key={GUID()}>{this.props.passage.split(' ')[0] + ' '}</CurrentWord>],
                 currentWordString: this.props.passage.split(' ')[0] + ' ',
                 totalPassageChars: this.props.passage.length
             });
