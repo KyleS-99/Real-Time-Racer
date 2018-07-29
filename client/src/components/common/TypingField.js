@@ -127,6 +127,7 @@ const Wrong = styled.span`
 class TypingField extends Component {
     state = {
         total: 120,
+        typingTime: 0,
         timeString: '2:00',
         startTimeDown: 6,
         text: '',
@@ -135,14 +136,17 @@ class TypingField extends Component {
         finished: [],
         currentWordString: '',
         backspace: false,
+        totalChars: 0,
         grossWPM: 0,
         netWPM: 0,
         errors: 0
     }
     countDown = () => {
         const timer = setInterval(() => {
-            const total = (this.state.total - 1);
-            this.setState({ total });
+            const total = this.state.total - 1;
+            const typingTime = this.state.typingTime + 1.6666666666666667;
+
+            this.setState({ total, typingTime });
 
             // Calculations
             const minutes = Math.floor(total / 60);
@@ -209,19 +213,24 @@ class TypingField extends Component {
         if (value.slice(-1) === ' ' && newRegExp.test(value) && currentWord.length === length) {
             return this.setState({
                 finished: [...this.state.finished, <Correct key={currentWord}>{currentWord}</Correct>],
-                currentWord: [<CurrentWord key={value}>{this.state.passageArray[0]}</CurrentWord>],
+                currentWord: [<CurrentWord key={value+this.state.total.toString()}>{this.state.passageArray[0]}</CurrentWord>],
                 currentWordString: this.state.passageArray[0],
                 passageArray: removedCurrent,
-                [e.target.name]: ''
+                text: '',
+                totalChars: this.state.totalChars + 1,
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
+                netWPM: ((this.state.totalChars / 5) / this.state.typingTime * 100) - this.state.errors / this.state.typingTime * 100
             });
         }
 
         // Test individual character against regex if not a space
         if (newRegExp.test(value)) {
-            console.log('passing');
             this.setState({
                 currentWord: [<CurrentWord key={value} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
-                text: value
+                text: value,
+                totalChars: this.state.totalChars + 1,
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
+                netWPM: ((this.state.totalChars / 5) / this.state.typingTime * 100) - this.state.errors / this.state.typingTime * 100
             });
         }
 
@@ -247,7 +256,9 @@ class TypingField extends Component {
                     </CurrentWord>
                 ],
                 text: value.length === 0 && this.state.backspace ? '' : value,
-                errors: this.state.errors + 1
+                errors: this.state.errors + 1,
+                grossWPM: (this.state.totalChars / 5) / ((120 - this.total) / 100),
+                netWPM: this.state.grossWPM - (this.state.errors / ((120 - this.total) / 100))
             });
         }
     }
