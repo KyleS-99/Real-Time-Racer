@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import ProgressBar from './ProgressBar';
+
 import GUID from '../../utils/keyGenerator';
 
 const TypingFieldContainer = styled.div`
@@ -70,6 +72,7 @@ const Time = styled.p`
 
 const TypingContainer = styled.div`
     width: 60%;
+    max-width: 1000px;
     height: auto;
     margin: 0 auto;
     display: flex;
@@ -146,6 +149,7 @@ class TypingField extends Component {
             backspace: false,
             totalChars: 0,
             totalPassageChars: 0,
+            percentComplete: 0,
             grossWPM: 0,
             errors: 0
         }
@@ -233,29 +237,30 @@ class TypingField extends Component {
         }
 
         // Test individual character against regex if not a space
-        if (newRegExp.test(value)) {
-            this.setState({
+        if (newRegExp.test(value) && value.slice(-1) !== ' ') {
+            return this.setState({
                 currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
-                totalChars: this.state.totalChars + 1,
-                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
+                totalChars: !this.state.backspace ? this.state.totalChars + 1 : this.state.totalChars,
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
+                percentComplete: !this.state.backspace ? (this.state.totalChars / this.state.totalPassageChars) * 100 : this.state.percentComplete
             });
         }
 
         // Error handling
-        if (!newRegExp.test(value.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'))) {
+        if (!newRegExp.test(value)) {
             // init var
             let correctLength;
 
             // Loop through value, see at what length it isn't correct against the current word
-            for(let i = 0; i < currentWord.slice(0, length).length; i++) {
-                if (currentWord.slice(0, length)[i] !== value[i]) {
+            for(let i = 0; i < length; i++) {
+                if (currentWord[i] !== value[i]) {
                     correctLength = i;
                     break;
                 }
             }
 
-            this.setState({
+            return this.setState({
                 currentWord: [
                     <CurrentWord key={value} text={value.slice(correctLength)} wrong={true}>
                         <Correct>{correctLength === 0 ? null : currentWord.slice(0, correctLength)}</Correct>
@@ -300,6 +305,8 @@ class TypingField extends Component {
                 <Timer>
                     <Time>{this.state.timeString}</Time>
                 </Timer>
+
+                <ProgressBar wpm={Math.round(this.state.grossWPM)} percentComplete={Math.round(this.state.percentComplete)} />
 
                 <StartTimerContainer count={this.state.startTimeDown}>
                     <StartTimer>

@@ -1,5 +1,11 @@
+.sk-circle-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -75px;
+}
+
 .sk-circle {
-  margin: 100px auto;
   width: 100px;
   height: 100px;
   position: relative;

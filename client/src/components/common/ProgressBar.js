@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-class ProgressBar extends Component {
-    state = {  }
-    render() {
-        return (
-            <div>ProgressBar Component</div>
-        );
-    }
+const ProgressBar = (props) => ({
+
+});
+
+ProgressBar.propTypes = {
+    wpm: PropTypes.number.isRequired,
+    percentComplete: PropTypes.number.isRequired
 }
 
 export default ProgressBar;
