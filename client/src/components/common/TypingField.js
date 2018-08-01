@@ -3,12 +3,14 @@ import styled, { keyframes } from 'styled-components';
 import { connect } from 'react-redux';
 
 import ProgressBar from './ProgressBar';
+import SmallSpinner from './SmallSpinner';
 
 import GUID from '../../utils/keyGenerator';
 
 const TypingFieldContainer = styled.div`
     margin-top: 136px;
     width: 100%;
+    position: relative;
 `;
 
 const bounce = keyframes`
@@ -132,6 +134,15 @@ const Wrong = styled.span`
     transition: .2s;
 `;
 
+const Overlay = styled.div`
+    ${props => props.raceDone ? 'position: absolute;' : 'display: none;'}
+    ${props => props.raceDone ? 'top: 37vh;' : null}
+    ${props => props.raceDone ? 'bottom: 0;' : null}
+    ${props => props.raceDone ? 'left: 0;' : null}
+    ${props => props.raceDone ? 'right: 0;' : null}
+    ${props => props.raceDone ? 'background: rgba(255, 255, 255, .7);' : null}
+`;
+
 class TypingField extends Component {
     constructor(props) {
         super(props);
@@ -205,13 +216,15 @@ class TypingField extends Component {
         e.preventDefault();
     }
     onKeyDown = (e) => {
-        if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length) === e.target.value) {
+        // Only change totalChars, and percentComplete if the value is correct and they're deleting
+        if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length) === e.target.value && (this.state.totalChars !== this.state.totalPassageChars)) {
             this.setState({
                 totalChars: this.state.totalChars - 1,
                 percentComplete: (this.state.totalChars / this.state.totalPassageChars) * 100,
                 backspace: e.keyCode === 8
             });
         } else {
+            // Otherwise set backspace to true or false depending on if it equals 8
             this.setState({ backspace: e.keyCode === 8 });
         }
     }
@@ -229,7 +242,7 @@ class TypingField extends Component {
         // Create a string based on the length of the input field
         const match = currentWord.slice(0, length) === value;
 
-        if (value[0] === ' ') {
+        if (value[0] === ' ' || this.state.totalChars === this.state.totalPassageChars) {
             return;
         }
 
@@ -316,7 +329,7 @@ class TypingField extends Component {
         }
     }
     render() {
-        const { first, last } = this.state;
+        const { first, last, totalChars, totalPassageChars } = this.state;
         return (
             <TypingFieldContainer>
                 <Timer>
@@ -350,6 +363,12 @@ class TypingField extends Component {
                         innerRef={this.inputRef}
                     />
                 </TypingContainer>
+
+                <Overlay raceDone={totalChars === totalPassageChars}>
+                    <div style={{position: 'relative;'}}>
+                        <SmallSpinner />
+                    </div>
+                </Overlay>
             </TypingFieldContainer>
         );
     }
