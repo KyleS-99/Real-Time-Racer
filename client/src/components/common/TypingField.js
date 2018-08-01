@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { connect } from 'react-redux';
 
 import ProgressBar from './ProgressBar';
 
@@ -140,7 +141,7 @@ class TypingField extends Component {
             total: 120,
             typingTime: 0,
             timeString: '2:00',
-            startTimeDown: 6,
+            startTimeDown: 5,
             text: '',
             passageArray: [],
             currentWord: [],
@@ -151,7 +152,9 @@ class TypingField extends Component {
             totalPassageChars: 0,
             percentComplete: 0,
             grossWPM: 0,
-            errors: 0
+            errors: 0,
+            first: '',
+            last: ''
         }
     }
     countDown = () => {
@@ -202,7 +205,15 @@ class TypingField extends Component {
         e.preventDefault();
     }
     onKeyDown = (e) => {
-        this.setState({ backspace: e.keyCode === 8 });
+        if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length) === e.target.value) {
+            this.setState({
+                totalChars: this.state.totalChars - 1,
+                percentComplete: (this.state.totalChars / this.state.totalPassageChars) * 100,
+                backspace: e.keyCode === 8
+            });
+        } else {
+            this.setState({ backspace: e.keyCode === 8 });
+        }
     }
     onChange = (e) => {
         // Get value of input
@@ -215,8 +226,8 @@ class TypingField extends Component {
         const rest = currentWord.slice(length);
         // Remove the word that was finished from the array
         const removedCurrent = this.state.passageArray.slice(1);
-        // Create a regex based on the length of the input field
-        const newRegExp = new RegExp(currentWord.slice(0, length));
+        // Create a string based on the length of the input field
+        const match = currentWord.slice(0, length) === value;
 
         if (value[0] === ' ') {
             return;
@@ -224,7 +235,7 @@ class TypingField extends Component {
 
         // If user types space test to see if it matches the current word
         // If so shift state
-        if (value.slice(-1) === ' ' && newRegExp.test(value) && currentWord.length === length) {
+        if (value.slice(-1) === ' ' && match && currentWord.length === length) {
             return this.setState({
                 finished: [...this.state.finished, <Correct key={GUID()}>{currentWord}</Correct>],
                 currentWord: [<CurrentWord key={GUID()}>{this.state.passageArray[0]}</CurrentWord>],
@@ -237,18 +248,18 @@ class TypingField extends Component {
         }
 
         // Test individual character against regex if not a space
-        if (newRegExp.test(value) && value.slice(-1) !== ' ') {
+        if (match && value.slice(-1) !== ' ') {
             return this.setState({
                 currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
                 totalChars: !this.state.backspace ? this.state.totalChars + 1 : this.state.totalChars,
                 grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
-                percentComplete: !this.state.backspace ? (this.state.totalChars / this.state.totalPassageChars) * 100 : this.state.percentComplete
+                percentComplete: !this.state.backspace ? ((this.state.totalChars + 1) / this.state.totalPassageChars) * 100 : this.state.percentComplete
             });
         }
 
         // Error handling
-        if (!newRegExp.test(value)) {
+        if (!match) {
             // init var
             let correctLength;
 
@@ -270,8 +281,7 @@ class TypingField extends Component {
                 ],
                 text: value.length === 0 && this.state.backspace ? '' : value,
                 errors: this.state.errors + 1,
-                grossWPM: (this.state.totalChars / 5) / ((120 - this.total) / 100),
-                netWPM: this.state.grossWPM - (this.state.errors / ((120 - this.total) / 100))
+                grossWPM: (this.state.totalChars / 5) / ((120 - this.total) / 100)
             });
         }
     }
@@ -298,15 +308,26 @@ class TypingField extends Component {
     componentDidMount() {
         // Start time down
         this.timeDown();
+
+        if (this.props.auth.user.first) {
+            const { first, last } = this.props.auth.user;
+
+            this.setState({ first, last });
+        }
     }
     render() {
+        const { first, last } = this.state;
         return (
             <TypingFieldContainer>
                 <Timer>
                     <Time>{this.state.timeString}</Time>
                 </Timer>
 
-                <ProgressBar wpm={Math.round(this.state.grossWPM)} percentComplete={Math.round(this.state.percentComplete)} />
+                <ProgressBar 
+                    wpm={Math.round(this.state.grossWPM)} 
+                    percentComplete={this.state.percentComplete}
+                    name={`${first} ${last}`}
+                />
 
                 <StartTimerContainer count={this.state.startTimeDown}>
                     <StartTimer>
@@ -334,4 +355,8 @@ class TypingField extends Component {
     }
 }
 
-export default TypingField;
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(TypingField);
