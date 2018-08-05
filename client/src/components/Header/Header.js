@@ -43,7 +43,7 @@ const Avatar = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-image: url(${props => props.src ? props.src : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5d43ec18ec2cf6ff854513b9e8395c1e&auto=format&fit=crop&w=1350&q=80"});
+    background-image: url(${props => props.src ? props.src : "https://i.imgur.com/O4mhvZf.png"});
     background-size: cover;
     background-position: center center;
     box-shadow: 0 8px 19px -1px rgba(0,0,0,.1);
