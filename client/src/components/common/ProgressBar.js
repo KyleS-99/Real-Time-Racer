@@ -79,6 +79,40 @@ const Name = styled.p`
     margin: 0;
 `;
 
+const ProfilePictureContainer = styled.div`
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+`;
+
+const ProfileLine = styled.div`
+    width: 100%;
+`;
+
+const Line = styled.div`
+    width: 100%;
+    height: 5px;
+    background-image: linear-gradient(0deg,#f77062 0,#fe5196);
+`;
+
+const LineBlur = Line.extend`
+    filter: blur(10px);
+`;
+
+const ProfilePicture = styled.div`
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-image: url(${props => props.src ? props.src : "https://i.imgur.com/O4mhvZf.png"});
+    background-size: cover;
+    background-position: center center;
+    box-shadow: 0 8px 19px -1px rgba(0,0,0,.1);
+    cursor: pointer;
+    box-shadow: 0 4px 45px 0 rgba(0,0,0,.2);
+    border: 5px solid #f77062;
+    margin: -47px auto 0 auto;
+`;
+
 class ProgressBar extends Component {
     state = {
         wpm: 0,
@@ -108,7 +142,13 @@ class ProgressBar extends Component {
                     </StatusBar>
         
                     <PlayerBackgroundFill>
-        
+                        <ProfilePictureContainer>
+                            <ProfileLine>
+                                <Line />
+                                <LineBlur />
+                            </ProfileLine>
+                            <ProfilePicture src={this.props.img} />
+                        </ProfilePictureContainer>
                     </PlayerBackgroundFill>
 
                     <PlayerName>
@@ -123,7 +163,8 @@ class ProgressBar extends Component {
 ProgressBar.propTypes = {
     wpm: PropTypes.number.isRequired,
     percentComplete: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    img: PropTypes.string.isRequired
 }
 
 export default ProgressBar;

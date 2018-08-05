@@ -242,6 +242,8 @@ class TypingField extends Component {
         // Create a string based on the length of the input field
         const match = currentWord.slice(0, length) === value;
 
+        // If user is entering a space at the start of the race prevent them or if the race is over
+        // Prevent them from typing/removing characters
         if (value[0] === ' ' || this.state.totalChars === this.state.totalPassageChars) {
             return;
         }
@@ -267,7 +269,7 @@ class TypingField extends Component {
                 text: value,
                 totalChars: !this.state.backspace ? this.state.totalChars + 1 : this.state.totalChars,
                 grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
-                percentComplete: !this.state.backspace ? ((this.state.totalChars + 1) / this.state.totalPassageChars) * 100 : this.state.percentComplete
+                percentComplete: !this.state.backspace ? (this.state.totalChars + 1) === this.state.totalPassageChars ? 100 : ((this.state.totalChars + 1) / this.state.totalPassageChars) * 100 : this.state.percentComplete
             });
         }
 
@@ -329,7 +331,14 @@ class TypingField extends Component {
         }
     }
     render() {
-        const { first, last, totalChars, totalPassageChars } = this.state;
+        const { 
+            first, 
+            last, 
+            totalChars, 
+            totalPassageChars
+        } = this.state;
+        const { user: { img } } = this.props.auth;
+
         return (
             <TypingFieldContainer>
                 <Timer>
@@ -340,6 +349,7 @@ class TypingField extends Component {
                     wpm={Math.round(this.state.grossWPM)} 
                     percentComplete={this.state.percentComplete}
                     name={`${first} ${last}`}
+                    img={img}
                 />
 
                 <StartTimerContainer count={this.state.startTimeDown}>
