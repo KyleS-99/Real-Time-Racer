@@ -77,8 +77,7 @@ module.exports = {
         // Send user data and token back to user
         res.json({ token });
     },
-    secret: async (req, res) => {
-        res.json({ message: "You're an authenticated user"});
-        console.log('secret route called', req.user);
+    practice: async (req, res) => {
+        
     }
 };

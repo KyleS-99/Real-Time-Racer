@@ -164,6 +164,7 @@ class TypingField extends Component {
             percentComplete: 0,
             grossWPM: 0,
             errors: 0,
+            acc: 0,
             first: '',
             last: ''
         }
@@ -221,7 +222,6 @@ class TypingField extends Component {
         e.persist();
         // Only change totalChars, and percentComplete if the value is correct and they're deleting
         if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length === 0 ? 1 : e.target.value.length) === e.target.value && (this.state.totalChars !== this.state.totalPassageChars)) {
-            console.log('I\'m being ran')
             this.setState((prevState) => ({
                 totalChars: this.state.totalChars - 1,
                 percentComplete: (this.state.totalChars / this.state.totalPassageChars) * 100,
@@ -268,23 +268,27 @@ class TypingField extends Component {
                 passageArray: removedCurrent,
                 text: '',
                 totalChars: prevState.totalChars + 1,
-                grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100
+                grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100,
+                acc: ((prevState.totalPassageChars - (prevState.errors)) / (prevState.totalPassageChars)) * 100
             }));
         }
 
         // Test individual character against regex if not a space
         if (match && value.slice(-1) !== ' ') {
+            console.log('norm called');
             return this.setState((prevState) => ({
                 currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
                 totalChars: !prevState.backspace ? prevState.totalChars + 1 : prevState.totalChars,
                 grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100,
-                percentComplete: !prevState.backspace ? (prevState.totalChars + 1) === prevState.totalPassageChars ? 100 : ((prevState.totalChars + 1) / prevState.totalPassageChars) * 100 : prevState.percentComplete
+                percentComplete: !prevState.backspace ? (prevState.totalChars + 1) === prevState.totalPassageChars ? 100 : ((prevState.totalChars + 1) / prevState.totalPassageChars) * 100 : prevState.percentComplete,
+                acc: !prevState.backspace ? ((prevState.totalPassageChars - (prevState.errors)) / (prevState.totalPassageChars)) * 100 : prevState.acc
             }));
         }
 
         // Error handling
         if (!match) {
+            console.log('fail called');
             // init var
             let correctLength;
 
@@ -305,7 +309,8 @@ class TypingField extends Component {
                     </CurrentWord>
                 ],
                 text: value.length === 0 && prevState.backspace ? '' : value,
-                errors: prevState.errors + 1,
+                errors: !prevState.backspace ? prevState.errors + 1 : prevState.errors,
+                acc: !prevState.backspace ? ((prevState.totalPassageChars - (prevState.errors + 1)) / (prevState.totalPassageChars)) * 100 : prevState.acc,
                 grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100
             }));
         }
@@ -348,7 +353,9 @@ class TypingField extends Component {
             first, 
             last, 
             totalChars, 
-            totalPassageChars
+            totalPassageChars,
+            grossWPM,
+            percentComplete
         } = this.state;
         const { user: { img } } = this.props.auth;
 
@@ -359,8 +366,8 @@ class TypingField extends Component {
                 </Timer>
 
                 <ProgressBar 
-                    wpm={Math.round(this.state.grossWPM)} 
-                    percentComplete={this.state.percentComplete}
+                    wpm={Math.round(grossWPM)} 
+                    percentComplete={percentComplete}
                     name={`${first} ${last}`}
                     img={img}
                 />
