@@ -14,8 +14,11 @@ class Practice extends Component {
     componentDidMount() {
         this.props.setPassage();
     }
+    componentWillUnmount() {
+        this.canceledRequest = true;
+    }
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.passage !== this.props.test.passage) {
+        if (prevState.passage !== this.props.test.passage && !this.canceledRequest) {
             this.setState({ passage: this.props.test.passage });
         }
     }
