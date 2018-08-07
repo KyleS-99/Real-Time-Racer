@@ -40,6 +40,14 @@ const userSchema = new Schema({
                 wpm: Number,
                 img: String
             }
+        }],
+        practiceRaces: [{
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
+            wpm: Number,
+            accuracy: Number
         }]
     },
     google: {
@@ -73,6 +81,14 @@ const userSchema = new Schema({
                 wpm: Number,
                 img: String
             }
+        }],
+        practiceRaces: [{
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
+            wpm: Number,
+            accuracy: Number
         }]
     },
     facebook: {
@@ -106,6 +122,14 @@ const userSchema = new Schema({
                 wpm: Number,
                 img: String
             }
+        }],
+        practiceRaces: [{
+            text: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'texts'
+            },
+            wpm: Number,
+            accuracy: Number
         }]
     }
 });
