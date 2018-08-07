@@ -216,13 +216,16 @@ class TypingField extends Component {
         e.preventDefault();
     }
     onKeyDown = (e) => {
+        e.persist();
         // Only change totalChars, and percentComplete if the value is correct and they're deleting
-        if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length) === e.target.value && (this.state.totalChars !== this.state.totalPassageChars)) {
-            this.setState({
+        if (e.keyCode === 8 && this.state.currentWordString.slice(0, e.target.value.length === 0 ? 1 : e.target.value.length) === e.target.value && (this.state.totalChars !== this.state.totalPassageChars)) {
+            console.log('I\'m being ran')
+            this.setState((prevState) => ({
                 totalChars: this.state.totalChars - 1,
                 percentComplete: (this.state.totalChars / this.state.totalPassageChars) * 100,
-                backspace: e.keyCode === 8
-            });
+                backspace: e.keyCode === 8,
+                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
+            }));
         } else {
             // Otherwise set backspace to true or false depending on if it equals 8
             this.setState({ backspace: e.keyCode === 8 });
@@ -251,26 +254,26 @@ class TypingField extends Component {
         // If user types space test to see if it matches the current word
         // If so shift state
         if (value.slice(-1) === ' ' && match && currentWord.length === length) {
-            return this.setState({
-                finished: [...this.state.finished, <Correct key={GUID()}>{currentWord}</Correct>],
-                currentWord: [<CurrentWord key={GUID()}>{this.state.passageArray[0]}</CurrentWord>],
-                currentWordString: this.state.passageArray[0],
+            return this.setState((prevState) => ({
+                finished: [...prevState.finished, <Correct key={GUID()}>{currentWord}</Correct>],
+                currentWord: [<CurrentWord key={GUID()}>{prevState.passageArray[0]}</CurrentWord>],
+                currentWordString: prevState.passageArray[0],
                 passageArray: removedCurrent,
                 text: '',
-                totalChars: this.state.totalChars + 1,
-                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100
-            });
+                totalChars: prevState.totalChars + 1,
+                grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100
+            }));
         }
 
         // Test individual character against regex if not a space
         if (match && value.slice(-1) !== ' ') {
-            return this.setState({
+            return this.setState((prevState) => ({
                 currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
-                totalChars: !this.state.backspace ? this.state.totalChars + 1 : this.state.totalChars,
-                grossWPM: (this.state.totalChars / 5) / this.state.typingTime * 100,
-                percentComplete: !this.state.backspace ? (this.state.totalChars + 1) === this.state.totalPassageChars ? 100 : ((this.state.totalChars + 1) / this.state.totalPassageChars) * 100 : this.state.percentComplete
-            });
+                totalChars: !prevState.backspace ? prevState.totalChars + 1 : prevState.totalChars,
+                grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100,
+                percentComplete: !prevState.backspace ? (prevState.totalChars + 1) === prevState.totalPassageChars ? 100 : ((prevState.totalChars + 1) / prevState.totalPassageChars) * 100 : prevState.percentComplete
+            }));
         }
 
         // Error handling
@@ -286,7 +289,7 @@ class TypingField extends Component {
                 }
             }
 
-            return this.setState({
+            return this.setState((prevState) => ({
                 currentWord: [
                     <CurrentWord key={value} text={value.slice(correctLength)} wrong={true}>
                         <Correct>{correctLength === 0 ? null : currentWord.slice(0, correctLength)}</Correct>
@@ -294,10 +297,10 @@ class TypingField extends Component {
                         {currentWord.slice(correctLength + 1)}
                     </CurrentWord>
                 ],
-                text: value.length === 0 && this.state.backspace ? '' : value,
-                errors: this.state.errors + 1,
-                grossWPM: (this.state.totalChars / 5) / ((120 - this.total) / 100)
-            });
+                text: value.length === 0 && prevState.backspace ? '' : value,
+                errors: prevState.errors + 1,
+                grossWPM: (prevState.totalChars / 5) / prevState.typingTime * 100
+            }));
         }
     }
     componentDidUpdate(prevProps, prevState) {
