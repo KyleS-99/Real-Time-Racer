@@ -135,12 +135,12 @@ const Wrong = styled.span`
 `;
 
 const Overlay = styled.div`
-    ${props => props.raceDone ? 'position: absolute;' : 'display: none;'}
-    ${props => props.raceDone ? 'top: 37vh;' : null}
-    ${props => props.raceDone ? 'bottom: 0;' : null}
-    ${props => props.raceDone ? 'left: 0;' : null}
-    ${props => props.raceDone ? 'right: 0;' : null}
-    ${props => props.raceDone ? 'background: rgba(255, 255, 255, .7);' : null}
+    ${props => props.raceDone ? 'position: absolute' : 'display: none'}
+    ${props => props.raceDone ? 'top: 37vh' : null}
+    ${props => props.raceDone ? 'bottom: 0' : null}
+    ${props => props.raceDone ? 'left: 0' : null}
+    ${props => props.raceDone ? 'right: 0' : null}
+    ${props => props.raceDone ? 'background: rgba(255, 255, 255, .7)' : null}
 `;
 
 class TypingField extends Component {
@@ -245,9 +245,14 @@ class TypingField extends Component {
         // Create a string based on the length of the input field
         const match = currentWord.slice(0, length) === value;
 
+        // Check if race is finished or if time is out
+        if (this.state.totalChars === this.state.totalPassageChars || this.state.total === 0) {
+            // add react-redux & async post request to database saving data
+        }
+
         // If user is entering a space at the start of the race prevent them or if the race is over
         // Prevent them from typing/removing characters
-        if (value[0] === ' ' || this.state.totalChars === this.state.totalPassageChars) {
+        if (value[0] === ' ') {
             return;
         }
 
@@ -327,11 +332,14 @@ class TypingField extends Component {
         // Start time down
         this.timeDown();
 
-        if (this.props.auth.user.first) {
+        if (this.props.auth.user.first && !this.cancelRequest) {
             const { first, last } = this.props.auth.user;
-
+            
             this.setState({ first, last });
         }
+    }
+    componentWillUnmount() {
+        this.cancelRequest = true;
     }
     render() {
         const { 
