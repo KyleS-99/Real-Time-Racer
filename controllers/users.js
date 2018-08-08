@@ -78,6 +78,6 @@ module.exports = {
         res.json({ token });
     },
     practice: async (req, res) => {
-        
+        console.log(req.user);
     }
 };

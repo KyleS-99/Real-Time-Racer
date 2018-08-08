@@ -98,8 +98,10 @@ const Input = styled.input`
 
 const WordContainer = styled.div`
     text-align: center;
-    font-size: 1.55rem;
+    font-size: 23px;
     line-height: 1.15;
+    font-weight: 400;
+    color: #555;
 `;
 
 const CurrentWord = styled.span`
@@ -126,6 +128,7 @@ const CurrentWord = styled.span`
 
 const Correct = styled.span`
     color: #17a589;
+    transition: .5s;
 `;
 
 const Wrong = styled.span`
@@ -245,12 +248,7 @@ class TypingField extends Component {
         // Remove the word that was finished from the array
         const removedCurrent = this.state.passageArray.slice(1);
         // Create a string based on the length of the input field
-        const match = currentWord.slice(0, length) === value;
-
-        // Check if race is finished or if time is out
-        if (this.state.totalChars === this.state.totalPassageChars || this.state.total === 0) {
-            // add react-redux & async post request to database saving data
-        }
+        const match = currentWord.slice(0, length) === value
 
         // If user is entering a space at the start of the race prevent them or if the race is over
         // Prevent them from typing/removing characters
@@ -274,9 +272,8 @@ class TypingField extends Component {
         }
 
         // Test individual character against regex if not a space
-        if (match && value.slice(-1) !== ' ') {
-            console.log('norm called');
-            return this.setState((prevState) => ({
+        if (match) {
+            this.setState((prevState) => ({
                 currentWord: [<CurrentWord key={GUID()} text={value}><Correct>{value}</Correct>{rest}</CurrentWord>],
                 text: value,
                 totalChars: !prevState.backspace ? prevState.totalChars + 1 : prevState.totalChars,
@@ -284,11 +281,23 @@ class TypingField extends Component {
                 percentComplete: !prevState.backspace ? (prevState.totalChars + 1) === prevState.totalPassageChars ? 100 : ((prevState.totalChars + 1) / prevState.totalPassageChars) * 100 : prevState.percentComplete,
                 acc: !prevState.backspace ? ((prevState.totalPassageChars - (prevState.errors)) / (prevState.totalPassageChars)) * 100 : prevState.acc
             }));
+            
+            // Check if race is finished
+            // Since setState is async test for +1 and ===
+            if ((this.state.totalChars + 1) === this.state.totalPassageChars || this.state.totalChars === this.state.totalPassageChars) {
+                // configure user data
+                const { grossWPM, acc } = this.state;
+                const userData = { grossWPM, acc };
+
+                // Call parent component function with data
+                return this.props.submitRaceData(userData);
+            } else {
+                return;
+            }
         }
 
         // Error handling
         if (!match) {
-            console.log('fail called');
             // init var
             let correctLength;
 

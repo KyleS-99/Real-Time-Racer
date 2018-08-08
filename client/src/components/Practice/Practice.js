@@ -9,7 +9,11 @@ import TypingField from '../common/TypingField';
 
 class Practice extends Component {
     state = {
-        passage: null
+        passage: null,
+        passageId: null
+    }
+    submitRaceData = (userData) => {
+        console.log(userData);
     }
     componentDidMount() {
         this.props.setPassage();
@@ -19,13 +23,16 @@ class Practice extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevState.passage !== this.props.test.passage && !this.canceledRequest) {
-            this.setState({ passage: this.props.test.passage });
+            const { passage, passageID } = this.props.test;
+
+            // Set data to state
+            this.setState({ passage, passageId });
         }
     }
     render() {
         return (
             <div>
-                <TypingField passage={this.state.passage} />
+                <TypingField passage={this.state.passage} submitRaceData={this.submitRaceData} />
             </div>
         );
     }
