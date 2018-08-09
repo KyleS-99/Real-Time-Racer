@@ -193,18 +193,8 @@ class TypingField extends Component {
             // if total is 0 set the time to 0 & clear interval
             if (total === 0) {
                 this.setState({ timeString: '0:00' });
-                clearInterval(timer);
-            }
-
-            if (total === 0 && this.state.totalChars === 0) {
                 this.props.history.push('/dashboard');
-            } else if (total === 0 && this.state.totalChars !== 0) {
-                 // configure user data
-                 const { grossWPM, acc } = this.state;
-                 const userData = { grossWPM: Math.round(grossWPM), acc: Math.round(acc) };
- 
-                 // Call parent component function with data
-                 this.props.submitRaceData(userData);
+                clearInterval(timer);
             }
 
             // Update state
