@@ -193,8 +193,10 @@ class TypingField extends Component {
             // if total is 0 set the time to 0 & clear interval
             if (total === 0) {
                 this.setState({ timeString: '0:00' });
-                this.props.history.push('/dashboard');
                 clearInterval(timer);
+                
+                // Redirect user to /dashboard if they've not finished the race
+                this.props.history.push('/dashboard');
             }
 
             // Update state
