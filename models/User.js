@@ -24,7 +24,7 @@ const userSchema = new Schema({
             type: String
         },
         img: String,
-        races: [{
+        playerRaces: [{
             first: String,
             last: String,
             img: String,
@@ -65,7 +65,7 @@ const userSchema = new Schema({
             lowercase: true
         },
         img: String,
-        races: [{
+        playerRaces: [{
             first: String,
             last: String,
             img: String,
@@ -106,7 +106,7 @@ const userSchema = new Schema({
             lowercase: true
         },
         img: String,
-        races: [{
+        playerRaces: [{
             first: String,
             last: String,
             img: String,

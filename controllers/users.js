@@ -78,6 +78,23 @@ module.exports = {
         res.json({ token });
     },
     practice: async (req, res) => {
-        console.log(req.user);
+        // Get user data
+        const { grossWPM, acc, passageId } = req.body;
+
+        // Find user by id
+        const user = await User.findById(req.user.id);
+
+        // Update users practiceRaces array
+        user[user.method].practiceRaces.unshift({
+            text: passageId,
+            wpm: grossWPM,
+            accuracy: acc
+        });
+
+        // Save new race data to database
+        await user.save();
+
+        // Send race data back to client
+        res.json({ raceId: user[user.method].practiceRaces[0].id });
     }
 };

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { setPassage } from '../../actions/testActions';
+import { setPassage, savePracticeRace } from '../../actions/testActions';
 
 import TypingField from '../common/TypingField';
 
@@ -13,7 +12,11 @@ class Practice extends Component {
         passageId: null
     }
     submitRaceData = (userData) => {
-        console.log(userData);
+        // Set passageId in object to be submited
+        userData.passageId = this.state.passageId;
+
+        // Make request
+        this.props.savePracticeRace(userData, this.props.history);
     }
     componentDidMount() {
         this.props.setPassage();
@@ -23,7 +26,7 @@ class Practice extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevState.passage !== this.props.test.passage && !this.canceledRequest) {
-            const { passage, passageID } = this.props.test;
+            const { passage, passageId } = this.props.test;
 
             // Set data to state
             this.setState({ passage, passageId });
@@ -32,7 +35,11 @@ class Practice extends Component {
     render() {
         return (
             <div>
-                <TypingField passage={this.state.passage} submitRaceData={this.submitRaceData} />
+                <TypingField 
+                    passage={this.state.passage} 
+                    submitRaceData={this.submitRaceData} 
+                    history={this.props.history}
+                />
             </div>
         );
     }
@@ -40,11 +47,12 @@ class Practice extends Component {
 
 Practice.propTypes = {
     test: PropTypes.object.isRequired,
-    setPassage: PropTypes.func.isRequired
+    setPassage: PropTypes.func.isRequired,
+    savePracticeRace: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
     test: state.test
 });
 
-export default connect(mapStateToProps, { setPassage })(Practice);
+export default connect(mapStateToProps, { setPassage, savePracticeRace })(Practice);

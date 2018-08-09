@@ -16,16 +16,20 @@ export const setPassage = () => dispatch => {
         );
 };
 
-// export const savePracticeRace = data => dispatch => {
-//     axios.post('/users/practice', data)
-//         .then()
-//         .catch((err) => 
-//             dispatch({
-//                 type: GET_ERRORS,
-//                 payload: 'Unable to save race'
-//             })
-//         )
-// };
+export const savePracticeRace = (data, history) => dispatch => {
+    axios.post('/users/practice', data)
+        .then((res) => {
+            const { raceId } = res.data;
+
+            history.push(`/tests/practice/${raceId}`);
+        })
+        .catch((err) => 
+            dispatch({
+                type: GET_ERRORS,
+                payload: 'Unable to save race'
+            })
+        )
+};
 
 export const passageAction = (passage) => ({
     type: SET_PASSAGE,

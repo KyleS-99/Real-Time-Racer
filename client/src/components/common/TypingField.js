@@ -194,6 +194,7 @@ class TypingField extends Component {
             if (total === 0) {
                 this.setState({ timeString: '0:00' });
                 clearInterval(timer);
+                this.props.history.push('/dashboard');
             }
 
             // Update state
@@ -250,9 +251,8 @@ class TypingField extends Component {
         // Create a string based on the length of the input field
         const match = currentWord.slice(0, length) === value
 
-        // If user is entering a space at the start of the race prevent them or if the race is over
-        // Prevent them from typing/removing characters
-        if (value[0] === ' ') {
+       // Prevent user from typing if race is over or if user enters space at the beginning
+        if (value[0] === ' ' || this.state.totalChars === this.state.totalPassageChars) {
             return;
         }
 
@@ -287,7 +287,7 @@ class TypingField extends Component {
             if ((this.state.totalChars + 1) === this.state.totalPassageChars || this.state.totalChars === this.state.totalPassageChars) {
                 // configure user data
                 const { grossWPM, acc } = this.state;
-                const userData = { grossWPM, acc };
+                const userData = { grossWPM: Math.round(grossWPM), acc: Math.round(acc) };
 
                 // Call parent component function with data
                 return this.props.submitRaceData(userData);
