@@ -13,7 +13,8 @@ import Header from './components/Header/Header';
 import { 
 	Landing,
 	Dashboard,
-	Practice
+	Practice,
+	Overview
 } from './code-split';
 
 import './App.css';
@@ -62,6 +63,7 @@ class App extends Component {
 							<Route exact path="/" component={Landing} />
 							<PrivateRoute exact path="/dashboard" component={Dashboard} />
 							<PrivateRoute exact path="/test/practice" component={Practice} />
+							<PrivateRoute exact path="/tests/practice/:raceId" component={Overview} />
 						</Switch>
 					</div>
 				</BrowserRouter>
