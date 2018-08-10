@@ -1,6 +1,7 @@
 const JWT = require('jsonwebtoken');
 const User = require('../models/User');
 const { secret } = require('../config/keys');
+const bcrypt = require('bcryptjs');
 
 const signToken = user => {
     if (user[user.method].password) {
@@ -25,7 +26,7 @@ const signToken = user => {
 
 module.exports = {
     signUp: async (req, res) => {
-        const { first, last, email, password, password2 } = req.value.body;
+        const { first, last, email, password } = req.value.body;
 
         // Check if user already exists with entered email
         const foundUser = await User.findOne({ 'local.email': email });
@@ -35,8 +36,13 @@ module.exports = {
             return res.status(403).json({ email: 'Email is already in use' });
         }
 
+        // Generate salt
+        const salt = await bcrypt.genSalt(10);
+        // Generate hashed password (salt + hash)
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         // Create a new user
-        const newUser = new User({ method: 'local', local: { first, last, email, password } });
+        const newUser = new User({ method: 'local', local: { first, last, email, password: hashedPassword } });
         await newUser.save();
 
         // Generate the token
@@ -81,20 +87,17 @@ module.exports = {
         // Get user data
         const { grossWPM, acc, passageId } = req.body;
 
-        // Find user by id
-        const user = await User.findById(req.user.id);
-
         // Update users practiceRaces array
-        user[user.method].practiceRaces.unshift({
+        req.user[req.user.method].practiceRaces.unshift({
             text: passageId,
             wpm: grossWPM,
             accuracy: acc
         });
 
         // Save new race data to database
-        await user.save();
+        await req.user.save();
 
         // Send race data back to client
-        res.json({ raceId: user[user.method].practiceRaces[0].id });
+        res.json({ raceId: req.user[req.user.method].practiceRaces[0].id });
     }
 };

@@ -134,25 +134,6 @@ const userSchema = new Schema({
     }
 });
 
-userSchema.pre('save', async function(next) {
-    try {
-        if (this.method !== 'local') {
-            next();
-        }
-
-        // Generate salt
-        const salt = await bcrypt.genSalt(10);
-        // Generate hashed password (salt + hash)
-        const hashedPassword = await bcrypt.hash(this.local.password, salt);
-
-        // set plain-text password to hashed password
-        this.local.password = hashedPassword;
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
 userSchema.methods.isValidPassword = async function(password) {
     try {
         return await bcrypt.compare(password, this.local.password);
