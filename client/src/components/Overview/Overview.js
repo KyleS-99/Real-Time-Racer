@@ -27,7 +27,7 @@ const Avatar = styled.div`
     cursor: pointer;
 `;
 
-const NameContainer = styled.div`
+const MarginTopDiv = styled.div`
     margin-top: 20px;
 `;
 
@@ -37,6 +37,83 @@ const Name = styled(Link)`
     text-decoration: none;
 `;
 
+const Wpm = styled.p`
+    color: #222;
+    font-size: 25px;
+`;
+
+const Accuracy = styled.p`
+    font-weight: 300;
+`;
+
+const AccuracyPercent = styled.span`
+    font-weight: 300;
+    padding: 5px;
+    color: #1e1e1e;
+    border-radius: 5px;
+    background: #eee;
+`;
+
+const TextTyped = styled.div`
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.5;
+`;
+
+const Title = styled.h2`
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 300;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-self: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+`;
+
+const Replay = styled.button`
+    margin-right: 20px;
+    width: 150px;
+    height: 40px;
+    background-image: linear-gradient(-225deg, #A445B2 0%, #D41872 52%, #FF0066 100%);
+    color: aliceblue;
+    font-size: 18px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0px 15px 43px 0px rgba(212,24,114,0.3);
+    outline: none;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.9);
+    }
+`;
+
+const AnotherTest = styled.button`
+    height: 40px;
+    outline: none;
+    background: #fff;
+    border: none;
+    padding: 0px 25px;
+    box-shadow: 0px 7px 60px -6px rgba(0,0,0,0.1);
+    color: #707B7C;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:active {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+`;
+
 class Overview extends Component {
     state = {  }
     render() {
@@ -44,7 +121,7 @@ class Overview extends Component {
         let enlargeImg;
 
         // Check if img is defined if so set enlargeImg to the url but add 200 as the size
-        if (img) {
+        if (img && img !== '') {
             enlargeImg = img.slice(0, -2) + '200';
         }
 
@@ -53,11 +130,39 @@ class Overview extends Component {
                 <OverviewInnerContainer>
                     <Avatar src={enlargeImg} />
 
-                    <NameContainer>
+                    <MarginTopDiv>
                         <Name to="/profile">
                             {`${first} ${last}`}
                         </Name>
-                    </NameContainer>
+                    </MarginTopDiv>
+
+                    <MarginTopDiv>
+                        <Wpm>
+                            76 WPM
+                        </Wpm>
+                    </MarginTopDiv>
+
+                    <MarginTopDiv>
+                        <Accuracy>
+                            Accuracy <AccuracyPercent>100%</AccuracyPercent>
+                        </Accuracy>
+                    </MarginTopDiv>
+
+                    <MarginTopDiv>
+                        <TextTyped>
+                            <Title>text typed</Title>
+                            <p>As human beings, we are the only organisms that create for the sheer stupid pleasure of doing so. Whether it's laying out a garden, composing a new tune on the piano, writing a bit of poetry, manipulating a digital photo, redecorating a room, or inventing a new chili recipe - we are happiest when we are creating.</p>
+                        </TextTyped>
+                    </MarginTopDiv>
+
+                    <ButtonContainer>
+                        <Replay>Replay</Replay>
+                        <Link to="/test/practice">
+                            <AnotherTest>
+                                Take Practice Test (Ctrl + z)
+                            </AnotherTest>
+                        </Link>
+                    </ButtonContainer>
                 </OverviewInnerContainer>
             </OverviewContainer>
         );
