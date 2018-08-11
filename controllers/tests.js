@@ -4,18 +4,20 @@ module.exports = {
     practice: async (req, res) => {
         // Get user data
         const { grossWPM, acc, passageId } = req.body;
+        // Get user off of req object
+        const { user } = req;
 
         // Update users practiceRaces array
-        req.user[req.user.method].practiceRaces.unshift({
+        user[user.method].practiceRaces.unshift({
             text: passageId,
             wpm: grossWPM,
             accuracy: acc
         });
 
         // Save new race data to database
-        await req.user.save();
+        await user.save();
 
         // Send race data back to client
-        res.json({ raceId: req.user[req.user.method].practiceRaces[0].id });
+        res.json({ raceId: user[user.method].practiceRaces[0].id });
     }
 };
