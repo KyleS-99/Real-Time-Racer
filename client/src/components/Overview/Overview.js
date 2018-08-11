@@ -65,6 +65,7 @@ const Title = styled.h2`
     text-transform: uppercase;
     font-size: 15px;
     font-weight: 300;
+    margin-bottom: -20px;
 `;
 
 const ButtonContainer = styled.div`
@@ -76,7 +77,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Replay = styled.button`
-    margin-right: 20px;
+    margin-right: 15px;
     width: 150px;
     height: 40px;
     background-image: linear-gradient(-225deg, #A445B2 0%, #D41872 52%, #FF0066 100%);
@@ -121,14 +122,14 @@ class Overview extends Component {
         let enlargeImg;
 
         // Check if img is defined if so set enlargeImg to the url but add 200 as the size
-        if (img && img !== '') {
+        if (img && img !== '' && method === 'google') {
             enlargeImg = img.slice(0, -2) + '200';
         }
 
         return (
             <OverviewContainer>
                 <OverviewInnerContainer>
-                    <Avatar src={enlargeImg} />
+                    <Avatar src={enlargeImg ? enlargeImg : img} />
 
                     <MarginTopDiv>
                         <Name to="/profile">

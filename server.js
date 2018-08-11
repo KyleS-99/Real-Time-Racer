@@ -10,6 +10,7 @@ const { mongoURI } = require('./config/keys');
 
 const users = require('./routes/users');
 const passages = require('./routes/passages');
+const tests = require('./routes/tests');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,6 +25,7 @@ mongoose
 // Routes
 app.use('/users', users);
 app.use('/passages/', passages);
+app.use('/tests', tests);
 
 // Start the server
 const port = process.env.PORT || 5000;

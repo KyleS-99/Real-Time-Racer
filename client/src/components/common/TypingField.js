@@ -214,7 +214,7 @@ class TypingField extends Component {
             // Check if time is 0 if so start the clock & clear interval
             if (time === 0) {
                 this.countDown();
-                if (this.inputRef) {
+                if (this.inputRef && !this.cancelRequest) {
                     this.inputRef.current.focus();
                 }
                 return clearInterval(timer);

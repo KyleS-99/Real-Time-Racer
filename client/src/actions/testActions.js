@@ -17,7 +17,7 @@ export const setPassage = () => dispatch => {
 };
 
 export const savePracticeRace = (data, history) => dispatch => {
-    axios.post('/users/practice', data)
+    axios.post('/tests/practice', data)
         .then((res) => {
             const { raceId } = res.data;
 
