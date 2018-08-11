@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const OverviewContainer = styled.div`
+const PracticeResultContainer = styled.div`
     width: 100%;
     margin-top: 80px;
 `;
 
-const OverviewInnerContainer = styled.div`
+const PracticeResultInnerContainer = styled.div`
     width: 60%;
     max-width: 1200px;
     margin: 0 auto;
@@ -115,8 +116,21 @@ const AnotherTest = styled.button`
     }
 `;
 
-class Overview extends Component {
-    state = {  }
+class PracticeResult extends Component {
+    state = {
+        passage: null,
+        passageId: null,
+        wpm: null,
+        accuracy: null
+    }
+    componentDidMount() {
+        if (!this.canceled) {
+            axios.get(`/tests/practice/`)
+        }
+    }
+    componentWillUnmount() {
+        this.canceled = true;
+    }
     render() {
         const { user: { img, first, last }, method } = this.props.auth;
         let enlargeImg;
@@ -127,8 +141,8 @@ class Overview extends Component {
         }
 
         return (
-            <OverviewContainer>
-                <OverviewInnerContainer>
+            <PracticeResultContainer>
+                <PracticeResultInnerContainer>
                     <Avatar src={enlargeImg ? enlargeImg : img} />
 
                     <MarginTopDiv>
@@ -164,13 +178,13 @@ class Overview extends Component {
                             </AnotherTest>
                         </Link>
                     </ButtonContainer>
-                </OverviewInnerContainer>
-            </OverviewContainer>
+                </PracticeResultInnerContainer>
+            </PracticeResultContainer>
         );
     }
 }
 
-Overview.propTypes = {
+PracticeResult.propTypes = {
     auth: PropTypes.object.isRequired
 };
 
@@ -178,4 +192,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps)(Overview);
+export default connect(mapStateToProps)(PracticeResult);

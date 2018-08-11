@@ -20,8 +20,8 @@ export const Practice = Loadable({
     delay: 500
 });
 
-export const Overview = Loadable({
-    loader: () => import('../components/Overview/Overview'),
+export const PracticeResult = Loadable({
+    loader: () => import('../components/PracticeResult/PracticeResult'),
     loading: Spinner,
     delay: 500
 });

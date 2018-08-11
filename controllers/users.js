@@ -5,12 +5,20 @@ const bcrypt = require('bcryptjs');
 
 const signToken = user => {
     if (user[user.method].password) {
-        const { email, first, last, races } = user[user.method]
+        const { email, first, last } = user[user.method]
         user[user.method] = {
             email,
             first,
-            last, 
-            races
+            last
+        }
+    } else {
+        const { email, first, last, img } = user[user.method];
+
+        user[user.method] = {
+            email,
+            first,
+            last,
+            img
         }
     }
 

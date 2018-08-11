@@ -28,9 +28,9 @@ const userSchema = new Schema({
             first: String,
             last: String,
             img: String,
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number,
@@ -42,9 +42,9 @@ const userSchema = new Schema({
             }
         }],
         practiceRaces: [{
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number
@@ -69,9 +69,9 @@ const userSchema = new Schema({
             first: String,
             last: String,
             img: String,
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number,
@@ -83,9 +83,9 @@ const userSchema = new Schema({
             }
         }],
         practiceRaces: [{
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number
@@ -110,7 +110,7 @@ const userSchema = new Schema({
             first: String,
             last: String,
             img: String,
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'passages'
             },
@@ -124,9 +124,9 @@ const userSchema = new Schema({
             }
         }],
         practiceRaces: [{
-            text: {
+            passage: {
                 type: mongoose.SchemaTypes.ObjectId,
-                ref: 'texts'
+                ref: 'passages'
             },
             wpm: Number,
             accuracy: Number

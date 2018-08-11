@@ -24,7 +24,7 @@ mongoose
 
 // Routes
 app.use('/users', users);
-app.use('/passages/', passages);
+app.use('/passages', passages);
 app.use('/tests', tests);
 
 // Start the server
