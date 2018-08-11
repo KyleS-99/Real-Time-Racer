@@ -26,7 +26,7 @@ module.exports = {
         const raceFound = 
             user[user.method]
             .practiceRaces
-            .filter((race) => race._id === req.params.raceId);
+            .filter((race) => (race._id).toString() === req.params.raceId);
         
         // If no race found
         if (raceFound.length === 0) {
@@ -34,12 +34,21 @@ module.exports = {
         }
 
         // Get passageId
-        const passageId = raceFound[0].passage;
+        const { passage: passageId } = raceFound[0];
 
         // race was found, now fetch the passage that was typed
-        const passage = await Passage.findById(passageId);
+        const passageDocument = await Passage.findById(passageId);
 
+        // Data to send back
+        const { passage, _id: id } = passageDocument;
+        const { wpm, accuracy } = raceFound[0];
+        
         // Send back to client
-        console.log(passage);
+        res.json({
+            passage,
+            wpm,
+            accuracy,
+            id
+        });
     }
 };

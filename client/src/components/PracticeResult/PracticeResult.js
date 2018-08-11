@@ -121,17 +121,46 @@ class PracticeResult extends Component {
         passage: null,
         passageId: null,
         wpm: null,
-        accuracy: null
+        accuracy: null,
+        error: null,
+        loading: true
     }
     componentDidMount() {
         if (!this.canceled) {
-            axios.get(`/tests/practice/`)
+            // Get the raceId from the params
+            const { raceId } = this.props.match.params;
+
+            // make GET request
+            axios.get(`/tests/practice/${raceId}`)
+                .then((res) => {
+                    // since this is an async request 
+                    // check to make sure that component has not been unmounted
+                    // (don't create a memory leak)
+                    if (!this.canceled) {
+                        // Get data from response
+                        const { id, accuracy, wpm, passage } = res.data;
+
+                        // Set state
+                        this.setState({
+                            passage,
+                            passageId: id,
+                            accuracy,
+                            wpm,
+                            loading: false
+                        });
+                    }
+                })
+                .catch((err) => this.setState({
+                    error: err.response.data.error,
+                    loading: false
+                }));
         }
     }
     componentWillUnmount() {
         this.canceled = true;
     }
     render() {
+        const { passage, wpm, accuracy, error, loading } = this.state;
         const { user: { img, first, last }, method } = this.props.auth;
         let enlargeImg;
 
@@ -140,47 +169,56 @@ class PracticeResult extends Component {
             enlargeImg = img.slice(0, -2) + '200';
         }
 
-        return (
-            <PracticeResultContainer>
-                <PracticeResultInnerContainer>
-                    <Avatar src={enlargeImg ? enlargeImg : img} />
+        // Init result variable
+        let result;
 
-                    <MarginTopDiv>
-                        <Name to="/profile">
-                            {`${first} ${last}`}
-                        </Name>
-                    </MarginTopDiv>
+        if (error === null && !loading) {
+            result = (
+                <PracticeResultContainer>
+                    <PracticeResultInnerContainer>
+                        <Avatar src={enlargeImg ? enlargeImg : img} />
 
-                    <MarginTopDiv>
-                        <Wpm>
-                            76 WPM
-                        </Wpm>
-                    </MarginTopDiv>
+                        <MarginTopDiv>
+                            <Name to="/profile">
+                                {`${first} ${last}`}
+                            </Name>
+                        </MarginTopDiv>
 
-                    <MarginTopDiv>
-                        <Accuracy>
-                            Accuracy <AccuracyPercent>100%</AccuracyPercent>
-                        </Accuracy>
-                    </MarginTopDiv>
+                        <MarginTopDiv>
+                            <Wpm>
+                                {wpm}
+                            </Wpm>
+                        </MarginTopDiv>
 
-                    <MarginTopDiv>
-                        <TextTyped>
-                            <Title>text typed</Title>
-                            <p>As human beings, we are the only organisms that create for the sheer stupid pleasure of doing so. Whether it's laying out a garden, composing a new tune on the piano, writing a bit of poetry, manipulating a digital photo, redecorating a room, or inventing a new chili recipe - we are happiest when we are creating.</p>
-                        </TextTyped>
-                    </MarginTopDiv>
+                        <MarginTopDiv>
+                            <Accuracy>
+                                Accuracy <AccuracyPercent>{accuracy}%</AccuracyPercent>
+                            </Accuracy>
+                        </MarginTopDiv>
 
-                    <ButtonContainer>
-                        <Replay>Replay</Replay>
-                        <Link to="/test/practice">
-                            <AnotherTest>
-                                Take Practice Test (Ctrl + z)
-                            </AnotherTest>
-                        </Link>
-                    </ButtonContainer>
-                </PracticeResultInnerContainer>
-            </PracticeResultContainer>
-        );
+                        <MarginTopDiv>
+                            <TextTyped>
+                                <Title>text typed</Title>
+                                <p>{passage}</p>
+                            </TextTyped>
+                        </MarginTopDiv>
+
+                        <ButtonContainer>
+                            <Replay>Replay</Replay>
+                            <Link to="/test/practice">
+                                <AnotherTest>
+                                    Take Practice Test (Ctrl + z)
+                                </AnotherTest>
+                            </Link>
+                        </ButtonContainer>
+                    </PracticeResultInnerContainer>
+                </PracticeResultContainer>
+            );
+        } else {
+            result = <h1>{error}</h1>;
+        }
+
+        return result;
     }
 }
 
