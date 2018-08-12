@@ -125,7 +125,21 @@ class PracticeResult extends Component {
         error: null,
         loading: true
     }
+    onKeyDown = (e) => {
+        // See if users is using IE9
+        const eventObj = window.event ? window.event : e;
+
+        // Check to see if user pressed ctrl + z
+        if (eventObj.keyCode === 90 && eventObj.ctrlKey) {
+            // Send them back to practice test
+            this.props.history.push('/test/practice');
+        }
+    }
     componentDidMount() {
+        // Add listener for keydown to see if user presses ctrl + z
+        window.addEventListener('keydown', this.onKeyDown);
+
+        // Make sure component hasn't been unmounted
         if (!this.canceled) {
             // Get the raceId from the params
             const { raceId } = this.props.match.params;
@@ -158,6 +172,9 @@ class PracticeResult extends Component {
     }
     componentWillUnmount() {
         this.canceled = true;
+
+        // Remove event listener for keydown
+        window.removeEventListener('keydown', this.onKeyDown);
     }
     render() {
         const { passage, wpm, accuracy, error, loading } = this.state;
@@ -186,7 +203,7 @@ class PracticeResult extends Component {
 
                         <MarginTopDiv>
                             <Wpm>
-                                {wpm}
+                                {wpm} WPM
                             </Wpm>
                         </MarginTopDiv>
 
@@ -215,7 +232,11 @@ class PracticeResult extends Component {
                 </PracticeResultContainer>
             );
         } else {
-            result = <h1>{error}</h1>;
+            result = (
+                <PracticeResultContainer>
+                    <h1>{error}</h1>
+                </PracticeResultContainer>
+            );
         }
 
         return result;
