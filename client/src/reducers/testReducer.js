@@ -1,9 +1,12 @@
-import { SET_PASSAGE } from '../actions/types';
+import { SET_PASSAGE, SET_REPLAY } from '../actions/types';
 
 const intialState = {
     passage: null,
     passageId: null,
-    raceId: null
+    raceId: null,
+    replay: null,
+    replayPassage: null,
+    replayId: null
 };
 
 export default (state = intialState, action) => {
@@ -14,6 +17,14 @@ export default (state = intialState, action) => {
                 ...state,
                 passage,
                 passageId: id
+            };
+        case SET_REPLAY:
+            const { replayPassage, replayId } = action.payload;
+            return {
+                ...state,
+                replayPassage,
+                replayId,
+                replay: true
             };
         default:
             return state;

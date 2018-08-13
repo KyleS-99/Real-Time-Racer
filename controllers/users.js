@@ -80,7 +80,7 @@ module.exports = {
         // Generate token
         const token = signToken(user);
 
-        // Send back user and token
+        // Send token bacl to user
         res.json({ token });
     },
     generateOAuthToken:  async (req, res) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { SET_PASSAGE, GET_ERRORS } from './types';
+import { SET_PASSAGE, GET_ERRORS, SET_REPLAY } from './types';
 
 export const setPassage = () => dispatch => {
     axios.get('/passages/random')
@@ -34,4 +34,13 @@ export const savePracticeRace = (data, history) => dispatch => {
 export const passageAction = (passage) => ({
     type: SET_PASSAGE,
     payload: passage
+});
+
+export const replayAction = (replayId, replayPassage) => ({
+    type: SET_REPLAY,
+    payload: {
+        replayId,
+        replayPassage,
+        replay: true
+    }
 });

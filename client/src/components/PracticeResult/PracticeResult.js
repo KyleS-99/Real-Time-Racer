@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import { replayAction } from '../../actions/testActions';
+
 const PracticeResultContainer = styled.div`
     width: 100%;
     margin-top: 80px;
@@ -135,6 +137,16 @@ class PracticeResult extends Component {
             this.props.history.push('/test/practice');
         }
     }
+    replay = () => {
+        // Get data from state
+        const { passage, passageId } = this.state;
+
+        // Set data to store
+        this.props.dispatch(replayAction(passageId, passage));
+
+        // Redirect to practice test
+        this.props.history.push('/test/practice');
+    }
     componentDidMount() {
         // Add listener for keydown to see if user presses ctrl + z
         window.addEventListener('keydown', this.onKeyDown);
@@ -221,7 +233,8 @@ class PracticeResult extends Component {
                         </MarginTopDiv>
 
                         <ButtonContainer>
-                            <Replay>Replay</Replay>
+                            <Replay onClick={this.replay}>Replay</Replay>
+                
                             <Link to="/test/practice">
                                 <AnotherTest>
                                     Take Practice Test (Ctrl + z)
