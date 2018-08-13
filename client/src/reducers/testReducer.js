@@ -4,7 +4,7 @@ import {
     RESET_REPLAY_DATA
 } from '../actions/types';
 
-const intialState = {
+const initialState = {
     passage: null,
     passageId: null,
     raceId: null,
@@ -13,7 +13,7 @@ const intialState = {
     replayId: null
 };
 
-export default (state = intialState, action) => {
+export default (state = initialState, action) => {
     switch (action.type) {
         case SET_PASSAGE:
             const { passage, id } = action.payload;
@@ -31,12 +31,7 @@ export default (state = intialState, action) => {
                 replay: true
             };
         case RESET_REPLAY_DATA:
-            return {
-                ...state,
-                replayId: null,
-                replay: false,
-                replayPassage: null
-            };
+            return initialState;
         default:
             return state;
     }
