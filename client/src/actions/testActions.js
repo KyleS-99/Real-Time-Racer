@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { SET_PASSAGE, GET_ERRORS, SET_REPLAY } from './types';
+import {
+    SET_PASSAGE,
+    GET_ERRORS,
+    SET_REPLAY
+} from './types';
 
 export const setPassage = () => dispatch => {
     axios.get('/passages/random')
@@ -21,6 +25,7 @@ export const savePracticeRace = (data, history) => dispatch => {
         .then((res) => {
             const { raceId } = res.data;
 
+            // Redirect user to after-race result
             history.push(`/tests/practice/${raceId}`);
         })
         .catch((err) => 

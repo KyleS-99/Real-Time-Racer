@@ -19,7 +19,18 @@ class Practice extends Component {
         this.props.savePracticeRace(userData, this.props.history);
     }
     componentDidMount() {
-        this.props.setPassage();
+        // Get data from props
+        const { replay, replayId, replayPassage } = this.props.test;
+        
+        // Check to see if user is wanting to replay certian passage
+        if (replay) {
+            this.setState({
+                passage: replayPassage,
+                passageId: replayId
+            });
+        } else {
+            this.props.setPassage();
+        }
     }
     componentWillUnmount() {
         this.canceledRequest = true;

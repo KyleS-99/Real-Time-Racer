@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { replayAction } from '../../actions/testActions';
+import { RESET_REPLAY_DATA } from '../../actions/types';
 
 const PracticeResultContainer = styled.div`
     width: 100%;
@@ -153,6 +154,11 @@ class PracticeResult extends Component {
 
         // Make sure component hasn't been unmounted
         if (!this.canceled) {
+            // Clear replay data
+            this.props.dispatch({
+                type: RESET_REPLAY_DATA
+            });
+
             // Get the raceId from the params
             const { raceId } = this.props.match.params;
 
