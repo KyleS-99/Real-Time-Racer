@@ -24,6 +24,18 @@ const userSchema = new Schema({
             type: String
         },
         img: String,
+        low: {
+            default: 0,
+            type: Number
+        },
+        avg: {
+            default: 0,
+            type: Number
+        },
+        high: {
+            default: 0,
+            type: Number
+        },
         playerRaces: [{
             first: String,
             last: String,
@@ -65,6 +77,18 @@ const userSchema = new Schema({
             lowercase: true
         },
         img: String,
+        low: {
+            default: 0,
+            type: Number
+        },
+        avg: {
+            default: 0,
+            type: Number
+        },
+        high: {
+            default: 0,
+            type: Number
+        },
         playerRaces: [{
             first: String,
             last: String,
@@ -106,6 +130,18 @@ const userSchema = new Schema({
             lowercase: true
         },
         img: String,
+        low: {
+            default: 0,
+            type: Number
+        },
+        avg: {
+            default: 0,
+            type: Number
+        },
+        high: {
+            default: 0,
+            type: Number
+        },
         playerRaces: [{
             first: String,
             last: String,

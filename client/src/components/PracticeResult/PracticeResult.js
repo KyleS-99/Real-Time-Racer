@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import BackArrow from '../common/BackArrow';
+
 import { replayAction } from '../../actions/testActions';
 import { RESET_REPLAY_DATA } from '../../actions/types';
 
@@ -119,6 +121,23 @@ const AnotherTest = styled.button`
     }
 `;
 
+const NotFoundContainer = styled.div`
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const NotFound = styled.h1`
+    font-size: 2rem;
+    font-weight: 300;
+`;
+
 class PracticeResult extends Component {
     state = {
         passage: null,
@@ -210,6 +229,8 @@ class PracticeResult extends Component {
         if (error === null && !loading) {
             result = (
                 <PracticeResultContainer>
+                    <BackArrow />
+
                     <PracticeResultInnerContainer>
                         <Avatar src={enlargeImg ? enlargeImg : img} />
 
@@ -252,9 +273,13 @@ class PracticeResult extends Component {
             );
         } else {
             result = (
-                <PracticeResultContainer>
-                    <h1>{error}</h1>
-                </PracticeResultContainer>
+                <div>
+                    <BackArrow />
+
+                    <NotFoundContainer>
+                        <NotFound>{error}</NotFound>
+                    </NotFoundContainer>
+                </div>
             );
         }
 
