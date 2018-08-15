@@ -230,6 +230,20 @@ class Landing extends Component {
                         <Title>Sign Up</Title>
                         <FormDiv>
                             <Signup />
+                            <OAuthContainer>
+                                <Google
+                                    clientId="475707192337-0fom7s274iocogh9drql9vloohrqv25n.apps.googleusercontent.com"
+                                    buttonText="Google"
+                                    onSuccess={this.responseGoogle}
+                                />
+                                <FacebookLogin
+                                    appId="1903089829756150"
+                                    fields="name,email,picture"
+                                    callback={this.responseFacebook} 
+                                    scope="public_profile"
+                                    render={({...props}) => (<FacebookButton {...props}>Facebook</FacebookButton>)}
+                                />
+                            </OAuthContainer>
                         </FormDiv>
                     </SignupFormContainer>
 
