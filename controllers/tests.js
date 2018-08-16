@@ -6,13 +6,19 @@ const calcHighAvgLow = (user, wpm) => {
     let statsObj = {};
     const userInMethod = user[user.method];
 
+    // Check to see if it's their first race
+    if (userInMethod.practiceRaces.length === 1) {
+        userInMethod.high = wpm;
+        userInMethod.low = wpm;
+    }
+
     // Check to see if it's a new high score for the user
-    if (userInMethod.high < wpm || userInMethod.practiceRaces.length === 0) {
+    if (userInMethod.high < wpm) {
         userInMethod.high = wpm;
     }
 
     // Check to see if it's the slowest they've typed
-    if (userInMethod.low > wpm || userInMethod.practiceRaces.length === 0) {
+    if (userInMethod.low > wpm) {
         userInMethod.low = wpm;
     }
 
@@ -41,7 +47,7 @@ module.exports = {
         });
 
         // Calculate high avg and low
-        user = calcHighAvgLow(user);
+        user = calcHighAvgLow(user, grossWPM);
 
         // Save new race data to database
         await user.save();

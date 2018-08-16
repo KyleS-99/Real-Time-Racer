@@ -14,7 +14,8 @@ import {
 	Landing,
 	Dashboard,
 	Practice,
-	PracticeResult
+	PracticeResult,
+	Profile
 } from './code-split';
 
 import './App.css';
@@ -64,6 +65,7 @@ class App extends Component {
 							<PrivateRoute exact path="/dashboard" component={Dashboard} />
 							<PrivateRoute exact path="/test/practice" component={Practice} />
 							<PrivateRoute exact path="/tests/practice/:raceId" component={PracticeResult} />
+							<PrivateRoute exact path="/profile" component={Profile} />
 						</Switch>
 					</div>
 				</BrowserRouter>

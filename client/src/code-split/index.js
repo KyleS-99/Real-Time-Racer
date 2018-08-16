@@ -25,3 +25,9 @@ export const PracticeResult = Loadable({
     loading: Spinner,
     delay: 500
 });
+
+export const Profile = Loadable({
+    loader: () => import('../components/Profile/Profile'),
+    loading: Spinner,
+    delay: 500
+});
