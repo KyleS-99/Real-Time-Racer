@@ -131,6 +131,9 @@ class Navbar extends Component {
             this.setState({ dropDown: false });
         }
     }
+    dropDownClicked = () => {
+        this.setState({ dropDown: false });
+    }
     render() {
         return (
             <Header>
@@ -150,7 +153,7 @@ class Navbar extends Component {
                     display={this.state.dropDown}
                     ref={this.dropDownRef}
                 >
-                    <StyledLink to="/profile">
+                    <StyledLink to="/profile" onClick={this.dropDownClicked}>
                         Profile
                     </StyledLink>
                     <StyledLink to="#" onClick={() => {
