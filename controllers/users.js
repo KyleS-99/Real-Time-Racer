@@ -41,7 +41,7 @@ module.exports = {
 
         // Respond with status 403 with error message if user found with that email
         if (foundUser) {
-            return res.status(403).json({ email: 'Email is already in use' });
+            return res.status(403).json({ signupEmail: 'Email is already in use' });
         }
 
         // Generate salt
