@@ -21,19 +21,13 @@ const LandingContainer = styled.div`
     }
 `;
 
-const LogoContainer = styled.div`
-    font-size: 2rem;
-    text-align: center;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
-`;
-
 const Logo = styled.span`
     font-weight: 300;
 `;
 
 const Left = styled.div`
     background: #fff;
+    padding-top: 40px;
 `;
 
 const Right = styled.div`
@@ -70,10 +64,6 @@ const SignupFormContainer = styled.div`
         transform: translateY(-2px);
         box-shadow: 0px 20px 34px -4px rgba(0,0,0,0.10);
     }
-`;
-
-const LoginFormContainer = SignupFormContainer.extend`
-    margin-bottom: 7vh;
 `;
 
 const ColorBorder = styled.div`
@@ -220,10 +210,6 @@ class Landing extends Component {
         return (
             <LandingContainer>
                 <Left>
-                    <LogoContainer>
-                        <Logo>Real Time Racer.</Logo><Cursor fontSize="2.2rem">|</Cursor>
-                    </LogoContainer>
-                    
                     <SignupFormContainer>
                         <ColorBorder />
                         <Blur />
@@ -237,7 +223,7 @@ class Landing extends Component {
                         OR
                     </Or>
 
-                    <LoginFormContainer>
+                    <SignupFormContainer>
                         <ColorBorder />
                         <Blur />
                         <Title>Login</Title>
@@ -258,7 +244,7 @@ class Landing extends Component {
                                 />
                             </OAuthContainer>
                         </FormDiv>
-                    </LoginFormContainer>
+                    </SignupFormContainer>
                 </Left>
                 <Right>
                     <div style={{ background: 'transparent' }}>
