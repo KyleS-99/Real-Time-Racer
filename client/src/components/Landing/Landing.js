@@ -21,10 +21,6 @@ const LandingContainer = styled.div`
     }
 `;
 
-const Logo = styled.span`
-    font-weight: 300;
-`;
-
 const Left = styled.div`
     background: #fff;
     padding-top: 40px;

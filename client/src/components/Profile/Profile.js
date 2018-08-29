@@ -99,17 +99,62 @@ const WPMData = styled.p`
     font-size: 18px;
 `;
 
+const RaceDataContainer = styled.div`
+    max-width: 1200px;
+    margin: 25px auto 0 auto;
+`;
+
+const Menu = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 5px;
+
+    & p + p {
+        margin-left: 15px;
+    }
+`;
+
+const MenuItem = styled.p`
+    padding: 8px 15px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    font-size: 14px;
+    color: #a3a3a3;
+    transition: .2s;
+    ${props => props.active ? 'background: #eee;' : null}
+
+    &:hover {
+        background: #eee;
+        cursor: pointer;
+    }
+`;
+
 class Profile extends Component {
     state = {
         low: 0,
         avg: 0,
-        high: 0
+        high: 0,
+        all: true,
+        practice: false,
+        vs: false,
+        prev: 'all',
+        practiceRaces: [],
+        vsRaces: []
+    }
+    toggleActiveMenu = (makeActive) => {
+        this.setState((prevState) => ({
+            [prevState.prev]: false,
+            prev: makeActive,
+            [makeActive]: true
+        }));
     }
     render() {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high } = this.state;
+        const { low, avg, high, all, practice, vs } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -123,6 +168,7 @@ class Profile extends Component {
         return (
             <ProfileContainer>
                 <ProfileInnerContainer>
+
                     <StatsContainer>
                         <Avatar src={enlargeImg ? enlargeImg : img} />
 
@@ -152,6 +198,29 @@ class Profile extends Component {
                             </WPMContainer>
                         </ProfileDetails>
                     </StatsContainer>
+
+                    <RaceDataContainer>
+                        <Menu>
+                            <MenuItem active={all} onClick={() => {
+                                this.toggleActiveMenu('all')
+                            }}>
+                                all tests (54)
+                            </MenuItem>
+
+                            <MenuItem active={practice} onClick={() => {
+                                this.toggleActiveMenu('practice')
+                            }}>
+                                practice tests (22)
+                            </MenuItem>
+
+                            <MenuItem active={vs} onClick={() => {
+                                this.toggleActiveMenu('vs')
+                            }}>
+                                multiplayer tests (32)
+                            </MenuItem>
+                        </Menu>
+                    </RaceDataContainer>
+
                 </ProfileInnerContainer>
             </ProfileContainer>
         );
