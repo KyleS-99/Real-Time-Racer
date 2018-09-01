@@ -84,5 +84,45 @@ module.exports = {
             accuracy,
             id
         });
+    },
+    all: async (req, res) => {
+        // Set user variable
+        const { user } = req;
+        // Get query parameters
+        const { type = 'all', start = 0 } = req.query;
+
+        if (type === 'all') {
+            // Merge the 2 arrays
+            const merged = [...user[user.method].practiceRaces, ...user[user.method].playerRaces];
+            const all = merged.slice(start, start + 15);
+            const { low, avg, high } = user[user.method];
+
+            // send back data
+            res.json({
+                all: all.length >= 15 ? all : merged.slice(0, 15),
+                total: merged.length,
+                practiceTotal: user[user.method].practiceRaces.length,
+                playerTotal: user[user.method].playerRaces.length,
+                low,
+                avg,
+                high
+            });
+        } else if (type === 'practice') {
+            // Get practice races
+            const practiceRaces = user[user.method].practiceRaces.slice(start, start + 15);
+
+            // Send back to client
+            res.json({
+                practiceRaces: practiceRaces.length > 0 ? practiceRaces : user[user.method].practiceRaces.slice(0, 15)
+            });
+        } else if (type === 'player') {
+            // Get player races
+            const playerRaces = user[user.method].playerRaces.slice(start, start + 15);
+
+            // Send back to client
+            res.json({
+                playerRaces: playerRaces.length > 0 ? playerRaces : user[user.method].playerRaces.slice(0, 15)
+            });
+        }
     }
 };

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 const ProfileContainer = styled.div`
     margin-top: 100px;
@@ -138,10 +139,15 @@ class Profile extends Component {
         high: 0,
         all: true,
         practice: false,
-        vs: false,
+        player: false,
         prev: 'all',
+        practiceTotal: 0,
+        playerTotal: 0,
+        total: 0,
         practiceRaces: [],
-        vsRaces: []
+        playerRaces: [],
+        all: [],
+        errors: null
     }
     toggleActiveMenu = (makeActive) => {
         this.setState((prevState) => ({
@@ -150,11 +156,49 @@ class Profile extends Component {
             [makeActive]: true
         }));
     }
+    componentDidMount() {
+        // don't make request if component is going to be unmounted
+        if (!this.unmounted) {
+            axios
+                .get('/tests/all')
+                .then((res) => {
+                    // Pull data off of object
+                    const {
+                        all,
+                        total,
+                        practiceTotal,
+                        playerTotal,
+                        low,
+                        avg,
+                        high
+                    } = res.data;
+
+                    // Check to see if component is not being umounted
+                    if (!this.unmounted) {
+                        this.setState({
+                            low,
+                            avg,
+                            high,
+                            practiceTotal,
+                            playerTotal,
+                            total,
+                            all
+                        });
+                    }
+                })
+                .catch((e) => 
+                    this.setState({ errors: 'Unable to fetch any races at this time. Please try again later.' })
+                );
+        }
+    }
+    componentWillUnmount() {
+        this.unmounted = true;
+    }
     render() {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, all, practice, vs } = this.state;
+        const { low, avg, high, all, practice, player, practiceTotal, playerTotal, total } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -204,19 +248,19 @@ class Profile extends Component {
                             <MenuItem active={all} onClick={() => {
                                 this.toggleActiveMenu('all')
                             }}>
-                                all tests (54)
+                                all tests ({total})
                             </MenuItem>
 
                             <MenuItem active={practice} onClick={() => {
                                 this.toggleActiveMenu('practice')
                             }}>
-                                practice tests (22)
+                                practice tests ({practiceTotal})
                             </MenuItem>
 
-                            <MenuItem active={vs} onClick={() => {
-                                this.toggleActiveMenu('vs')
+                            <MenuItem active={player} onClick={() => {
+                                this.toggleActiveMenu('player')
                             }}>
-                                multiplayer tests (32)
+                                multiplayer tests ({playerTotal})
                             </MenuItem>
                         </Menu>
                     </RaceDataContainer>
