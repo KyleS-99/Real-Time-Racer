@@ -137,10 +137,10 @@ class Profile extends Component {
         low: 0,
         avg: 0,
         high: 0,
-        all: true,
+        both: true,
         practice: false,
         player: false,
-        prev: 'all',
+        prev: 'both',
         practiceTotal: 0,
         playerTotal: 0,
         total: 0,
@@ -198,7 +198,7 @@ class Profile extends Component {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, all, practice, player, practiceTotal, playerTotal, total } = this.state;
+        const { low, avg, high, all, practice, player, both, practiceTotal, playerTotal, total } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -245,8 +245,8 @@ class Profile extends Component {
 
                     <RaceDataContainer>
                         <Menu>
-                            <MenuItem active={all} onClick={() => {
-                                this.toggleActiveMenu('all')
+                            <MenuItem active={both} onClick={() => {
+                                this.toggleActiveMenu('both')
                             }}>
                                 all tests ({total})
                             </MenuItem>
@@ -274,5 +274,9 @@ class Profile extends Component {
 const mapStateToProps = state => ({
     auth: state.auth
 });
+
+Profile.propTypes = {
+    auth: PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps)(Profile);
