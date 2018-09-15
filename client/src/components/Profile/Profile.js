@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import BackArrow from '../common/BackArrow';
+
 const ProfileContainer = styled.div`
     margin-top: 100px;
     width: 100%;
@@ -132,6 +134,15 @@ const MenuItem = styled.p`
     }
 `;
 
+const Races = styled.div`
+    width: 80%;
+    max-width: 1200px;
+    margin: 50px auto 0 auto;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 100px;
+`;
+
 class Profile extends Component {
     state = {
         low: 0,
@@ -211,8 +222,8 @@ class Profile extends Component {
 
         return (
             <ProfileContainer>
+                <BackArrow />
                 <ProfileInnerContainer>
-
                     <StatsContainer>
                         <Avatar src={enlargeImg ? enlargeImg : img} />
 
@@ -265,6 +276,9 @@ class Profile extends Component {
                         </Menu>
                     </RaceDataContainer>
 
+                    <Races>
+                        
+                    </Races>
                 </ProfileInnerContainer>
             </ProfileContainer>
         );
