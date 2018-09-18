@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -44,7 +44,7 @@ const WPM = styled.h1`
 const Race =({ id, wpm, accuracy }) => (
     <IndividualRace>
         <StyledLink to={`/tests/practice/${id}`}>view details</StyledLink>
-
+        <WPM>{wpm}</WPM>
     </IndividualRace>
 );
 
