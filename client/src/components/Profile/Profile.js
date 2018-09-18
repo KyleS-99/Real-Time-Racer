@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import BackArrow from '../common/BackArrow';
+import Race from './Race';
 
 const ProfileContainer = styled.div`
     margin-top: 100px;
@@ -141,6 +142,7 @@ const Races = styled.div`
     display: flex;
     justify-content: center;
     padding-bottom: 100px;
+    flex-wrap: wrap;
 `;
 
 class Profile extends Component {
@@ -193,7 +195,7 @@ class Profile extends Component {
                             practiceTotal,
                             playerTotal,
                             total,
-                            all
+                            all: all.map(({ wpm, accuracy, passage }) => <Race id={passage} wpm={wpm} accuracy={accuracy} />)
                         });
                     }
                 })
@@ -277,7 +279,7 @@ class Profile extends Component {
                     </RaceDataContainer>
 
                     <Races>
-                        
+                        {both && all}
                     </Races>
                 </ProfileInnerContainer>
             </ProfileContainer>
