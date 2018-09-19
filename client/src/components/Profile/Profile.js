@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import BackArrow from '../common/BackArrow';
 import Race from './Race';
+import Spinner from '../common/Spinner';
 
 const ProfileContainer = styled.div`
     margin-top: 100px;
@@ -145,6 +146,42 @@ const Races = styled.div`
     flex-wrap: wrap;
 `;
 
+const ButtonContainer = styled.div`
+    max-width: 1200px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ${props => props.loading ? 'margin: 25px auto 10vh auto' : 'margin: -35px auto 10vh auto'};
+`;
+
+const Button = styled.button`
+    padding: 10px 25px;
+    background: #eee;
+    border: none;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    outline: none;
+    border-radius: 5px;
+    color: #2C3E50;
+    box-shadow: 0px 7px 45px -8px rgba(212,212,212,0.2);
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+`;
+
 class Profile extends Component {
     state = {
         low: 0,
@@ -153,10 +190,16 @@ class Profile extends Component {
         both: true,
         practice: false,
         player: false,
+        loading: true,
         prev: 'both',
+        current: 'both',
         practiceTotal: 0,
         playerTotal: 0,
         total: 0,
+        bothRequest: 15,
+        practiceRequest: 15,
+        playerRequest: 15,
+        disabled: false,
         practiceRaces: [],
         playerRaces: [],
         all: [],
@@ -166,8 +209,83 @@ class Profile extends Component {
         this.setState((prevState) => ({
             [prevState.prev]: false,
             prev: makeActive,
-            [makeActive]: true
+            [makeActive]: true,
+            current: makeActive
         }));
+
+        // Set vars
+        const {
+            practiceRaces,
+            playerRaces,
+            bothRequest,
+            practiceRequest,
+            playerRequest
+        } = this.state;
+
+        // Check to see if length of array is 0 if so make the network request
+        if (makeActive === 'player' && playerRaces.length === 0) {
+            // Make sure component is not being unmounted before making request
+            if (!this.unmounted) {
+                // Set loading to true
+                this.setState({ loading: true });
+
+                // Make request
+                axios
+                    .get('tests/all?type=player')
+                    .then(res => {
+                        // Get data off of object
+                        const { playerRaces } = res.data;
+                        
+                        // Only set state if component is not being unmounted
+                        if (!this.unmounted) {
+                            this.setState(prevState => ({
+                                loading: false,
+                                playerRaces: playerRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
+                                playerRequest: prevState.playerRequest + 15
+                            }));
+                        }
+                    })
+                    .catch((e) => {
+                        if (!this.umounted) {
+                            this.setState({
+                                errors: 'Unable to fetch any races at this time. Please try again later.',
+                                loading: false
+                            });
+                        }   
+                    });
+            }
+        } else if (makeActive === 'practice' && practiceRaces.length === 0) {
+            // Make sure component is not being unmounted before making request
+            if (!this.unmounted) {
+                // Set loading to true
+                this.setState({ loading: true });
+
+                // Make request
+                axios
+                    .get('tests/all?type=practice')
+                    .then(res => {
+                        // Get data off of object
+                        const { practiceRaces } = res.data;
+                        
+                        // Only set state if component is not being unmounted
+                        if (!this.unmounted) {
+                            this.setState(prevState => ({
+                                loading: false,
+                                practiceRaces: practiceRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
+                                practiceRequest: prevState.practiceRequest + 15
+                            }));
+                        }
+                    })
+                    .catch((e) => {
+                        if (!this.unmounted) {
+                            this.setState({
+                                errors: 'Unable to fetch any races at this time. Please try again later.',
+                                loading: false
+                            });
+                        }
+                    });
+            }
+        }
     }
     componentDidMount() {
         // don't make request if component is going to be unmounted
@@ -195,12 +313,16 @@ class Profile extends Component {
                             practiceTotal,
                             playerTotal,
                             total,
-                            all: all.map(({ wpm, accuracy, passage }) => <Race id={passage} wpm={wpm} accuracy={accuracy} />)
+                            loading: false,
+                            all: all.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />)
                         });
                     }
                 })
                 .catch((e) => 
-                    this.setState({ errors: 'Unable to fetch any races at this time. Please try again later.' })
+                    this.setState({ 
+                        errors: 'Unable to fetch any races at this time. Please try again later.',
+                        loading: false 
+                    })
                 );
         }
     }
@@ -211,7 +333,7 @@ class Profile extends Component {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, all, practice, player, both, practiceTotal, playerTotal, total } = this.state;
+        const { low, avg, high, all, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -279,8 +401,15 @@ class Profile extends Component {
                     </RaceDataContainer>
 
                     <Races>
+                        {loading && <Spinner />}
                         {both && all}
+                        {practice && practiceRaces}
+                        {player && playerRaces}
                     </Races>
+
+                    <ButtonContainer loading={loading}>
+                        <Button type="button" disabled={disabled || loading}>load more</Button>
+                    </ButtonContainer>
                 </ProfileInnerContainer>
             </ProfileContainer>
         );

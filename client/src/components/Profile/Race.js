@@ -18,6 +18,7 @@ const IndividualRace = styled.div`
     
     & * {
         color: #696969;
+        font-weight: 300;
     }
 
     &:hover {
@@ -28,7 +29,6 @@ const IndividualRace = styled.div`
 const StyledLink = styled(Link)`
     text-decoration: none;
     font-size: 16px;
-    font-weight: 300;
     text-transform: capitalize;
 
     &:hover {
@@ -37,22 +37,35 @@ const StyledLink = styled(Link)`
 `;
 
 const WPM = styled.h1`
-    font-size: 25px;
+    font-size: 35px;
+`;
 
+const WPMWord = styled.span`
+    font-size: 20px;
+    text-transform: uppercase;
+`;
+
+const Accuracy = styled.h1`
+    font-size: 20px;
+`;
+
+const AccuracySymbol = styled.span`
+    font-size: 15px;
+    text-transform: capitalize;
 `;
 
 const Race =({ id, wpm, accuracy }) => (
     <IndividualRace>
         <StyledLink to={`/tests/practice/${id}`}>view details</StyledLink>
-        <WPM>{wpm}</WPM>
+        <WPM>{wpm} <WPMWord>wpm</WPMWord></WPM>
+        <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
     </IndividualRace>
 );
 
 Race.propTypes = {
     id: PropTypes.string.isRequired,
     wpm: PropTypes.number.isRequired,
-    accuracy: PropTypes.number.isRequired,
-    onClick: PropTypes.func.isRequired
+    accuracy: PropTypes.number.isRequired
 };
 
 export default Race;
