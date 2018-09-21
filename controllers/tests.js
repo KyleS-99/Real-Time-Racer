@@ -100,7 +100,7 @@ module.exports = {
 
             // send back data
             res.json({
-                all: all.length >= 15 ? all : merged.slice(0, 15),
+                allRaces: all.length >= 15 ? all : merged.slice(0, 15),
                 total: merged.length,
                 practiceTotal: user[user.method].practiceRaces.length,
                 playerTotal: user[user.method].playerRaces.length,
@@ -122,7 +122,7 @@ module.exports = {
         } else if (type === 'player') {
             // Get player races
             const playerRaces = user[user.method].playerRaces.slice(start, start + 15);
-            const done = playerRaces.length === 0 || playerRaces === user[user.method].playerRaces.length;;  
+            const done = playerRaces.length === 0 || playerRaces === user[user.method].playerRaces.length;
 
             // Send back to client
             res.json({

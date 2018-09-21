@@ -205,7 +205,7 @@ class Profile extends Component {
         disabled: false,
         practiceRaces: [],
         playerRaces: [],
-        all: [],
+        allRaces: [],
         errors: null
     }
     toggleActiveMenu = (makeActive) => {
@@ -225,101 +225,50 @@ class Profile extends Component {
             playerRequest
         } = this.state;
 
-        // Check to see if length of array is 0 if so make the network request
-        if (makeActive === 'player' && playerRaces.length === 0) {
-            // Make sure component is not being unmounted before making request
-            if (!this.unmounted) {
-                // Set loading to true
-                this.setState({ loading: true });
-
-                // Make request
-                axios
-                    .get('tests/all?type=player')
-                    .then(res => {
-                        // Get data off of object
-                        const { playerRaces } = res.data;
-                        
-                        // Only set state if component is not being unmounted
-                        if (!this.unmounted) {
-                            this.setState(prevState => ({
-                                loading: false,
-                                playerRaces: playerRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
-                                playerRequest: prevState.playerRequest + 15
-                            }));
-                        }
-                    })
-                    .catch((e) => {
-                        if (!this.umounted) {
-                            this.setState({
-                                errors: 'Unable to fetch any races at this time. Please try again later.',
-                                loading: false
-                            });
-                        }   
-                    });
-            }
-        } else if (makeActive === 'practice' && practiceRaces.length === 0) {
-            // Make sure component is not being unmounted before making request
-            if (!this.unmounted) {
-                // Set loading to true
-                this.setState({ loading: true });
-
-                // Make request
-                axios
-                    .get('tests/all?type=practice')
-                    .then(res => {
-                        // Get data off of object
-                        const { practiceRaces } = res.data;
-                        
-                        // Only set state if component is not being unmounted
-                        if (!this.unmounted) {
-                            this.setState(prevState => ({
-                                loading: false,
-                                practiceRaces: practiceRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
-                                practiceRequest: prevState.practiceRequest + 15
-                            }));
-                        }
-                    })
-                    .catch((e) => {
-                        if (!this.unmounted) {
-                            this.setState({
-                                errors: 'Unable to fetch any races at this time. Please try again later.',
-                                loading: false
-                            });
-                        }
-                    });
-            }
-        }
+        // Call requestData method to fetch data
+        this.requestData(makeActive === 'both' ? 'all' : makeActive, this.state[`${makeActive}Request`]);
     }
     requestData = (type, start) => {
-         if (!this.unmounted && !this.state.[`${type}Done`]) {
-                // Set loading to true
-                this.setState({ loading: true });
+        if (!this.unmounted && !this.state[`${type}Done`] && this.state[`${type}Races`].length === 0) {
+            // Set loading to true
+            this.setState({ loading: true });
 
-                // Make request
-                axios
-                    .get(`tests/all?type=${type}&start=${start}`)
-                    .then(res => {
-                        // Get data off of object
-                        const { practiceRaces } = res.data;
-                        
-                        // Only set state if component is not being unmounted
-                        if (!this.unmounted) {
-                            this.setState(prevState => ({
-                                loading: false,
-                                [`${type}Races`]: practiceRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
-                                [`${type}Request`]: prevState.practiceRequest + 15
-                            }));
-                        }
-                    })
-                    .catch((e) => {
-                        if (!this.unmounted) {
-                            this.setState({
-                                errors: 'Unable to fetch any races at this time. Please try again later.',
-                                loading: false
-                            });
-                        }
-                    });
-            }
+            // Make request
+            axios
+                .get(`tests/all?type=${type}&start=${start}`)
+                .then(res => {
+                    // Get data off of object
+                    let raceData;
+                    const { data, data: { done } } = res;
+
+                    // Find type of race data and set it to raceData
+                    if (data.all) {
+                        raceData = res.data.all;
+                    } else if (data.practiceRaces) {
+                        raceData = data.practiceRaces;
+                    } else if (data.playerRaces) {
+                        raceData = data.playerRaces;
+                    }
+                    
+                    // Only set state if component is not being unmounted
+                    if (!this.unmounted) {
+                        this.setState(prevState => ({
+                            loading: false,
+                            [`${type}Races`]: raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
+                            [`${type === 'all' ? 'both' : type}Request`]: prevState[`${type === 'all' ? 'both' : type}Request`] + 15,
+                            [`${type}Done`]: done
+                        }));
+                    }
+                })
+                .catch((e) => {
+                    if (!this.unmounted) {
+                        this.setState({
+                            errors: 'Unable to fetch any races at this time. Please try again later.',
+                            loading: false
+                        });
+                    }
+                });
+        }
     }
     loadMore = () => {
 
@@ -332,7 +281,7 @@ class Profile extends Component {
                 .then((res) => {
                     // Pull data off of object
                     const {
-                        all,
+                        allRaces,
                         total,
                         practiceTotal,
                         playerTotal,
@@ -351,7 +300,8 @@ class Profile extends Component {
                             playerTotal,
                             total,
                             loading: false,
-                            all: all.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />)
+                            allRaces: allRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
+                            bothRequest: this.state.bothRequest + 15
                         });
                     }
                 })
@@ -370,7 +320,7 @@ class Profile extends Component {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, all, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces } = this.state;
+        const { low, avg, high, allRaces, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -439,7 +389,7 @@ class Profile extends Component {
 
                     <Races>
                         {loading && <Spinner />}
-                        {both && all}
+                        {both && allRaces}
                         {practice && practiceRaces}
                         {player && playerRaces}
                     </Races>
