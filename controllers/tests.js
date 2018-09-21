@@ -96,6 +96,7 @@ module.exports = {
             const merged = [...user[user.method].practiceRaces, ...user[user.method].playerRaces];
             const all = merged.slice(start, start + 15);
             const { low, avg, high } = user[user.method];
+            const done = merged.length === 0 || all === merged;
 
             // send back data
             res.json({
@@ -105,23 +106,28 @@ module.exports = {
                 playerTotal: user[user.method].playerRaces.length,
                 low,
                 avg,
-                high
+                high,
+                done
             });
         } else if (type === 'practice') {
             // Get practice races
             const practiceRaces = user[user.method].practiceRaces.slice(start, start + 15);
+            const done = practiceRaces.length === 0 || practiceRaces === user[user.method].practiceRaces.length;    
 
             // Send back to client
             res.json({
-                practiceRaces: practiceRaces.length > 0 ? practiceRaces : user[user.method].practiceRaces.slice(0, 15)
+                practiceRaces: practiceRaces.length > 0 ? practiceRaces : user[user.method].practiceRaces.slice(0, 15),
+                done
             });
         } else if (type === 'player') {
             // Get player races
             const playerRaces = user[user.method].playerRaces.slice(start, start + 15);
+            const done = playerRaces.length === 0 || playerRaces === user[user.method].playerRaces.length;;  
 
             // Send back to client
             res.json({
-                playerRaces: playerRaces.length > 0 ? playerRaces : user[user.method].playerRaces.slice(0, 15)
+                playerRaces: playerRaces.length > 0 ? playerRaces : user[user.method].playerRaces.slice(0, 15),
+                done
             });
         }
     }

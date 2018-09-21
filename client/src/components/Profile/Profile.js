@@ -191,6 +191,9 @@ class Profile extends Component {
         practice: false,
         player: false,
         loading: true,
+        practiceDone: false,
+        playerDone: false,
+        allDone: false,
         prev: 'both',
         current: 'both',
         practiceTotal: 0,
@@ -286,6 +289,40 @@ class Profile extends Component {
                     });
             }
         }
+    }
+    requestData = (type, start) => {
+         if (!this.unmounted && !this.state.[`${type}Done`]) {
+                // Set loading to true
+                this.setState({ loading: true });
+
+                // Make request
+                axios
+                    .get(`tests/all?type=${type}&start=${start}`)
+                    .then(res => {
+                        // Get data off of object
+                        const { practiceRaces } = res.data;
+                        
+                        // Only set state if component is not being unmounted
+                        if (!this.unmounted) {
+                            this.setState(prevState => ({
+                                loading: false,
+                                [`${type}Races`]: practiceRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
+                                [`${type}Request`]: prevState.practiceRequest + 15
+                            }));
+                        }
+                    })
+                    .catch((e) => {
+                        if (!this.unmounted) {
+                            this.setState({
+                                errors: 'Unable to fetch any races at this time. Please try again later.',
+                                loading: false
+                            });
+                        }
+                    });
+            }
+    }
+    loadMore = () => {
+
     }
     componentDidMount() {
         // don't make request if component is going to be unmounted
@@ -408,7 +445,7 @@ class Profile extends Component {
                     </Races>
 
                     <ButtonContainer loading={loading}>
-                        <Button type="button" disabled={disabled || loading}>load more</Button>
+                        <Button type="button" disabled={disabled || loading} onClick={this.loadMore}>load more</Button>
                     </ButtonContainer>
                 </ProfileInnerContainer>
             </ProfileContainer>
