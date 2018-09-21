@@ -199,9 +199,9 @@ class Profile extends Component {
         practiceTotal: 0,
         playerTotal: 0,
         total: 0,
-        bothRequest: 15,
-        practiceRequest: 15,
-        playerRequest: 15,
+        bothRequest: 0,
+        practiceRequest: 0,
+        playerRequest: 0,
         disabled: false,
         practiceRaces: [],
         playerRaces: [],
@@ -240,6 +240,7 @@ class Profile extends Component {
                     // Get data off of object
                     let raceData;
                     const { data, data: { done } } = res;
+                    type = type === 'all' ? 'both' : type;
 
                     // Find type of race data and set it to raceData
                     if (data.all) {
@@ -255,7 +256,7 @@ class Profile extends Component {
                         this.setState(prevState => ({
                             loading: false,
                             [`${type}Races`]: raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
-                            [`${type === 'all' ? 'both' : type}Request`]: prevState[`${type === 'all' ? 'both' : type}Request`] + 15,
+                            [`${type}Request`]: prevState[`${type}Request`] + 15,
                             [`${type}Done`]: done
                         }));
                     }
