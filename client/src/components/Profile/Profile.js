@@ -216,26 +216,17 @@ class Profile extends Component {
             current: makeActive
         }));
 
-        // Set vars
-        const {
-            practiceRaces,
-            playerRaces,
-            bothRequest,
-            practiceRequest,
-            playerRequest
-        } = this.state;
-
         // Call requestData method to fetch data
         this.requestData(makeActive === 'both' ? 'all' : makeActive, this.state[`${makeActive}Request`]);
     }
-    requestData = (type, start) => {
-        if (!this.unmounted && !this.state[`${type}Done`] && this.state[`${type}Races`].length === 0) {
+    requestData = (type, start, makeRequest = false) => {
+        if (!this.unmounted && !this.state[`${type}Done`] && (this.state[`${type}Races`].length === 0 || makeRequest)) {
             // Set loading to true
             this.setState({ loading: true });
 
             // Make request
             axios
-                .get(`tests/all?type=${type}&start=${start}`)
+                .get(`/tests/all?type=${type}&start=${start}`)
                 .then(res => {
                     // Get data off of object
                     let raceData;
@@ -243,8 +234,8 @@ class Profile extends Component {
                     type = type === 'all' ? 'both' : type;
 
                     // Find type of race data and set it to raceData
-                    if (data.all) {
-                        raceData = res.data.all;
+                    if (data.allRaces) {
+                        raceData = data.allRaces;
                     } else if (data.practiceRaces) {
                         raceData = data.practiceRaces;
                     } else if (data.playerRaces) {
@@ -253,12 +244,20 @@ class Profile extends Component {
                     
                     // Only set state if component is not being unmounted
                     if (!this.unmounted) {
-                        this.setState(prevState => ({
-                            loading: false,
-                            [`${type}Races`]: raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
-                            [`${type}Request`]: prevState[`${type}Request`] + 15,
-                            [`${type}Done`]: done
-                        }));
+                        // If there's data add it to the state
+                        if (data.length !== 0) {
+                            this.setState(prevState => ({
+                                loading: false,
+                                [`${type === 'both' ? 'all' : type}Races`]: [...prevState[`${type === 'both' ? 'all' : type}Races`], raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />)],
+                                [`${type}Request`]: prevState[`${type}Request`] + 15,
+                                [`${type === 'both' ? 'all' : type}Done`]: done
+                            }));    
+                        } else {
+                            // No data - set loading to false
+                            this.setState({
+                                loading: false
+                            });
+                        }
                     }
                 })
                 .catch((e) => {
@@ -272,7 +271,11 @@ class Profile extends Component {
         }
     }
     loadMore = () => {
+        // Get data from state
+        const { current } = this.state;
 
+        // Request the data
+        this.requestData(`${current === 'both' ? 'all' : current}`, this.state[`${current}Request`], true);
     }
     componentDidMount() {
         // don't make request if component is going to be unmounted
@@ -288,7 +291,8 @@ class Profile extends Component {
                         playerTotal,
                         low,
                         avg,
-                        high
+                        high,
+                        done
                     } = res.data;
 
                     // Check to see if component is not being umounted
@@ -300,6 +304,7 @@ class Profile extends Component {
                             practiceTotal,
                             playerTotal,
                             total,
+                            allDone: done,
                             loading: false,
                             allRaces: allRaces.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />),
                             bothRequest: this.state.bothRequest + 15
@@ -321,7 +326,7 @@ class Profile extends Component {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, allRaces, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces } = this.state;
+        const { low, avg, high, allRaces, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces, current, practiceDone, playerDone, allDone } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
@@ -396,7 +401,13 @@ class Profile extends Component {
                     </Races>
 
                     <ButtonContainer loading={loading}>
-                        <Button type="button" disabled={disabled || loading} onClick={this.loadMore}>load more</Button>
+                        <Button 
+                            type="button" 
+                            disabled={this.state[`${current === 'both' ? 'all' : current}Done`] || loading} 
+                            onClick={this.loadMore}
+                        >
+                            load more
+                        </Button>
                     </ButtonContainer>
                 </ProfileInnerContainer>
             </ProfileContainer>

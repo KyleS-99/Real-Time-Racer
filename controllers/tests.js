@@ -32,6 +32,8 @@ const calcHighAvgLow = (user, wpm) => {
     return user;
 };
 
+const sendBack = (data) => data.length > 0;
+
 module.exports = {
     practice: async (req, res) => {
         // Get user data
@@ -96,11 +98,11 @@ module.exports = {
             const merged = [...user[user.method].practiceRaces, ...user[user.method].playerRaces];
             const all = merged.slice(start, start + 15);
             const { low, avg, high } = user[user.method];
-            const done = merged.length === 0 || all === merged;
+            const done = !sendBack(all);
 
             // send back data
             res.json({
-                allRaces: all.length >= 15 ? all : merged.slice(0, 15),
+                allRaces: sendBack(all) ? all : [],
                 total: merged.length,
                 practiceTotal: user[user.method].practiceRaces.length,
                 playerTotal: user[user.method].playerRaces.length,
@@ -112,21 +114,21 @@ module.exports = {
         } else if (type === 'practice') {
             // Get practice races
             const practiceRaces = user[user.method].practiceRaces.slice(start, start + 15);
-            const done = practiceRaces.length === 0 || practiceRaces === user[user.method].practiceRaces.length;    
+            const done = !sendBack(practiceRaces);    
 
             // Send back to client
             res.json({
-                practiceRaces: practiceRaces.length > 0 ? practiceRaces : user[user.method].practiceRaces.slice(0, 15),
+                practiceRaces: sendBack(practiceRaces) ? practiceRaces : [],
                 done
             });
         } else if (type === 'player') {
             // Get player races
             const playerRaces = user[user.method].playerRaces.slice(start, start + 15);
-            const done = playerRaces.length === 0 || playerRaces === user[user.method].playerRaces.length;
+            const done = !sendBack(playerRaces);
 
             // Send back to client
             res.json({
-                playerRaces: playerRaces.length > 0 ? playerRaces : user[user.method].playerRaces.slice(0, 15),
+                playerRaces: sendBack(playerRaces) ? playerRaces : [],
                 done
             });
         }
