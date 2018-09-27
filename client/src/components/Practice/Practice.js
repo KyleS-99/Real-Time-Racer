@@ -16,7 +16,9 @@ class Practice extends Component {
         userData.passageId = this.state.passageId;
 
         // Make request
-        this.props.savePracticeRace(userData, this.props.history);
+        if (!this.canceledRequest) {
+            this.props.savePracticeRace(userData, this.props.history);
+        }
     }
     componentDidMount() {
         // Get data from props
