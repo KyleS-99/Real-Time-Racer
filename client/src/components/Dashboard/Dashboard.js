@@ -87,6 +87,10 @@ class Dashboard extends Component {
         // Toggle the modal
         this.setState(prevState => ({ displayModal: !prevState.displayModal }));
     }
+    closeModal = () => {
+        // Set displayModal to false to close the modal
+        this.setState({ displayModal: false });
+    }
     render() {
         const { displayModal } = this.state;
 

@@ -326,7 +326,7 @@ class Profile extends Component {
         // Users name and image
         const { user: { img, first, last }, method } = this.props.auth;
         // Typing data
-        const { low, avg, high, allRaces, practice, player, both, practiceTotal, playerTotal, total, disabled, loading, practiceRaces, playerRaces, current, practiceDone, playerDone, allDone } = this.state;
+        const { low, avg, high, allRaces, practice, player, both, practiceTotal, playerTotal, total, loading, practiceRaces, playerRaces, current } = this.state;
         // Enlarge image
         let enlargeImg;
         // Create full name from the 2 variables
