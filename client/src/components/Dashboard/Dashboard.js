@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
-import Modal from './Modal';
+import ModalContainer from './ModalContainer';
 
 import {
     Box,
@@ -88,7 +88,7 @@ class Dashboard extends Component {
         this.setState(prevState => ({ displayModal: !prevState.displayModal }));
     }
     closeModal = () => {
-        // Set displayModal to false to close the modal
+        // Close modal
         this.setState({ displayModal: false });
     }
     render() {
@@ -96,12 +96,12 @@ class Dashboard extends Component {
 
         return (
             <DashboardContainer>
-                <Modal
+                <ModalContainer
                     display={displayModal}
-                    toggleModalDisplay={this.toggleModalDisplay}
+                    closeModal={this.closeModal}
                 >
                     
-                </Modal>
+                </ModalContainer>
 
                 <Box>
                     <ColorBorder color="linear-gradient(-225deg, rgb(164, 69, 178), rgb(212, 24, 114) 52%, rgb(255, 0, 102));" />

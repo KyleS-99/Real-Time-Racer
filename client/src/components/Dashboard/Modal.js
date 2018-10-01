@@ -1,24 +1,40 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import onClickoutside from 'react-onclickoutside';
+import styled, { keyframes } from 'styled-components';
 
-const ModalContainer = styled.div`
-	display: ${props => props.display ? 'block' : 'none'}
+const Flop = keyframes`
+	from {
+		transform: translateY(0) perspective(1000px) rotateY( 15deg ) rotateX(10deg);
+	}
 
+	to {
+		transform: translateY(0) perspective(1000px) rotateX(0deg);
+	}
+`;
+
+const InnerModal = styled.div`
+	width: 400px;
+    height: 400px;
+    background: #000;
+    margin-top: -50px;
+    box-shadow: 0 10px 62px 4px rgba(0,0,0,.2);
+    border-radius: 5px;
+    animation: ${Flop};
+    animation-duration: .5s;
+    transition: all .2s ease-out;
 `;
 
 class Modal extends Component {
 	handleClickOutside = () => {
-		this.props.toggleModalDisplay();
+		this.props.closeModal();
 	}
 	render() {
 		return (
-			<ModalContainer>
-				
-			</ModalContainer>
+			<InnerModal>
+				{this.props.children}
+			</InnerModal>
 		);
 	}
 }
 
-
-export default Modal;
+export default onClickoutside(Modal);
