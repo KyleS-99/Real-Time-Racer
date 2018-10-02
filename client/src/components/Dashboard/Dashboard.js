@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
 import ModalContainer from './ModalContainer';
+import CustomText from './CustomText';
 
 import {
     Box,
@@ -100,7 +101,7 @@ class Dashboard extends Component {
                     display={displayModal}
                     closeModal={this.closeModal}
                 >
-                    
+                    <CustomText />
                 </ModalContainer>
 
                 <Box>
