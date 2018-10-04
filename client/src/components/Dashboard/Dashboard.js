@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
-import ModalContainer from './ModalContainer';
-import CustomText from './CustomText';
+import Modal from './Modal/Modal';
+import CustomText from './Modal/CustomText';
 
 import {
     Box,
@@ -97,12 +97,12 @@ class Dashboard extends Component {
 
         return (
             <DashboardContainer>
-                <ModalContainer
+                <Modal
                     display={displayModal}
                     closeModal={this.closeModal}
                 >
                     <CustomText />
-                </ModalContainer>
+                </Modal>
 
                 <Box>
                     <ColorBorder color="linear-gradient(-225deg, rgb(164, 69, 178), rgb(212, 24, 114) 52%, rgb(255, 0, 102));" />

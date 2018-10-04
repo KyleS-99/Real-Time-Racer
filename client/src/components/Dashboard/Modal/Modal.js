@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-import Modal from './Modal'; 
+import InnerModal from './InnerModal'; 
 
 const OuterModal = styled.div`
 	width: 100%;
@@ -24,9 +24,9 @@ class ModalContainer extends Component {
 
 		return (
 			<OuterModal display={display}>
-				<Modal closeModal={closeModal}>
+				<InnerModal closeModal={closeModal}>
 					{children}
-				</Modal>
+				</InnerModal>
 			</OuterModal>
 		);
 	}
