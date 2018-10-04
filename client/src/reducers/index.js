@@ -4,9 +4,11 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import errorReducer from './errorReducer';
 import testReducer from './testReducer';
+import modalReducer from './modalReducer';
 
 export default combineReducers({
     auth: authReducer,
     errors: errorReducer,
-    test: testReducer
+    test: testReducer,
+    modal: modalReducer
 });
