@@ -7,7 +7,7 @@ const ModalTitleContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 18px;
+	padding: 18px 18px 0 18px;
 `;
 
 const ModalTitleParagraph = styled.p`
