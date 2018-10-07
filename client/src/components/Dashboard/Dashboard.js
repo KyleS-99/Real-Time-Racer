@@ -92,6 +92,11 @@ class Dashboard extends Component {
         // Close modal
         this.setState({ displayModal: false });
     }
+    componentDidUpdate(prevProps) {
+        if (prevProps.modal.displayModal !== this.props.modal.displayModal) {
+            this.setState({ displayModal: this.props.modal.displayModal });
+        }
+    }
     render() {
         const { displayModal } = this.state;
 
@@ -162,4 +167,8 @@ class Dashboard extends Component {
     }
 }
 
-export default connect(null)(Dashboard);
+const mapStateToProps = ({ modal }) => ({
+    modal
+});
+
+export default connect(mapStateToProps)(Dashboard);
