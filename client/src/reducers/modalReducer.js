@@ -17,6 +17,12 @@ export default (state = initialState, action) => {
                 ...state,
                 displayModal: false
             };
+        case SET_CUSTOM_TEXT:
+            const { text } = action.payload;
+            return {
+                ...state,
+                text
+            };
         default:
             return state;
     }
