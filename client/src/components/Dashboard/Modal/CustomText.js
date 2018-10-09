@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import ModalTitle from './ModalTitle';
+import {  } from '../../../actions/modalActions';
 
 const Information = styled.div`
 	display: flex;
@@ -44,6 +46,30 @@ const TextArea = styled.textarea`
 	font-size: 14px;
 `;
 
+const ButtonContainer = styled.div`
+	background: #000;
+	padding: 15px;
+	margin-top: -5px;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+`;
+
+const Button = styled.button`
+	padding: 10px 35px;
+	text-transform: uppercase;
+	background: #fff;
+	border: none;
+	border-radius: 50px;
+	outline: none;
+	cursor: pointer;
+	transition: 0.2s;
+
+	&:active {
+		transform: scale(0.8);
+	}
+`;
+
 class CustomText extends Component {
 	state = {
 		wordTotal: 0,
@@ -58,6 +84,9 @@ class CustomText extends Component {
 			wordTotal: target.value.split(' ').length
 		});
 	}
+	submit = () => {
+
+	}
 	render() {
 		// Get wordTotal, and text from state
 		const { wordTotal, text } = this.state;
@@ -65,10 +94,12 @@ class CustomText extends Component {
 		return (
 			<div>
 				<ModalTitle text="Custom Test" closeModal={this.props.closeModal} />
+
 				<Information>
 					<TotalWords>total words: {wordTotal}</TotalWords>
 					<SmallText>we don't store your custom test data</SmallText>
 				</Information>
+
 				<TextAreaContainer>
 					<TextArea 
 						placeholder="Enter Custom Text" 
@@ -79,9 +110,18 @@ class CustomText extends Component {
 						onChange={this.onChange} 
 					/>
 				</TextAreaContainer>
+
+				<ButtonContainer>
+					<Button 
+						type="button"
+						onClick={this.submit}
+					>
+						play
+					</Button>
+				</ButtonContainer>
 			</div>
 		); 
 	}
 }
 
-export default CustomText;
+export default connect(null)(CustomText);

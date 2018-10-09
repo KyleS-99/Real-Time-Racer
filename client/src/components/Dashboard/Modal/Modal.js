@@ -5,7 +5,7 @@ import InnerModal from './InnerModal';
 
 const OuterModal = styled.div`
 	width: 100%;
-	height: 94vh;
+	height: 100vh;
 	background: hsla(0, 0%, 100%, .8);
 	position: fixed;
     z-index: 6;
