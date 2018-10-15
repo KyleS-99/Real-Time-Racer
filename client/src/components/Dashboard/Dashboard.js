@@ -88,13 +88,9 @@ class Dashboard extends Component {
         // Toggle the modal
         this.setState(prevState => ({ displayModal: !prevState.displayModal }));
     }
-    closeModal = () => {
-        // Close modal
-        this.setState({ displayModal: false });
-    }
     componentDidUpdate(prevProps) {
-        if (prevProps.modal.displayModal !== this.props.modal.displayModal) {
-            this.setState({ displayModal: this.props.modal.displayModal });
+        if (prevProps.displayModal !== this.props.displayModal) {
+            this.setState({ displayModal: this.props.displayModal });
         }
     }
     render() {
@@ -104,7 +100,6 @@ class Dashboard extends Component {
             <DashboardContainer>
                 <Modal
                     display={displayModal}
-                    closeModal={this.closeModal}
                 >
                     <CustomText />
                 </Modal>
@@ -167,8 +162,8 @@ class Dashboard extends Component {
     }
 }
 
-const mapStateToProps = ({ modal }) => ({
-    modal
+const mapStateToProps = ({ modal: { displayModal } }) => ({
+    displayModal
 });
 
 export default connect(mapStateToProps)(Dashboard);

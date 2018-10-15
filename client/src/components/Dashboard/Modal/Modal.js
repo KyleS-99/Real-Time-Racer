@@ -10,12 +10,10 @@ const OuterModal = styled.div`
 	position: fixed;
 	top: 0;
     z-index: 6;
-    display: flex;
+    display: ${props => props.display ? 'flex' : 'none'}
     justify-content: center;
     align-items: center;
 `;
-
-// ${props => props.display ? 'flex' : 'none'}
 
 class ModalContainer extends Component {
 	render() {
