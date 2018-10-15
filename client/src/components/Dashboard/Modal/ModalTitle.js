@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import BorderLine from '../../styled/BorderLine';
+import { closeModal } from '../../../actions/modalActions';
 
 const ModalTitleContainer = styled.div`
 	display: flex;
@@ -23,14 +25,28 @@ const Img = styled.img`
 	width: 40px;
 `;
 
-const ModalTitle = (props) => (
-    <ModalTitleContainer>
-        <div>
-            <ModalTitleParagraph>{props.text}</ModalTitleParagraph>
-            <BorderLine />
-        </div>
-        <Img src={window.location.origin + '/img/x.png'} alt="Close" />
-    </ModalTitleContainer>
-);
+class ModalTitle extends Component {
+	closeTheModal = () => {
+		this.props.dispatch(closeModal());
+	}
+	render() {
+		// Get data from props
+		const { text } = this.props;
 
-export default ModalTitle;
+		return (
+			<ModalTitleContainer>
+				<div>
+					<ModalTitleParagraph>{text}</ModalTitleParagraph>
+					<BorderLine />
+				</div>
+				<Img 
+					src={window.location.origin + '/img/x.png'} 
+					alt="Close" 
+					onClick={this.closeTheModal}
+				/>
+			</ModalTitleContainer>
+		);
+	}
+} 
+
+export default connect(null)(ModalTitle);
