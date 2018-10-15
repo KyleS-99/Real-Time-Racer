@@ -5,11 +5,11 @@ import InnerModal from './InnerModal';
 
 const OuterModal = styled.div`
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 	background: hsla(0, 0%, 100%, .8);
 	position: fixed;
+	top: 0;
     z-index: 6;
-    margin-top: -50px;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -13,6 +13,8 @@ const Flop = keyframes`
 `;
 
 const InnerModal = styled.div`
+	position: relative;
+	top: -25px;
 	width: 400px;
     height: 400px;
     background: #000;

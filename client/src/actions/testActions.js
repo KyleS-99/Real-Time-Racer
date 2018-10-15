@@ -3,7 +3,8 @@ import axios from 'axios';
 import {
     SET_PASSAGE,
     GET_ERRORS,
-    SET_REPLAY
+    SET_REPLAY,
+    SET_CUSTOM_TEXT
 } from './types';
 
 export const setPassage = () => dispatch => {
@@ -47,5 +48,12 @@ export const replayAction = (replayId, replayPassage) => ({
         replayId,
         replayPassage,
         replay: true
+    }
+});
+
+export const setCustomText = (text) => ({
+    type: SET_CUSTOM_TEXT,
+    payload: {
+        text
     }
 });

@@ -7,10 +7,3 @@ export const closeModal = () => ({
 export const toggleModal = () => ({
     type: TOGGLE_MODAL
 });
-
-export const setCustomText = ({ text }) => ({
-    type: SET_CUSTOM_TEXT,
-    payload: {
-        text
-    }
-});

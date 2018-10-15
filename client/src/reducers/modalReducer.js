@@ -1,8 +1,10 @@
-import { TOGGLE_MODAL, CLOSE_MODAL, SET_CUSTOM_TEXT } from '../actions/types';
+import { 
+    TOGGLE_MODAL, 
+    CLOSE_MODAL 
+} from '../actions/types';
 
 const initialState = {
     displayModal: false,
-    text: ''
 };
 
 export default (state = initialState, action) => {
@@ -16,12 +18,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 displayModal: false
-            };
-        case SET_CUSTOM_TEXT:
-            const { text } = action.payload;
-            return {
-                ...state,
-                text
             };
         default:
             return state;

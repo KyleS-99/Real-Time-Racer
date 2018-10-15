@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import ModalTitle from './ModalTitle';
-import {  } from '../../../actions/modalActions';
+import { setCustomText } from '../../../actions/testActions';
 
 const Information = styled.div`
 	display: flex;
@@ -85,7 +85,11 @@ class CustomText extends Component {
 		});
 	}
 	submit = () => {
-
+		const { wordTotal, text } = this.state;
+		
+		if (wordTotal > 0) {
+			this.props.dispatch(setCustomText(text.trim()));
+		}
 	}
 	render() {
 		// Get wordTotal, and text from state
