@@ -9,6 +9,6 @@ export const SET_REPLAY = 'SET_REPLAY';
 export const RESET_REPLAY_DATA = 'RESET_REPLAY_DATA';
 
 // Modal
-export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 export const SET_CUSTOM_TEXT = 'SET_CUSTOM_TEXT';

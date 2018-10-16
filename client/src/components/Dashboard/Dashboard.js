@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Modal from './Modal/Modal';
 import CustomText from './Modal/CustomText';
+import { openModal, closeModal } from '../../actions/modalActions';
 
 import {
     Box,
@@ -82,7 +83,9 @@ const ButtonBlur = styled.div`
 
 class Dashboard extends Component {
     state = {
-        displayModal: false
+        displayModal: false,
+        multiplayer: false,
+        custom: false
     }
     toggleModalDisplay = () => {
         // Toggle the modal
@@ -90,8 +93,15 @@ class Dashboard extends Component {
     }
     componentDidUpdate(prevProps) {
         if (prevProps.displayModal !== this.props.displayModal) {
-            this.setState({ displayModal: this.props.displayModal });
+            this.setState(prevState => ({ 
+                displayModal: this.props.displayModal,
+                multiplayer: !this.props.displayModal ? false : prevState.multiplayer,
+                custom: !this.props.displayModal ? false : prevState.custom
+            }));
         }
+    }
+    whichModalShouldDisplay = () => {
+        
     }
     render() {
         const { displayModal } = this.state;

@@ -1,9 +1,9 @@
-import { CLOSE_MODAL, TOGGLE_MODAL, SET_CUSTOM_TEXT } from './types';
+import { CLOSE_MODAL, OPEN_MODAL } from './types';
 
 export const closeModal = () => ({
     type: CLOSE_MODAL
 });
 
-export const toggleModal = () => ({
-    type: TOGGLE_MODAL
+export const openModal = () => ({
+    type: OPEN_MODAL
 });

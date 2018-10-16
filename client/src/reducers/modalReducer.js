@@ -1,5 +1,5 @@
 import { 
-    TOGGLE_MODAL, 
+    OPEN_MODAL, 
     CLOSE_MODAL 
 } from '../actions/types';
 
@@ -9,14 +9,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case TOGGLE_MODAL:
+        case OPEN_MODAL:
             return {
-                ...state,
-                displayModal: !state.displayModal
+                displayModal: true
             };
         case CLOSE_MODAL:
             return {
-                ...state,
                 displayModal: false
             };
         default:
