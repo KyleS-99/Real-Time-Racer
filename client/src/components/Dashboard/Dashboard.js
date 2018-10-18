@@ -100,18 +100,22 @@ class Dashboard extends Component {
             }));
         }
     }
-    whichModalShouldDisplay = () => {
-        
+    whichModalShouldDisplay = (e) => {
+        // Set which modal should display
+        this.setState({ [e.target.dataset.modalName]: true });
+
+        // Open modal
+        this.props.dispatch(openModal());
     }
     render() {
-        const { displayModal } = this.state;
+        const { displayModal, custom, multiplayer } = this.state;
 
         return (
             <DashboardContainer>
                 <Modal
                     display={displayModal}
                 >
-                    <CustomText />
+                    {custom && <CustomText />}
                 </Modal>
 
                 <Box>
@@ -122,7 +126,11 @@ class Dashboard extends Component {
                         <Message>Practice by yourself</Message>
                         <div>
                             <Link to="/test/practice">
-                                <Button color="linear-gradient(-225deg,#a445b2,#d41872 52%,#f06);">START</Button>
+                                <Button 
+                                    color="linear-gradient(-225deg,#a445b2,#d41872 52%,#f06);"
+                                >
+                                    START
+                                </Button>
                                 <ButtonBlur color="linear-gradient(-225deg, #A445B2 0%, #D41872 52%, #FF0066 100%);" />
                             </Link>
                         </div>
@@ -136,7 +144,13 @@ class Dashboard extends Component {
                         <Title spacing="6px;">Multiplayer Test</Title>
                         <Message>Race against others</Message>
                         <div>
-                            <Button color="linear-gradient(-225deg,#22e1ff,#1d8fe1 48%,#625eb1);">START</Button>
+                            <Button 
+                                color="linear-gradient(-225deg,#22e1ff,#1d8fe1 48%,#625eb1);"
+                                onClick={this.whichModalShouldDisplay}
+                                data-modal-name="multiplayer"
+                            >
+                                START
+                            </Button>
                             <ButtonBlur color="linear-gradient(-225deg,#22e1ff,#1d8fe1 48%,#625eb1);" />
                         </div>
                     </ContentContainer>
@@ -149,7 +163,11 @@ class Dashboard extends Component {
                         <Title spacing="6px;">Play With Friends</Title>
                         <Message>Invite a friend to a race</Message>
                         <div>
-                            <Button color="linear-gradient(135deg,#f761a1 10%,#8c1bab);">START</Button>
+                            <Button 
+                                color="linear-gradient(135deg,#f761a1 10%,#8c1bab);"
+                            >
+                                START
+                            </Button>
                             <ButtonBlur color="linear-gradient(135deg,#f761a1 10%,#8c1bab);" />
                         </div>
                     </ContentContainer>
@@ -162,7 +180,13 @@ class Dashboard extends Component {
                         <Title spacing="10px;">Custom Test</Title>
                         <Message>Create your own custom test</Message>
                         <div>
-                            <Button color="linear-gradient(0deg,#b224ef 0,#7579ff);">START</Button>
+                            <Button 
+                                color="linear-gradient(0deg,#b224ef 0,#7579ff);"
+                                onClick={this.whichModalShouldDisplay}
+                                data-modal-name="custom"
+                            >
+                                START
+                            </Button>
                             <ButtonBlur color="linear-gradient(0deg,#b224ef 0,#7579ff);" />
                         </div>
                     </ContentContainer>

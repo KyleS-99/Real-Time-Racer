@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import onClickoutside from 'react-onclickoutside';
 import styled, { keyframes } from 'styled-components';
+import { connect } from 'react-redux';
+
+import { closeModal } from '../../../actions/modalActions';
 
 const Flop = keyframes`
 	from {
@@ -28,7 +31,8 @@ const InnerModal = styled.div`
 
 class Modal extends Component {
 	handleClickOutside = () => {
-		this.props.closeModal();
+		// Close modal if user clicks outside of modal
+		this.props.dispatch(closeModal());
 	}
 	render() {
 		return (
@@ -39,4 +43,4 @@ class Modal extends Component {
 	}
 }
 
-export default onClickoutside(Modal);
+export default connect(null)(onClickoutside(Modal));
