@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import Modal from './Modal/Modal';
 import CustomText from './Modal/CustomText';
-import { openModal, closeModal } from '../../actions/modalActions';
+import Multiplayer from './Modal/Multiplayer';
+import { openModal } from '../../actions/modalActions';
 
 import {
     Box,
@@ -116,6 +117,7 @@ class Dashboard extends Component {
                     display={displayModal}
                 >
                     {custom && <CustomText />}
+                    {multiplayer && <Multiplayer />}
                 </Modal>
 
                 <Box>

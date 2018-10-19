@@ -99,7 +99,7 @@ class CustomText extends Component {
 
 		return (
 			<div>
-				<ModalTitle text="Custom Test" closeModal={this.props.closeModal} />
+				<ModalTitle text="Custom Test" />
 
 				<Information>
 					<TotalWords>total words: {wordTotal}</TotalWords>
