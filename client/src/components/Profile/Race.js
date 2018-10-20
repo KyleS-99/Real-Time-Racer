@@ -56,7 +56,7 @@ const AccuracySymbol = styled.span`
 
 const Race =({ id, wpm, accuracy }) => (
     <IndividualRace>
-        <StyledLink to={`/tests/practice/${id}`}>view details</StyledLink>
+        <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
         <WPM>{wpm} <WPMWord>wpm</WPMWord></WPM>
         <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
     </IndividualRace>
