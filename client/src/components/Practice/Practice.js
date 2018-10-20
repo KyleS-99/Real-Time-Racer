@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { setPassage, savePracticeRace } from '../../actions/testActions';
+import { setPassage, savePracticeRace, setCustomWPMAndAccuracy } from '../../actions/testActions';
 
 import TypingField from '../common/TypingField';
 
@@ -12,6 +12,14 @@ class Practice extends Component {
         passageId: null
     }
     submitRaceData = (userData) => {
+        // If custom is true then set the data and redirect to /tests/result
+        if (this.props.tests.custom) {
+            // Get race data
+            const { grossWPM, acc } = userData;
+
+            return this.props.setCustomWPMAndAccuracy(grossWPM, acc, this.props.history);
+        }
+
         // Set passageId in object to be submited
         userData.passageId = this.state.passageId;
 
@@ -22,7 +30,7 @@ class Practice extends Component {
     }
     componentDidMount() {
         // Get data from props
-        const { replay, replayId, replayPassage } = this.props.test;
+        const { replay, replayId, replayPassage, custom, customPassage } = this.props.test;
         
         // Check to see if user is wanting to replay certian passage
         if (replay) {
@@ -30,6 +38,8 @@ class Practice extends Component {
                 passage: replayPassage,
                 passageId: replayId
             });
+        } else if (custom) {
+            this.setState({ passage: customPassage });
         } else {
             this.props.setPassage();
         }
@@ -68,4 +78,4 @@ const mapStateToProps = (state) => ({
     test: state.test
 });
 
-export default connect(mapStateToProps, { setPassage, savePracticeRace })(Practice);
+export default connect(mapStateToProps, { setPassage, savePracticeRace, setCustomWPMAndAccuracy })(Practice);

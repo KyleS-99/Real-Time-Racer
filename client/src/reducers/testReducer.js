@@ -2,7 +2,8 @@ import {
     SET_PASSAGE,
     SET_REPLAY,
     RESET_REPLAY_DATA,
-    SET_CUSTOM_TEXT
+    SET_CUSTOM_TEXT,
+    SET_CUSTOM_RACE_DATA
 } from '../actions/types';
 
 const initialState = {
@@ -11,6 +12,8 @@ const initialState = {
     raceId: null,
     custom: false,
     customPassage: null,
+    customWPM: null,
+    customAccuracy: null,
     replay: false,
     replayPassage: null,
     replayId: null
@@ -47,6 +50,14 @@ export default (state = initialState, action) => {
                 replay: false,
                 replaypassage: null
             };
+        case SET_CUSTOM_RACE_DATA:
+            const { acc, wpm } = action.payload;
+
+            return {
+                ...state,
+                customWPM: wpm,
+                customAccuracy: acc
+            }
         default:
             return state;
     }

@@ -7,8 +7,9 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_PASSAGE = 'SET_PASSAGE';
 export const SET_REPLAY = 'SET_REPLAY';
 export const RESET_REPLAY_DATA = 'RESET_REPLAY_DATA';
+export const SET_CUSTOM_TEXT = 'SET_CUSTOM_TEXT';
+export const SET_CUSTOM_RACE_DATA = 'SET_CUSTOM_RACE_DATA';
 
 // Modal
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
-export const SET_CUSTOM_TEXT = 'SET_CUSTOM_TEXT';

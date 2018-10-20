@@ -4,7 +4,8 @@ import {
     SET_PASSAGE,
     GET_ERRORS,
     SET_REPLAY,
-    SET_CUSTOM_TEXT
+    SET_CUSTOM_TEXT,
+    SET_CUSTOM_RACE_DATA
 } from './types';
 
 export const setPassage = () => dispatch => {
@@ -27,7 +28,7 @@ export const savePracticeRace = (data, history) => dispatch => {
             const { raceId } = res.data;
 
             // Redirect user to after-race result
-            history.push(`/tests/practice/${raceId}`);
+            history.push(`/tests/result/${raceId}`);
         })
         .catch((err) => 
             dispatch({
@@ -57,3 +58,16 @@ export const setCustomText = (text) => ({
         text
     }
 });
+
+export const setCustomWPMAndAccuracy = (wpm, acc, history) => dispatch => {
+    dispatch({
+        type: SET_CUSTOM_RACE_DATA,
+        payload: {
+            wpm,
+            acc
+        }
+    });
+
+    // Redirect to /tests/result
+    history.push('/tests/result/');
+};
