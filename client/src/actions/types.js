@@ -6,7 +6,7 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 // Tying
 export const SET_PASSAGE = 'SET_PASSAGE';
 export const SET_REPLAY = 'SET_REPLAY';
-export const RESET_REPLAY_DATA = 'RESET_REPLAY_DATA';
+export const RESET_DATA = 'RESET_DATA';
 export const SET_CUSTOM_TEXT = 'SET_CUSTOM_TEXT';
 export const SET_CUSTOM_RACE_DATA = 'SET_CUSTOM_RACE_DATA';
 

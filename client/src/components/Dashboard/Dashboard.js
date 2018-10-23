@@ -7,6 +7,7 @@ import Modal from './Modal/Modal';
 import CustomText from './Modal/CustomText';
 import Multiplayer from './Modal/Multiplayer';
 import { openModal } from '../../actions/modalActions';
+import { RESET_DATA } from '../../actions/types';
 
 import {
     Box,
@@ -108,6 +109,11 @@ class Dashboard extends Component {
         // Open modal
         this.props.dispatch(openModal());
     }
+    practiceRace = () => {
+        this.props.dispatch({
+            type: RESET_DATA
+        });
+    }
     render() {
         const { displayModal, custom, multiplayer } = this.state;
 
@@ -130,6 +136,7 @@ class Dashboard extends Component {
                             <Link to="/test/practice">
                                 <Button 
                                     color="linear-gradient(-225deg,#a445b2,#d41872 52%,#f06);"
+                                    onClick={this.practiceRace}
                                 >
                                     START
                                 </Button>

@@ -1,7 +1,7 @@
 import {
     SET_PASSAGE,
     SET_REPLAY,
-    RESET_REPLAY_DATA,
+    RESET_DATA,
     SET_CUSTOM_TEXT,
     SET_CUSTOM_RACE_DATA
 } from '../actions/types';
@@ -42,7 +42,7 @@ export default (state = initialState, action) => {
                 custom: false,
                 customPassage: null
             };
-        case RESET_REPLAY_DATA:
+        case RESET_DATA:
             return initialState;
         case SET_CUSTOM_TEXT:
             const { text } = action.payload;

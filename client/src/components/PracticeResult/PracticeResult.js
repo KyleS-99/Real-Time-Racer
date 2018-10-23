@@ -8,7 +8,7 @@ import axios from 'axios';
 import BackArrow from '../common/BackArrow';
 
 import { replayAction } from '../../actions/testActions';
-import { RESET_REPLAY_DATA } from '../../actions/types';
+import { RESET_DATA } from '../../actions/types';
 
 const PracticeResultContainer = styled.div`
     width: 100%;
@@ -173,10 +173,25 @@ class PracticeResult extends Component {
 
         // Make sure component hasn't been unmounted
         if (!this.canceled) {
+            // Get data from store
+            const { custom, customPassage, customWPM, customAccuracy } = this.props.test;
+
+            // Check to see this was a custom test
+            if (custom) {
+                // Set state
+                return this.setState({
+                    passage: customPassage,
+                    passageId: null,
+                    accuracy: customAccuracy,
+                    wpm: customWPM,
+                    loading: false
+                });
+            }
+
             // Clear replay data
-            this.props.dispatch({
-                type: RESET_REPLAY_DATA
-            });
+            // this.props.dispatch({
+            //     type: RESET_DATA
+            // });
 
             // Get the raceId from the params
             const { raceId } = this.props.match.params;
@@ -212,6 +227,11 @@ class PracticeResult extends Component {
 
         // Remove event listener for keydown
         window.removeEventListener('keydown', this.onKeyDown);
+
+        // Clear replay data
+        this.props.dispatch({
+            type: RESET_DATA
+        });
     }
     render() {
         const { passage, wpm, accuracy, error, loading } = this.state;
@@ -288,11 +308,13 @@ class PracticeResult extends Component {
 }
 
 PracticeResult.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    test: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    test: state.test
 });
 
 export default connect(mapStateToProps)(PracticeResult);
