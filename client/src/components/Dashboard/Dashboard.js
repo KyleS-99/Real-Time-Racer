@@ -116,8 +116,8 @@ class Dashboard extends Component {
                 <Modal
                     display={displayModal}
                 >
-                    {custom && <CustomText />}
-                    {multiplayer && <Multiplayer />}
+                    {custom && <CustomText history={this.props.history} />}
+                    {multiplayer && <Multiplayer history={this.props.history} />}
                 </Modal>
 
                 <Box>

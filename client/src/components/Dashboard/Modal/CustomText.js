@@ -91,6 +91,7 @@ class CustomText extends Component {
 		if (wordTotal > 0) {
 			this.props.dispatch(setCustomText(text.trim()));
 			this.props.dispatch(closeModal());
+			this.props.history.push('/test/practice');
 		}
 	}
 	render() {

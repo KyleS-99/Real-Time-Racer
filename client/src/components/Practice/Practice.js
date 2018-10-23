@@ -13,7 +13,7 @@ class Practice extends Component {
     }
     submitRaceData = (userData) => {
         // If custom is true then set the data and redirect to /tests/result
-        if (this.props.tests.custom) {
+        if (this.props.test.custom) {
             // Get race data
             const { grossWPM, acc } = userData;
 

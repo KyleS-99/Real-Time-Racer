@@ -26,7 +26,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 passage,
-                passageId: id
+                passageId: id,
+                replay: false,
+                replayPassage: null,
+                custom: false,
+                customPassage: null
             };
         case SET_REPLAY:
             const { replayPassage, replayId } = action.payload;
@@ -48,7 +52,9 @@ export default (state = initialState, action) => {
                 customPassage: text,
                 custom: true,
                 replay: false,
-                replaypassage: null
+                replaypassage: null,
+                passage: null,
+                passageId: null
             };
         case SET_CUSTOM_RACE_DATA:
             const { acc, wpm } = action.payload;
