@@ -14,7 +14,7 @@ const IndividualRace = styled.div`
     background: #fff;
     box-shadow: 0 9px 33px 0 rgba(0,0,0,.06);
     border-radius: 5px;
-    margin: 6px;
+    margin: 25px 6px;
     padding: 6px;
     position: relative;
     
@@ -30,8 +30,8 @@ const IndividualRace = styled.div`
 
 const Avatar = styled.div`
     grid-area: avatar;
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background-image: url(${props => props.src ? props.src : "https://i.imgur.com/O4mhvZf.png"});
     background-size: cover;
@@ -40,30 +40,73 @@ const Avatar = styled.div`
     cursor: pointer;
     position: absolute;
     left: 50%;
-    margin-left: -20px;
+    margin-left: -40px;
+    top: -40px;
 `
 
 const StyledLink = styled(Link)`
     text-decoration: none;
     font-size: 16px;
     text-transform: capitalize;
+    position: relative;
+    bottom: 5px;
 
     &:hover {
         text-decoration: underline;
     }
 `;
 
-// <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
+const RaceInfo = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 100%;
+`;
+
+const WPM = styled.h1`
+    font-size: 30px;
+`;
+
+const WPMWord = styled.span`
+    font-size: 20px;
+    text-transform: uppercase;
+`;
+
+const Accuracy = styled.h1`
+    font-size: 20px;
+`;
+
+const AccuracySymbol = styled.span`
+    font-size: 15px;
+    text-transform: capitalize;
+`;
+
 class Race extends Component {
     state = {  }
     render() {
-        const { id, wpm, accuracy, auth: { user: { img } }, player } = this.props;
+        const { id, wpm, accuracy, auth: { user: { img }, method }, player } = this.props;
+        let enlargeImg;
 
-        console.log(this.props);
+        // Check if img is defined if so set enlargeImg to the url but add 200 as the size
+        if (img && img !== '' && method === 'google') {
+            enlargeImg = img.slice(0, -2) + '200';
+        } else {
+            enlargeImg = img;
+        }
 
         return (
             <IndividualRace>
-                <Avatar src={img} />
+                <Avatar src={enlargeImg} />
+
+                <RaceInfo>
+                    <WPM>{wpm} <WPMWord>wpm</WPMWord></WPM>
+
+                    <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
+                </RaceInfo>
+
+                <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
             </IndividualRace>
         );
     }
