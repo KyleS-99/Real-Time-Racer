@@ -248,7 +248,7 @@ class Profile extends Component {
                         if (data.length !== 0) {
                             this.setState(prevState => ({
                                 loading: false,
-                                [`${type === 'both' ? 'all' : type}Races`]: [...prevState[`${type === 'both' ? 'all' : type}Races`], raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} />)],
+                                [`${type === 'both' ? 'all' : type}Races`]: [...prevState[`${type === 'both' ? 'all' : type}Races`], raceData.map(({ wpm, accuracy, _id }) => <Race id={_id} wpm={wpm} accuracy={accuracy} key={_id} player={type} />)],
                                 [`${type}Request`]: prevState[`${type}Request`] + 15,
                                 [`${type === 'both' ? 'all' : type}Done`]: done
                             }));    
@@ -335,6 +335,8 @@ class Profile extends Component {
         // Check if img is defined if so set enlargeImg to the url but add 200 as the size
         if (img && img !== '' && method === 'google') {
             enlargeImg = img.slice(0, -2) + '200';
+        } else {
+            enlargeImg = img;
         }
 
         return (
@@ -342,7 +344,7 @@ class Profile extends Component {
                 <BackArrow />
                 <ProfileInnerContainer>
                     <StatsContainer>
-                        <Avatar src={enlargeImg ? enlargeImg : img} />
+                        <Avatar src={enlargeImg} />
 
                         <ProfileDetails>
                             <Name>
