@@ -228,7 +228,7 @@ class PracticeResult extends Component {
         // Remove event listener for keydown
         window.removeEventListener('keydown', this.onKeyDown);
 
-        // Clear replay data
+        // Clear race data
         this.props.dispatch({
             type: RESET_DATA
         });

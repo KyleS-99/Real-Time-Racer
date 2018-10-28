@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -83,34 +83,32 @@ const AccuracySymbol = styled.span`
     text-transform: capitalize;
 `;
 
-class Race extends Component {
-    state = {  }
-    render() {
-        const { id, wpm, accuracy, auth: { user: { img }, method }, player } = this.props;
-        let enlargeImg;
+const Race = (props) => {
+    const { id, wpm, accuracy, auth: { user: { img }, method }, player } = props;
+    let enlargeImg;
 
-        // Check if img is defined if so set enlargeImg to the url but add 200 as the size
-        if (img && img !== '' && method === 'google') {
-            enlargeImg = img.slice(0, -2) + '200';
-        } else {
-            enlargeImg = img;
-        }
-
-        return (
-            <IndividualRace>
-                <Avatar src={enlargeImg} />
-
-                <RaceInfo>
-                    <WPM>{wpm} <WPMWord>wpm</WPMWord></WPM>
-
-                    <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
-                </RaceInfo>
-
-                <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
-            </IndividualRace>
-        );
+    // Check if img is defined if so set enlargeImg to the url but add 200 as the size
+    if (img && img !== '' && method === 'google') {
+        enlargeImg = img.slice(0, -2) + '200';
+    } else {
+        enlargeImg = img;
     }
+
+    return (
+        <IndividualRace>
+            <Avatar src={enlargeImg} />
+
+            <RaceInfo>
+                <WPM>{wpm} <WPMWord>wpm</WPMWord></WPM>
+
+                <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
+            </RaceInfo>
+
+            <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
+        </IndividualRace>
+    );
 }
+
 
 Race.propTypes = {
     id: PropTypes.string.isRequired,
