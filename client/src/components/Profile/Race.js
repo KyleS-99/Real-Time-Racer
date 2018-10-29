@@ -14,7 +14,7 @@ const IndividualRace = styled.div`
     background: #fff;
     box-shadow: 0 9px 33px 0 rgba(0,0,0,.06);
     border-radius: 5px;
-    margin: 25px 6px;
+    margin: 15px 6px;
     padding: 6px;
     position: relative;
     
@@ -26,10 +26,13 @@ const IndividualRace = styled.div`
     &:hover {
         transform: translateY(-2px);
     }
+
+    @media(max-width: 440px) {
+        margin: 6px;   
+    }
 `;
 
 const Avatar = styled.div`
-    grid-area: avatar;
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -37,11 +40,14 @@ const Avatar = styled.div`
     background-size: cover;
     background-position: center center;
     box-shadow: 0 8px 19px -1px rgba(0,0,0,.1);
-    cursor: pointer;
     position: absolute;
     left: 50%;
     margin-left: -40px;
-    top: -40px;
+    top: -20px;
+
+    @media(max-width: 440px) {
+        display: none;
+    }
 `
 
 const StyledLink = styled(Link)`
@@ -83,8 +89,8 @@ const AccuracySymbol = styled.span`
     text-transform: capitalize;
 `;
 
-const Race = (props) => {
-    const { id, wpm, accuracy, auth: { user: { img }, method }, player } = props;
+const Race = ({ id, wpm, accuracy, auth: { user: { img }, method }, player }) => {
+    // init variable
     let enlargeImg;
 
     // Check if img is defined if so set enlargeImg to the url but add 200 as the size

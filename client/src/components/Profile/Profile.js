@@ -119,6 +119,11 @@ const Menu = styled.div`
     & p + p {
         margin-left: 15px;
     }
+
+    @media(max-width: 555px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const MenuItem = styled.p`
