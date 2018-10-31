@@ -4,7 +4,7 @@ import './HalfAndHalf.css';
 
 const HalfAndHalf = () => (
     <div id="half-container">
-        <div class="lds-dual-ring" />
+        <div className="lds-dual-ring" />
     </div>
 );
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import io from 'socket.io-client';
+import { connect } from 'react-redux';
 
 import ModalTitle from './ModalTitle';
 import HalfAndHalf from '../../common/HalfAndHalf';
@@ -15,7 +17,37 @@ const Searching = styled.p`
 `;
 
 class Multiplayer extends Component {
-    state = {  }
+    componentDidMount() {
+        if (!this.canceled) {
+            const socket = io();
+
+            socket.on('connect', () => {
+                console.log('Connected to server');
+
+                socket.emit('searching', {
+                    name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
+                    img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
+                });
+
+                socket.on('opponent-found', (data) => {
+                    console.log(data);
+                });
+            });
+
+            socket.on('reconnect_attempt', attempt => {
+                if (attempt > 4) {
+                    socket.disconnect();
+                }
+            });
+
+            socket.on('disconnect', () => {
+                console.log('socket disconnected');
+            });
+        }
+    }
+    componentWillUnmount() {
+        this.canceled = true;
+    }
     render() {
         return (
             <div>
@@ -27,4 +59,8 @@ class Multiplayer extends Component {
     }
 }
 
-export default Multiplayer;
+const mapStateToProps = ({ auth }) => ({
+    auth
+});
+
+export default connect(mapStateToProps)(Multiplayer);
