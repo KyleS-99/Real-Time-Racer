@@ -16,7 +16,12 @@ const initialState = {
     customAccuracy: null,
     replay: false,
     replayPassage: null,
-    replayId: null
+    replayId: null,
+    mutliplayer: false,
+    multiplayerPassage: null,
+    multiplayerPassageId: null,
+    opponentName: null,
+    opponentImg: null
 };
 
 export default (state = initialState, action) => {
