@@ -17,7 +17,7 @@ const leaveAllRooms = socket => {
 // All connected users
 let allConnectedClients = [];
 
-const configuredSocketIO = async (socket) => {
+const configuredSocketIO = socket => {
     socket.on('searching', data => {
         leaveAllRooms(socket);
 
@@ -51,27 +51,31 @@ const configuredSocketIO = async (socket) => {
                     connectedClient.setState('in-game');
                 }
 
-                try {
-                    const { passage, id: passageId } = await Passage.random();
+                Passage.random()
+                    .then(doc => {
+                        if (doc) {
+                            const { passage, _id: passageId } = doc;
 
-                    // Emit opponent-found
-                    socket.emit('opponent-found', { name, img });
-                    clientSocket.emit('opponent-found', inArray.length !== 0 ? { 
-                        name: inArray[0].name,
-                        img: inArray[0].img,
-                        passage,
-                        passageId
-                    } : 
-                    { 
-                        name: connectedClient.name,
-                        img: connectedClient.img,
-                        passage,
-                        passageId
+                            // Emit opponent-found
+                            socket.emit('opponent-found', { name, img, passage, passageId });
+                            clientSocket.emit('opponent-found', inArray.length !== 0 ? { 
+                                name: inArray[0].name,
+                                img: inArray[0].img,
+                                passage,
+                                passageId
+                            } : 
+                            { 
+                                name: connectedClient.name,
+                                img: connectedClient.img,
+                                passage,
+                                passageId
+                            });
+                        }
+                    })
+                    .catch(e => {
+                        socket.emit('failed');
+                        clientSocket.emit('failed');
                     });
-                } catch (err) {
-                    socket.emit('failed');
-                    clientSocket.emit('failed');
-                }
 
                 break;
             }
