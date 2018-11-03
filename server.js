@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const http = require('http');
 const socketIO = require('socket.io');
 
-// Configured configuredSocketIO
 const configuredSocketIO = require('./socket.io');
 
 // initialize socket.io/server
