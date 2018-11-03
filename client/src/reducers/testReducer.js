@@ -3,7 +3,8 @@ import {
     SET_REPLAY,
     RESET_DATA,
     SET_CUSTOM_TEXT,
-    SET_CUSTOM_RACE_DATA
+    SET_CUSTOM_RACE_DATA,
+    SET_MULTIPLAYER_DATA
 } from '../actions/types';
 
 const initialState = {
@@ -36,7 +37,8 @@ export default (state = initialState, action) => {
                 replay: false,
                 replayPassage: null,
                 custom: false,
-                customPassage: null
+                customPassage: null,
+                multiplayer: false
             };
         case SET_REPLAY:
             const { replayPassage, replayId } = action.payload;
@@ -47,7 +49,8 @@ export default (state = initialState, action) => {
                 replayId,
                 replay: true,
                 custom: false,
-                customPassage: null
+                customPassage: null,
+                multiplayer: false
             };
         case RESET_DATA:
             return initialState;
@@ -61,7 +64,8 @@ export default (state = initialState, action) => {
                 replay: false,
                 replaypassage: null,
                 passage: null,
-                passageId: null
+                passageId: null,
+                multiplayer: false
             };
         case SET_CUSTOM_RACE_DATA:
             const { acc, wpm } = action.payload;
@@ -70,7 +74,24 @@ export default (state = initialState, action) => {
                 ...state,
                 customWPM: wpm,
                 customAccuracy: acc
-            }
+            };
+        case SET_MULTIPLAYER_DATA:
+            const { name, img, passage: multiPassage, passageId } = action.payload;
+
+            return {
+                ...state,
+                custom: false,
+                customPassage: null,
+                replay: false,
+                replayPassage: null,
+                passage: null,
+                passageId: null,
+                mutliplayer: true,
+                multiplayerPassage: multiPassage,
+                multiplayerPassageId: passageId,
+                opponentName: name,
+                opponentImg: img
+            };
         default:
             return state;
     }

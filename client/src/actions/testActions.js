@@ -5,7 +5,8 @@ import {
     GET_ERRORS,
     SET_REPLAY,
     SET_CUSTOM_TEXT,
-    SET_CUSTOM_RACE_DATA
+    SET_CUSTOM_RACE_DATA,
+    SET_MULTIPLAYER_DATA
 } from './types';
 
 export const setPassage = () => dispatch => {
@@ -28,7 +29,7 @@ export const savePracticeRace = (data, history) => dispatch => {
             const { raceId } = res.data;
 
             // Redirect user to after-race result
-            history.push(`/tests/result/${raceId}`);
+            history.push(`/race/result/${raceId}`);
         })
         .catch((err) => 
             dispatch({
@@ -52,6 +53,11 @@ export const replayAction = (replayId, replayPassage) => ({
     }
 });
 
+export const setMultiplayerData = (data) => ({
+    type: SET_MULTIPLAYER_DATA,
+    payload: data
+});
+
 export const setCustomText = (text) => ({
     type: SET_CUSTOM_TEXT,
     payload: {
@@ -69,5 +75,5 @@ export const setCustomWPMAndAccuracy = (wpm, acc, history) => dispatch => {
     });
 
     // Redirect to /tests/result
-    history.push('/tests/result/');
+    history.push('/race/result/');
 };

@@ -110,7 +110,7 @@ const Race = ({ id, wpm, accuracy, auth: { user: { img }, method }, player }) =>
                 <Accuracy>{accuracy}<AccuracySymbol>% Accuracy</AccuracySymbol></Accuracy>
             </RaceInfo>
 
-            <StyledLink to={`/tests/result/${id}`}>view details</StyledLink>
+            <StyledLink to={`/race/result/${id}`}>view details</StyledLink>
         </IndividualRace>
     );
 }
@@ -120,7 +120,6 @@ Race.propTypes = {
     id: PropTypes.string.isRequired,
     wpm: PropTypes.number.isRequired,
     accuracy: PropTypes.number.isRequired,
-    player: PropTypes.bool.isRequired,
     auth: PropTypes.object.isRequired
 };
 

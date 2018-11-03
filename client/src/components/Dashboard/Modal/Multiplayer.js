@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ModalTitle from './ModalTitle';
 import HalfAndHalf from '../../common/HalfAndHalf';
 import Cursor from '../../styled/Cursor';
+import { setMultiplayerData } from '../../../actions/testActions';
 
 const Searching = styled.p`
     font-size: 20px;
@@ -17,36 +18,39 @@ const Searching = styled.p`
 `;
 
 class Multiplayer extends Component {
+    state = {
+        found: false
+    }
     componentDidMount() {
         if (!this.canceled) {
-            const socket = io();
+            this.socket = io();
 
-            socket.on('connect', () => {
-                console.log('Connected to server');
-
-                socket.emit('searching', {
+            this.socket.on('connect', () => {
+                this.socket.emit('searching', {
                     name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
                     img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
                 });
 
-                socket.on('opponent-found', (data) => {
-                    console.log(data);
+                this.socket.on('opponent-found', (data) => {
+                    this.setState({ found: true });
+                    this.props.dispatch(setMultiplayerData(data));
+                    this.props.push('/race')
                 });
             });
 
-            socket.on('reconnect_attempt', attempt => {
+            this.socket.on('reconnect_attempt', attempt => {
                 if (attempt > 4) {
-                    socket.disconnect();
+                    this.socket.disconnect();
                 }
-            });
-
-            socket.on('disconnect', () => {
-                console.log('socket disconnected');
             });
         }
     }
     componentWillUnmount() {
         this.canceled = true;
+
+        if (!this.state.found) {
+            this.socket.disconnect();
+        }
     }
     render() {
         return (

@@ -133,7 +133,7 @@ class Dashboard extends Component {
                         <Title spacing="10px;">Practice Test</Title>
                         <Message>Practice by yourself</Message>
                         <div>
-                            <Link to="/test/practice">
+                            <Link to="/race">
                                 <Button 
                                     color="linear-gradient(-225deg,#a445b2,#d41872 52%,#f06);"
                                     onClick={this.practiceRace}

@@ -9,6 +9,7 @@ export const SET_REPLAY = 'SET_REPLAY';
 export const RESET_DATA = 'RESET_DATA';
 export const SET_CUSTOM_TEXT = 'SET_CUSTOM_TEXT';
 export const SET_CUSTOM_RACE_DATA = 'SET_CUSTOM_RACE_DATA';
+export const SET_MULTIPLAYER_DATA = 'SET_MULTIPLAYER_DATA';
 
 // Modal
 export const OPEN_MODAL = 'OPEN_MODAL';

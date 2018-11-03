@@ -88,10 +88,10 @@ class CustomText extends Component {
 	submit = () => {
 		const { wordTotal, text } = this.state;
 		
-		if (wordTotal > 0) {
+		if (wordTotal > 1) {
 			this.props.dispatch(setCustomText(text.trim()));
 			this.props.dispatch(closeModal());
-			this.props.history.push('/test/practice');
+			this.props.history.push('/race');
 		}
 	}
 	render() {
@@ -114,7 +114,7 @@ class CustomText extends Component {
 						rows="20" 
 						name="text"
 						value={text} 
-						onChange={this.onChange} 
+						onChange={this.onChange}
 					/>
 				</TextAreaContainer>
 

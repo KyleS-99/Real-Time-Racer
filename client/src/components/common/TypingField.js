@@ -54,7 +54,7 @@ const Timer = styled.div`
     color: #f0f8ff;
     border-radius: 5px;
     position: fixed;
-    z-index: 10;
+    z-index: 10000;
     width: 80px;
     height: 32px;
     display: flex;

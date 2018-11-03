@@ -154,7 +154,7 @@ class PracticeResult extends Component {
         // Check to see if user pressed ctrl + z
         if (eventObj.keyCode === 90 && eventObj.ctrlKey) {
             // Send them back to practice test
-            this.props.history.push('/test/practice');
+            this.props.history.push('/race');
         }
     }
     replay = () => {
@@ -165,7 +165,7 @@ class PracticeResult extends Component {
         this.props.dispatch(replayAction(passageId, passage));
 
         // Redirect to practice test
-        this.props.history.push('/test/practice');
+        this.props.history.push('/race');
     }
     componentDidMount() {
         // Add listener for keydown to see if user presses ctrl + z
@@ -187,11 +187,6 @@ class PracticeResult extends Component {
                     loading: false
                 });
             }
-
-            // Clear replay data
-            // this.props.dispatch({
-            //     type: RESET_DATA
-            // });
 
             // Get the raceId from the params
             const { raceId } = this.props.match.params;
@@ -282,7 +277,7 @@ class PracticeResult extends Component {
                         <ButtonContainer>
                             <Replay onClick={this.replay}>Replay</Replay>
                 
-                            <Link to="/test/practice">
+                            <Link to="/race">
                                 <AnotherTest>
                                     Take Practice Test (Ctrl + z)
                                 </AnotherTest>
