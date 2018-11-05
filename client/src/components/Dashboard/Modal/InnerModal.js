@@ -32,7 +32,9 @@ const InnerModal = styled.div`
 class Modal extends Component {
 	handleClickOutside = () => {
 		// Close modal if user clicks outside of modal
-		this.props.dispatch(closeModal());
+		if (this.props.modal.displayModal) {
+			this.props.dispatch(closeModal());
+		}
 	}
 	render() {
 		return (
@@ -43,4 +45,8 @@ class Modal extends Component {
 	}
 }
 
-export default connect(null)(onClickoutside(Modal));
+const mapStateToProps = state => ({
+	modal: state.modal
+});
+
+export default connect(mapStateToProps)(onClickoutside(Modal));

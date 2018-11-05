@@ -86,7 +86,7 @@ export default (state = initialState, action) => {
                 replayPassage: null,
                 passage: null,
                 passageId: null,
-                mutliplayer: true,
+                multiplayer: true,
                 multiplayerPassage: multiPassage,
                 multiplayerPassageId: passageId,
                 opponentName: name,

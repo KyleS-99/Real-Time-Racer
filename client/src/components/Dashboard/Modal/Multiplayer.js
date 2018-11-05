@@ -34,7 +34,7 @@ class Multiplayer extends Component {
                 this.socket.on('opponent-found', (data) => {
                     this.setState({ found: true });
                     this.props.dispatch(setMultiplayerData(data));
-                    this.props.history.push('/race')
+                    this.props.history.push('/race');
                 });
             });
 

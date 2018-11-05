@@ -13,6 +13,14 @@ const TypingFieldContainer = styled.div`
     position: relative;
 `;
 
+const ProgressBarContainer = styled.div`
+    width: 50%
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0 auto;
+`;
+
 const bounce = keyframes`
     from {
         transform: translateY(0px);
@@ -30,7 +38,7 @@ const StartTimerContainer = styled.div`
     display: ${props => props.count !== 0 ? 'flex' : 'none'};
     justify-content: center;
     align-items: center;
-    z-index: 5;
+    z-index: 100000;
 `;
 
 const StartTimer = styled.div`
@@ -376,12 +384,23 @@ class TypingField extends Component {
                     <Time>{this.state.timeString}</Time>
                 </Timer>
 
-                <ProgressBar 
-                    wpm={Math.round(grossWPM)} 
-                    percentComplete={percentComplete}
-                    name={`${first} ${last}`}
-                    img={img}
-                />
+                <ProgressBarContainer>
+                    <ProgressBar 
+                        wpm={Math.round(grossWPM)} 
+                        percentComplete={percentComplete}
+                        name={`${first} ${last}`}
+                        img={img}
+                    />
+
+                    {
+                        this.props.multiplayer && 
+                        <ProgressBar 
+                            name={this.props.opponent.opponentName} 
+                            img={this.props.opponent.opponentImg} 
+                        />
+                    }
+                </ProgressBarContainer>
+                
 
                 <StartTimerContainer count={this.state.startTimeDown}>
                     <StartTimer>

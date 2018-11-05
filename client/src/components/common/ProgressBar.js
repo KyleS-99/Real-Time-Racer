@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const ProgressBarContainer = styled.div`
-    width: 70%;
     height: 38vh;
     margin: 0 auto;
     box-sizing: border-box;

@@ -9,7 +9,10 @@ import TypingField from '../common/TypingField';
 class Practice extends Component {
     state = {
         passage: null,
-        passageId: null
+        passageId: null,
+        opponentImg: null,
+        opponentName: null,
+        multiplayer: null
     }
     submitRaceData = (userData) => {
         // If custom is true then set the data and redirect to /tests/result
@@ -30,13 +33,21 @@ class Practice extends Component {
     }
     componentDidMount() {
         // Get data from props
-        const { replay, replayId, replayPassage, custom, customPassage } = this.props.test;
+        const { replay, replayId, replayPassage, custom, customPassage, multiplayer, multiplayerPassage, multiplayerPassageId, opponentName, opponentImg } = this.props.test;
         
-        // Check to see if user is wanting to replay certian passage
+        // Check what user is doing - set state accordingly
         if (replay) {
             this.setState({
                 passage: replayPassage,
                 passageId: replayId
+            });
+        } else if (multiplayer) {
+            this.setState({
+                passage: multiplayerPassage,
+                passageId: multiplayerPassageId,
+                opponentName,
+                opponentImg,
+                multiplayer
             });
         } else if (custom) {
             this.setState({ passage: customPassage });
@@ -56,12 +67,15 @@ class Practice extends Component {
         }
     }
     render() {
+        const { passage, multiplayer, opponentName, opponentImg } = this.state;
         return (
             <div>
                 <TypingField 
-                    passage={this.state.passage} 
+                    passage={passage} 
                     submitRaceData={this.submitRaceData} 
                     history={this.props.history}
+                    multiplayer={multiplayer ? multiplayer : null}
+                    opponent={multiplayer ? { opponentName, opponentImg } : null}
                 />
             </div>
         );
