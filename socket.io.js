@@ -36,12 +36,11 @@ const configuredSocketIO = socket => {
             
             // if user is searching for a game, match them; but only if it's not us
             if (state === 'searching' && socket.id !== id) {
-                // Generate unique key
-                const unique = guid();
+                const unique_key = guid();
                 
-                // Make users join that unique room
-                clientSocket.join(unique);
-                socket.join(unique);
+                // Make users join that unique_key room
+                clientSocket.join(unique_key);
+                socket.join(unique_key);
 
                 setState('in-game');
                 
