@@ -18,7 +18,7 @@ const initialState = {
     replay: false,
     replayPassage: null,
     replayId: null,
-    mutliplayer: false,
+    multiplayer: false,
     multiplayerPassage: null,
     multiplayerPassageId: null,
     opponentName: null,

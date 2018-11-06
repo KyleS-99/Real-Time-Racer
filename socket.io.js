@@ -81,6 +81,10 @@ const configuredSocketIO = socket => {
         }
     });
 
+    socket.on('ready', () => {
+        console.log(socket.rooms);
+    });
+
     socket.on('disconnect', () => {
         allConnectedClients = allConnectedClients.filter(client => client.id !== socket.id);
     });

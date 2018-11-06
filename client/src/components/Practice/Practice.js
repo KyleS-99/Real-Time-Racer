@@ -68,14 +68,15 @@ class Practice extends Component {
     }
     render() {
         const { passage, multiplayer, opponentName, opponentImg } = this.state;
+        
         return (
             <div>
                 <TypingField 
                     passage={passage} 
                     submitRaceData={this.submitRaceData} 
                     history={this.props.history}
-                    multiplayer={multiplayer ? multiplayer : null}
-                    opponent={multiplayer ? { opponentName, opponentImg } : null}
+                    isMultiplayer={multiplayer}
+                    opponent={{ opponentName, opponentImg }}
                 />
             </div>
         );

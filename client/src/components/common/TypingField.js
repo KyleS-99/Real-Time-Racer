@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { connect } from 'react-redux';
+import io from 'socket.io-client';
 
 import ProgressBar from './ProgressBar';
 import SmallSpinner from './SmallSpinner';
@@ -207,16 +208,13 @@ class TypingField extends Component {
                 this.props.history.push('/dashboard');
             }
 
-            // Update state
             this.setState({ timeString: `${minuteString}:${secondString}` });
         }, 1000)
     }
-    timeDown = () => {
+    tickDown = () => {
         const timer = setInterval(() => {
-            // Set the time - 1
             const time = this.state.startTimeDown - 1;
 
-            // Update state
             this.setState({ startTimeDown: time });
 
             // Check if time is 0 if so start the clock & clear interval
@@ -226,6 +224,17 @@ class TypingField extends Component {
                     this.inputRef.current.focus();
                 }
                 return clearInterval(timer);
+            }
+        }, 1000);
+    }
+    timeDown = () => {
+        console.log(this.props, this.props.isMultiplayer);
+        setTimeout(() => {
+            console.log(this.props, this.props.isMultiplayer);
+            if (this.props.isMultiplayer) {
+                this.socket.emit('ready');
+            } else {
+                this.tickDown();
             }
         }, 1000);
     }
@@ -363,9 +372,14 @@ class TypingField extends Component {
             
             this.setState({ first, last });
         }
+
+        // Initialize socket.io
+        this.socket = io();
     }
     componentWillUnmount() {
         this.cancelRequest = true;
+
+        this.socket.disconnect();
     }
     render() {
         const { 
@@ -393,7 +407,7 @@ class TypingField extends Component {
                     />
 
                     {
-                        this.props.multiplayer && 
+                        this.props.isMultiplayer && 
                         <ProgressBar 
                             name={this.props.opponent.opponentName} 
                             img={this.props.opponent.opponentImg} 
