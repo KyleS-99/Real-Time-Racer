@@ -8,6 +8,7 @@ import CustomText from './Modal/CustomText';
 import Multiplayer from './Modal/Multiplayer';
 import { openModal } from '../../actions/modalActions';
 import { RESET_DATA } from '../../actions/types';
+import SocketContextConsumer from '../common/SocketContextConsumer';
 
 import {
     Box,
@@ -123,7 +124,14 @@ class Dashboard extends Component {
                     display={displayModal}
                 >
                     {custom && <CustomText history={this.props.history} />}
-                    {multiplayer && <Multiplayer history={this.props.history} />}
+                    {
+                        multiplayer && 
+                        <SocketContextConsumer 
+                            render={(socket) => {
+                                return <Multiplayer history={this.props.history} socket={socket} />
+                            }} 
+                        />
+                    }
                 </Modal>
 
                 <Box>

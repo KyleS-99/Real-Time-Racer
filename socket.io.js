@@ -56,22 +56,24 @@ const configuredSocketIO = socket => {
                             const { passage, _id: passageId } = doc;
 
                             // Emit opponent-found
-                            socket.emit('opponent-found', { name, img, passage, passageId });
+                            socket.emit('opponent-found', { name, img, passage, passageId, unique_key });
                             clientSocket.emit('opponent-found', inArray.length !== 0 ? { 
                                 name: inArray[0].name,
                                 img: inArray[0].img,
                                 passage,
-                                passageId
+                                passageId,
+                                unique_key
                             } : 
                             { 
                                 name: connectedClient.name,
                                 img: connectedClient.img,
                                 passage,
-                                passageId
+                                passageId,
+                                unique_key
                             });
                         }
                     })
-                    .catch(e => {
+                    .catch(() => {
                         socket.emit('failed');
                         clientSocket.emit('failed');
                     });

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import io from 'socket.io-client';
 import { connect } from 'react-redux';
 
 import ModalTitle from './ModalTitle';
@@ -19,28 +18,28 @@ const Searching = styled.p`
 
 class Multiplayer extends Component {
     state = {
-        found: false
+        opponentFound: false
     }
     componentDidMount() {
         if (!this.canceled) {
-            this.socket = io();
+            const { socket } = this.props;
 
-            this.socket.on('connect', () => {
-                this.socket.emit('searching', {
+            if (socket.connected) {
+                socket.emit('searching', {
                     name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
                     img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
                 });
 
-                this.socket.on('opponent-found', (data) => {
-                    this.setState({ found: true });
+                socket.on('opponent-found', (data) => {
+                    this.setState({ opponentFound: true });
                     this.props.dispatch(setMultiplayerData(data));
                     this.props.history.push('/race');
                 });
-            });
+            }
 
-            this.socket.on('reconnect_attempt', attempt => {
+            socket.on('reconnect_attempt', attempt => {
                 if (attempt > 4) {
-                    this.socket.disconnect();
+                    socket.disconnect();
                 }
             });
         }
@@ -48,8 +47,8 @@ class Multiplayer extends Component {
     componentWillUnmount() {
         this.canceled = true;
 
-        if (!this.state.found) {
-            this.socket.disconnect();
+        if (!this.state.opponentFound) {
+            this.props.socket.disconnect();
         }
     }
     render() {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { setPassage, savePracticeRace, setCustomWPMAndAccuracy } from '../../actions/testActions';
-
+import SocketContextConsumer from '../common/SocketContextConsumer';
 import TypingField from '../common/TypingField';
 
 class Practice extends Component {
@@ -12,7 +12,8 @@ class Practice extends Component {
         passageId: null,
         opponentImg: null,
         opponentName: null,
-        multiplayer: null
+        multiplayer: null,
+        uniqueKey: null
     }
     submitRaceData = (userData) => {
         // If custom is true then set the data and redirect to /tests/result
@@ -33,7 +34,7 @@ class Practice extends Component {
     }
     componentDidMount() {
         // Get data from props
-        const { replay, replayId, replayPassage, custom, customPassage, multiplayer, multiplayerPassage, multiplayerPassageId, opponentName, opponentImg } = this.props.test;
+        const { replay, replayId, replayPassage, custom, customPassage, multiplayer, multiplayerPassage, multiplayerPassageId, opponentName, opponentImg, uniqueKey } = this.props.test;
         
         // Check what user is doing - set state accordingly
         if (replay) {
@@ -47,7 +48,8 @@ class Practice extends Component {
                 passageId: multiplayerPassageId,
                 opponentName,
                 opponentImg,
-                multiplayer
+                multiplayer,
+                uniqueKey
             });
         } else if (custom) {
             this.setState({ passage: customPassage });
@@ -67,16 +69,24 @@ class Practice extends Component {
         }
     }
     render() {
-        const { passage, multiplayer, opponentName, opponentImg } = this.state;
+        const { passage, multiplayer, opponentName, opponentImg, uniqueKey } = this.state;
         
         return (
             <div>
-                <TypingField 
-                    passage={passage} 
-                    submitRaceData={this.submitRaceData} 
-                    history={this.props.history}
-                    isMultiplayer={multiplayer}
-                    opponent={{ opponentName, opponentImg }}
+                <SocketContextConsumer 
+                    render={socket => {
+                        return (
+                            <TypingField 
+                                passage={passage} 
+                                submitRaceData={this.submitRaceData} 
+                                history={this.props.history}
+                                isMultiplayer={multiplayer}
+                                opponent={{ opponentName, opponentImg }}
+                                socket={socket}
+                                room={uniqueKey}
+                            />
+                        );
+                    }} 
                 />
             </div>
         );

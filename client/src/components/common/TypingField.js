@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
 
 import ProgressBar from './ProgressBar';
 import SmallSpinner from './SmallSpinner';
@@ -220,19 +219,19 @@ class TypingField extends Component {
             // Check if time is 0 if so start the clock & clear interval
             if (time === 0) {
                 this.countDown();
+
                 if (this.inputRef && !this.cancelRequest) {
                     this.inputRef.current.focus();
                 }
+
                 return clearInterval(timer);
             }
         }, 1000);
     }
     timeDown = () => {
-        console.log(this.props, this.props.isMultiplayer);
         setTimeout(() => {
-            console.log(this.props, this.props.isMultiplayer);
             if (this.props.isMultiplayer) {
-                this.socket.emit('ready');
+                this.props.socket.emit('ready');
             } else {
                 this.tickDown();
             }
@@ -372,9 +371,6 @@ class TypingField extends Component {
             
             this.setState({ first, last });
         }
-
-        // Initialize socket.io
-        this.socket = io();
     }
     componentWillUnmount() {
         this.cancelRequest = true;
