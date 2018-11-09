@@ -50,6 +50,7 @@ const userSchema = new Schema({
                 first: String,
                 last: String,
                 wpm: Number,
+                acc: Number,
                 img: String
             }
         }],
@@ -103,6 +104,7 @@ const userSchema = new Schema({
                 first: String,
                 last: String,
                 wpm: Number,
+                acc: Number,
                 img: String
             }
         }],
@@ -156,6 +158,7 @@ const userSchema = new Schema({
                 first: String,
                 last: String,
                 wpm: Number,
+                acc: Number,
                 img: String
             }
         }],
