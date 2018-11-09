@@ -17,39 +17,29 @@ const Searching = styled.p`
 `;
 
 class Multiplayer extends Component {
-    state = {
-        opponentFound: false
-    }
     componentDidMount() {
-        if (!this.canceled) {
-            const { socket } = this.props;
+        const { socket } = this.props;
 
-            if (socket.connected) {
-                socket.emit('searching', {
-                    name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
-                    img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
-                });
+        socket.open();
 
-                socket.on('opponent-found', (data) => {
-                    this.setState({ opponentFound: true });
-                    this.props.dispatch(setMultiplayerData(data));
-                    this.props.history.push('/race');
-                });
-            }
-
-            socket.on('reconnect_attempt', attempt => {
-                if (attempt > 4) {
-                    socket.disconnect();
-                }
+        socket.on('connect', () => {
+            socket.emit('searching', {
+                name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
+                img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
             });
-        }
-    }
-    componentWillUnmount() {
-        this.canceled = true;
 
-        if (!this.state.opponentFound) {
-            this.props.socket.disconnect();
-        }
+            socket.on('opponent-found', (data) => {
+                this.props.dispatch(setMultiplayerData(data));
+                this.props.history.push('/race');
+            });
+        });
+
+        socket.on('reconnect_attempt', attempt => {
+            if (attempt > 4) {
+                socket.disconnect();
+            }
+        });
+        
     }
     render() {
         return (

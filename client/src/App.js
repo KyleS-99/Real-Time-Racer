@@ -55,7 +55,9 @@ if (localStorage.jwtToken) {
 	}
 }
 
-const socket = io();
+const socket = io({
+	autoConnect: false
+});
 
 class App extends Component {
 	render() {

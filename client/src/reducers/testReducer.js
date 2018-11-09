@@ -23,7 +23,8 @@ const initialState = {
     multiplayerPassageId: null,
     opponentName: null,
     opponentImg: null,
-    uniqueKey: null
+    uniqueKey: null,
+    opponentId: null
 };
 
 export default (state = initialState, action) => {
@@ -77,7 +78,7 @@ export default (state = initialState, action) => {
                 customAccuracy: acc
             };
         case SET_MULTIPLAYER_DATA:
-            const { name, img, passage: multiPassage, passageId, unique_key } = action.payload;
+            const { name, img, passage: multiPassage, passageId, unique_key, opponentId } = action.payload;
 
             return {
                 ...state,
@@ -92,7 +93,8 @@ export default (state = initialState, action) => {
                 multiplayerPassageId: passageId,
                 opponentName: name,
                 opponentImg: img,
-                uniqueKey: unique_key
+                uniqueKey: unique_key,
+                opponentId
             };
         default:
             return state;

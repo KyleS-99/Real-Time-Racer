@@ -174,6 +174,8 @@ class TypingField extends Component {
             totalPassageChars: 0,
             percentComplete: 0,
             grossWPM: 0,
+            opponentPercentComplete: 0,
+            opponentGroosWPM: 0,
             errors: 0,
             acc: 0,
             first: '',
@@ -231,7 +233,10 @@ class TypingField extends Component {
     timeDown = () => {
         setTimeout(() => {
             if (this.props.isMultiplayer) {
-                this.props.socket.emit('ready');
+                this.props.socket.emit('ready', this.props.opponentId);
+                this.props.socket.on('start', () => {
+                    this.tickDown();
+                });
             } else {
                 this.tickDown();
             }
@@ -343,7 +348,7 @@ class TypingField extends Component {
         }
     }
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.passage !== this.props.passage) {
+        if (prevProps.passage !== this.props.passage && this.props.passage !== null) {
             this.setState({
                 passageArray: this.props.passage.split(' ').map((word, index, arr) => {
                     if (index < arr.length) {
@@ -375,7 +380,7 @@ class TypingField extends Component {
     componentWillUnmount() {
         this.cancelRequest = true;
 
-        this.socket.disconnect();
+        this.props.socket.disconnect();
     }
     render() {
         const { 

@@ -30,7 +30,7 @@ const configuredSocketIO = socket => {
 
             allConnectedClients.push(connectedClient);
         }
-
+        
         for (let i = 0; i < allConnectedClients.length; i++) {
             const { id, state, clientSocket, setState, name, img } = allConnectedClients[i];
             
@@ -56,20 +56,29 @@ const configuredSocketIO = socket => {
                             const { passage, _id: passageId } = doc;
 
                             // Emit opponent-found
-                            socket.emit('opponent-found', { name, img, passage, passageId, unique_key });
+                            socket.emit('opponent-found', {
+                                name,
+                                img,
+                                passage,
+                                passageId,
+                                unique_key,
+                                opponentId: id
+                            });
                             clientSocket.emit('opponent-found', inArray.length !== 0 ? { 
                                 name: inArray[0].name,
                                 img: inArray[0].img,
                                 passage,
                                 passageId,
-                                unique_key
+                                unique_key,
+                                opponentId: socket.id
                             } : 
                             { 
                                 name: connectedClient.name,
                                 img: connectedClient.img,
                                 passage,
                                 passageId,
-                                unique_key
+                                unique_key,
+                                opponentId: socket.id
                             });
                         }
                     })
@@ -83,8 +92,18 @@ const configuredSocketIO = socket => {
         }
     });
 
-    socket.on('ready', () => {
-        console.log(socket.rooms);
+    socket.on('ready', (opponentId) => {
+        const connectedUser = allConnectedClients.filter(client => client.id === socket.id);
+        const opponent = allConnectedClients.filter(client => client.id === opponentId);
+
+        if (connectedUser.length !== 0) {
+            connectedUser[0].setState('ready');
+            
+            if (opponent.length !== 0 && opponent[0].state === 'ready') {
+                socket.emit('start');
+                opponent[0].clientSocket.emit('start');
+            }
+        }
     });
 
     socket.on('disconnect', () => {

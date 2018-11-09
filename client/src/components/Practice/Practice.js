@@ -13,7 +13,8 @@ class Practice extends Component {
         opponentImg: null,
         opponentName: null,
         multiplayer: null,
-        uniqueKey: null
+        uniqueKey: null,
+        opponentId: null
     }
     submitRaceData = (userData) => {
         // If custom is true then set the data and redirect to /tests/result
@@ -34,7 +35,7 @@ class Practice extends Component {
     }
     componentDidMount() {
         // Get data from props
-        const { replay, replayId, replayPassage, custom, customPassage, multiplayer, multiplayerPassage, multiplayerPassageId, opponentName, opponentImg, uniqueKey } = this.props.test;
+        const { replay, replayId, replayPassage, custom, customPassage, multiplayer, multiplayerPassage, multiplayerPassageId, opponentName, opponentImg, uniqueKey, opponentId } = this.props.test;
         
         // Check what user is doing - set state accordingly
         if (replay) {
@@ -49,7 +50,8 @@ class Practice extends Component {
                 opponentName,
                 opponentImg,
                 multiplayer,
-                uniqueKey
+                uniqueKey,
+                opponentId
             });
         } else if (custom) {
             this.setState({ passage: customPassage });
@@ -69,7 +71,7 @@ class Practice extends Component {
         }
     }
     render() {
-        const { passage, multiplayer, opponentName, opponentImg, uniqueKey } = this.state;
+        const { passage, multiplayer, opponentName, opponentImg, uniqueKey, opponentId } = this.state;
         
         return (
             <div>
@@ -84,6 +86,7 @@ class Practice extends Component {
                                 opponent={{ opponentName, opponentImg }}
                                 socket={socket}
                                 room={uniqueKey}
+                                opponentId={opponentId}
                             />
                         );
                     }} 
