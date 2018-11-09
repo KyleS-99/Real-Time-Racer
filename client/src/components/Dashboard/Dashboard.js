@@ -29,6 +29,16 @@ const DashboardContainer = styled.div`
     @media (max-width: 1100px) {
         width: 100%;
     }
+
+    @media (max-width: 600px) {
+        margin: 90px auto 34px auto;
+    }
+
+    @media (max-width: 440px) {
+        & > div + div {
+            margin-top: 20px;
+        }
+    }
 `;
 
 const Title = styled.h1`
