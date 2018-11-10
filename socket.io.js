@@ -106,6 +106,10 @@ const configuredSocketIO = socket => {
         }
     });
 
+    socket.on('update', ({ room, wpm, percent }) => {
+        socket.to(room).emit('updated-stats', { wpm, percent });
+    });
+
     socket.on('disconnect', () => {
         allConnectedClients = allConnectedClients.filter(client => client.id !== socket.id);
     });

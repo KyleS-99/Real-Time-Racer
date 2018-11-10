@@ -17,6 +17,9 @@ const Searching = styled.p`
 `;
 
 class Multiplayer extends Component {
+    state = {
+        opponentFound: false
+    }
     componentDidMount() {
         const { socket } = this.props;
 
@@ -29,6 +32,7 @@ class Multiplayer extends Component {
             });
 
             socket.on('opponent-found', (data) => {
+                this.setState({ opponentFound: true });
                 this.props.dispatch(setMultiplayerData(data));
                 this.props.history.push('/race');
             });
@@ -39,7 +43,11 @@ class Multiplayer extends Component {
                 socket.disconnect();
             }
         });
-        
+    }
+    componentWillUnmount() {
+        if (!this.state.opponentFound) {
+            this.props.socket.disconnect();
+        }
     }
     render() {
         return (

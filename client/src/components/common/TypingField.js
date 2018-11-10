@@ -19,6 +19,8 @@ const ProgressBarContainer = styled.div`
     flex-direction: row;
     justify-content: space-around;
     margin: 0 auto;
+    position: relative;
+    top: -30px;
 `;
 
 const bounce = keyframes`
@@ -175,7 +177,7 @@ class TypingField extends Component {
             percentComplete: 0,
             grossWPM: 0,
             opponentPercentComplete: 0,
-            opponentGroosWPM: 0,
+            opponentGrossWPM: 0,
             errors: 0,
             acc: 0,
             first: '',
@@ -220,6 +222,9 @@ class TypingField extends Component {
 
             // Check if time is 0 if so start the clock & clear interval
             if (time === 0) {
+                if (this.props.isMultiplayer) {
+                    this.updateMultiplayerData();
+                }
                 this.countDown();
 
                 if (this.inputRef && !this.cancelRequest) {
@@ -229,6 +234,14 @@ class TypingField extends Component {
                 return clearInterval(timer);
             }
         }, 1000);
+    }
+    updateMultiplayerData = () => {
+        const update = setInterval(() => {
+            const { socket, room } = this.props;
+            const { grossWPM, percentComplete } = this.state;
+
+            socket.emit('update', { wpm: grossWPM, percent: percentComplete, room });
+        }, 500);
     }
     timeDown = () => {
         setTimeout(() => {
@@ -376,6 +389,12 @@ class TypingField extends Component {
             
             this.setState({ first, last });
         }
+
+        this.props.socket.on('updated-stats', data => {
+            if (Object.keys(data).length !== 0 && !this.cancelRequest) {
+                this.setState({ opponentGrossWPM: data.wpm, opponentPercentComplete: data.percent });
+            }
+        });
     }
     componentWillUnmount() {
         this.cancelRequest = true;
@@ -389,7 +408,9 @@ class TypingField extends Component {
             totalChars, 
             totalPassageChars,
             grossWPM,
-            percentComplete
+            percentComplete,
+            opponentGrossWPM,
+            opponentPercentComplete
         } = this.state;
         const { user: { img } } = this.props.auth;
 
@@ -410,6 +431,8 @@ class TypingField extends Component {
                     {
                         this.props.isMultiplayer && 
                         <ProgressBar 
+                            wpm={Math.round(opponentGrossWPM)}
+                            percentComplete={opponentPercentComplete}
                             name={this.props.opponent.opponentName} 
                             img={this.props.opponent.opponentImg} 
                         />

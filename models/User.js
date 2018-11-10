@@ -45,14 +45,7 @@ const userSchema = new Schema({
                 ref: 'passages'
             },
             wpm: Number,
-            accuracy: Number,
-            opponent: {
-                first: String,
-                last: String,
-                wpm: Number,
-                acc: Number,
-                img: String
-            }
+            accuracy: Number
         }],
         practiceRaces: [{
             passage: {
@@ -99,14 +92,7 @@ const userSchema = new Schema({
                 ref: 'passages'
             },
             wpm: Number,
-            accuracy: Number,
-            opponent: {
-                first: String,
-                last: String,
-                wpm: Number,
-                acc: Number,
-                img: String
-            }
+            accuracy: Number
         }],
         practiceRaces: [{
             passage: {
@@ -153,14 +139,7 @@ const userSchema = new Schema({
                 ref: 'passages'
             },
             wpm: Number,
-            accuracy: Number,
-            opponent: {
-                first: String,
-                last: String,
-                wpm: Number,
-                acc: Number,
-                img: String
-            }
+            accuracy: Number
         }],
         practiceRaces: [{
             passage: {
