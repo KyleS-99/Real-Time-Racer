@@ -5,6 +5,7 @@ require('../passport');
 const passportJWT = passport.authenticate('jwt', { session: false });
 const {
     practice,
+    multiplayer,
     practiceResult,
     all
 } = require('../controllers/tests');
@@ -13,6 +14,11 @@ const {
 // @desc    Saves practice race data
 // @access  Private
 router.post('/practice', passportJWT, practice);
+
+// @route   POST /tests/multiplayer
+// @desc    Saves multiplayer race data
+// @access  Private
+router.post('/multiplayer', passportJWT, multiplayer);
 
 // @route   GET /tests/practice/:raceId
 // @desc    Grabs a race from the practice array matching id

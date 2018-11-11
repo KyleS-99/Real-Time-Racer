@@ -37,9 +37,6 @@ const userSchema = new Schema({
             type: Number
         },
         playerRaces: [{
-            first: String,
-            last: String,
-            img: String,
             passage: {
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'passages'
@@ -84,9 +81,6 @@ const userSchema = new Schema({
             type: Number
         },
         playerRaces: [{
-            first: String,
-            last: String,
-            img: String,
             passage: {
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'passages'
@@ -131,9 +125,6 @@ const userSchema = new Schema({
             type: Number
         },
         playerRaces: [{
-            first: String,
-            last: String,
-            img: String,
             passage: {
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'passages'

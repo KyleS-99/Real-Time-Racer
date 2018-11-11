@@ -185,7 +185,7 @@ class TypingField extends Component {
         }
     }
     countDown = () => {
-        const timer = setInterval(() => {
+        this.timer = setInterval(() => {
             const total = this.state.total - 1;
             const typingTime = this.state.typingTime + 1.6666666666666667;
 
@@ -205,7 +205,8 @@ class TypingField extends Component {
             // if total is 0 set the time to 0 & clear interval
             if (total === 0) {
                 this.setState({ timeString: '0:00' });
-                clearInterval(timer);
+
+                clearInterval(this.timer);
                 
                 // Redirect user to /dashboard if they've not finished the race
                 this.props.history.push('/dashboard');
@@ -218,7 +219,9 @@ class TypingField extends Component {
         const timer = setInterval(() => {
             const time = this.state.startTimeDown - 1;
 
-            this.setState({ startTimeDown: time });
+            if (!this.cancelRequest) {
+                this.setState({ startTimeDown: time });
+            }
 
             // Check if time is 0 if so start the clock & clear interval
             if (time === 0) {
@@ -236,10 +239,10 @@ class TypingField extends Component {
         }, 1000);
     }
     updateMultiplayerData = () => {
-        const update = setInterval(() => {
+        this.update = setInterval(() => {
             const { socket, room } = this.props;
             const { grossWPM, percentComplete } = this.state;
-
+            
             socket.emit('update', { wpm: grossWPM, percent: percentComplete, room });
         }, 500);
     }
@@ -398,7 +401,8 @@ class TypingField extends Component {
     }
     componentWillUnmount() {
         this.cancelRequest = true;
-
+        clearInterval(this.update);
+        clearInterval(this.timer);
         this.props.socket.disconnect();
     }
     render() {

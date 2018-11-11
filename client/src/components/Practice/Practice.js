@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { setPassage, savePracticeRace, setCustomWPMAndAccuracy } from '../../actions/testActions';
+import { setPassage, savePracticeRace, saveMultiplayerRace, setCustomWPMAndAccuracy } from '../../actions/testActions';
 import SocketContextConsumer from '../common/SocketContextConsumer';
 import TypingField from '../common/TypingField';
 
@@ -27,6 +27,10 @@ class Practice extends Component {
 
         // Set passageId in object to be submited
         userData.passageId = this.state.passageId;
+
+        if (this.props.test.multiplayer && !this.canceledRequest) {
+            return this.props.saveMultiplayerRace(userData, this.props.history);
+        }
 
         // Make request
         if (!this.canceledRequest) {
@@ -99,11 +103,12 @@ class Practice extends Component {
 Practice.propTypes = {
     test: PropTypes.object.isRequired,
     setPassage: PropTypes.func.isRequired,
-    savePracticeRace: PropTypes.func.isRequired
+    savePracticeRace: PropTypes.func.isRequired,
+    saveMultiplayerRace: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
     test: state.test
 });
 
-export default connect(mapStateToProps, { setPassage, savePracticeRace, setCustomWPMAndAccuracy })(Practice);
+export default connect(mapStateToProps, { setPassage, savePracticeRace, saveMultiplayerRace, setCustomWPMAndAccuracy })(Practice);

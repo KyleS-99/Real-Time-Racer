@@ -39,6 +39,22 @@ export const savePracticeRace = (data, history) => dispatch => {
         )
 };
 
+export const saveMultiplayerRace = (data, history) => dispatch => {
+    axios.post('/tests/multiplayer', data)
+        .then((res) => {
+            const { raceId } = res.data;
+
+            // Redirect user to after-race result
+            history.push(`/race/result/${raceId}`);
+        })
+        .catch((err) => 
+            dispatch({
+                type: GET_ERRORS,
+                payload: 'Unable to save race'
+            })
+        )
+};
+
 export const passageAction = (passage) => ({
     type: SET_PASSAGE,
     payload: passage

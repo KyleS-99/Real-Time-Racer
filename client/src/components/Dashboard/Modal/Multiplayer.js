@@ -22,7 +22,7 @@ class Multiplayer extends Component {
     }
     componentDidMount() {
         const { socket } = this.props;
-
+        
         socket.open();
 
         socket.on('connect', () => {
@@ -34,14 +34,10 @@ class Multiplayer extends Component {
             socket.on('opponent-found', (data) => {
                 this.setState({ opponentFound: true });
                 this.props.dispatch(setMultiplayerData(data));
-                this.props.history.push('/race');
+                setTimeout(() => {
+                    this.props.history.push('/race');
+                }, 500);
             });
-        });
-
-        socket.on('reconnect_attempt', attempt => {
-            if (attempt > 4) {
-                socket.disconnect();
-            }
         });
     }
     componentWillUnmount() {

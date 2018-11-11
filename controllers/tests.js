@@ -2,32 +2,32 @@ const User = require('../models/User');
 const Passage = require('../models/Passage');
 
 const calcHighAvgLow = (user, wpm) => {
-    // Initialize variables
-    let statsObj = {};
-    const userInMethod = user[user.method];
-
     // Check to see if it's their first race
-    if (userInMethod.practiceRaces.length === 1) {
-        userInMethod.high = wpm;
-        userInMethod.low = wpm;
+    if (user[user.method].practiceRaces.length === 1 && user[user.method].playerRaces.length === 1) {
+        user[user.method].high = wpm;
+        user[user.method].low = wpm;
     }
 
     // Check to see if it's a new high score for the user
-    if (userInMethod.high < wpm) {
-        userInMethod.high = wpm;
+    if (user[user.method].high < wpm) {
+        user[user.method].high = wpm;
     }
 
     // Check to see if it's the slowest they've typed
-    if (userInMethod.low > wpm) {
-        userInMethod.low = wpm;
+    if (user[user.method].low > wpm) {
+        user[user.method].low = wpm;
     }
 
     // Calculate the average
-    const avg = userInMethod.practiceRaces.reduce((a, b) => {
+    const practiceAvg = user[user.method].practiceRaces.length > 0 ? user[user.method].practiceRaces.reduce((a, b) => {
         return a + b.wpm;
-    }, 0) / userInMethod.practiceRaces.length;
+    }, 0) / user[user.method].practiceRaces.length : 0;
 
-    userInMethod.avg = Math.round(avg);
+    const playerAvg = user[user.method].playerRaces.length > 0 ? user[user.method].playerRaces.reduce((a, b) => {
+        return a + b.wpm;
+    }, 0) / user[user.method].playerRaces.length : 0;
+
+    user[user.method].avg = Math.round(practiceAvg + playerAvg);
 
     return user;
 };
@@ -48,7 +48,7 @@ module.exports = {
             accuracy: acc
         });
 
-        // Calculate high avg and low
+        // Calculate high, avg, and low
         user = calcHighAvgLow(user, grossWPM);
 
         // Save new race data to database
@@ -56,6 +56,28 @@ module.exports = {
 
         // Send race data back to client
         res.json({ raceId: user[user.method].practiceRaces[0].id });
+    },
+    multiplayer: async (req, res) => {
+        // Get user data
+        const { grossWPM, acc, passageId } = req.body;
+        // Get user off of req object
+        let { user } = req;
+
+        // Update users playerRaces array
+        user[user.method].playerRaces.unshift({
+            passage: passageId,
+            wpm: grossWPM,
+            accuracy: acc
+        });
+
+        // Calculate high, avg, and low
+        user = calcHighAvgLow(user, grossWPM);
+
+        // Save new race data to database
+        await user.save();
+
+        // Send race data back to client
+        res.json({ raceId: user[user.method].playerRaces[0].id });
     },
     practiceResult: async (req, res) => {
         const { user } = req;
