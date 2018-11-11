@@ -106,7 +106,6 @@ const ProfilePicture = styled.div`
     background-size: cover;
     background-position: center center;
     box-shadow: 0 8px 19px -1px rgba(0,0,0,.1);
-    cursor: pointer;
     box-shadow: 0 4px 45px 0 rgba(0,0,0,.2);
     border: 5px solid #f77062;
     margin: -47px auto 0 auto;

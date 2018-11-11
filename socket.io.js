@@ -15,43 +15,34 @@ const leaveAllRooms = socket => {
 };
 
 // All connected users
-let allConnectedClients = [];
+let allConnectedClients = new Map();
 
 const configuredSocketIO = socket => {
     socket.on('searching', data => {
         leaveAllRooms(socket);
 
-        const inArray = allConnectedClients.filter(client => client.id === socket.id);
-
-        if (inArray.length !== 0) {
-            inArray[0].setState('searching');
-        } else {
-            var connectedClient = new Client(socket, data);
-
-            allConnectedClients.push(connectedClient);
+        if (!allConnectedClients.has(socket.id)) {
+            allConnectedClients.set(socket.id, new Client(socket, data));
         }
-        
-        for (let i = 0; i < allConnectedClients.length; i++) {
-            const { id, state, clientSocket, setState, name, img } = allConnectedClients[i];
-            
-            // if user is searching for a game, match them; but only if it's not us
+
+        allConnectedClients.forEach((client) => {
+            const { id, state, clientSocket, setState, name, img } = client;
+
+            // If user is searching & they're not us
             if (state === 'searching' && socket.id !== id) {
                 const unique_key = guid();
-                
-                // Make users join that unique_key room
+
+                // Users join room
                 clientSocket.join(unique_key);
                 socket.join(unique_key);
 
-                setState('in-game');
+                const us = allConnectedClients.get(socket.id);
                 
-                if (inArray.length !== 0) {
-                    inArray[0].setState('in-game');
-                } else {
-                    connectedClient.setState('in-game');
-                }
+                setState('in-game');
+                us.setState('in-game');
 
                 Passage.random()
-                    .then(doc => {
+                    .then((doc) => {
                         if (doc) {
                             const { passage, _id: passageId } = doc;
 
@@ -64,21 +55,13 @@ const configuredSocketIO = socket => {
                                 unique_key,
                                 opponentId: id
                             });
-                            clientSocket.emit('opponent-found', inArray.length !== 0 ? { 
-                                name: inArray[0].name,
-                                img: inArray[0].img,
+                            clientSocket.emit('opponent-found', {
+                                name: us.name,
+                                img: us.img,
                                 passage,
                                 passageId,
                                 unique_key,
-                                opponentId: socket.id
-                            } : 
-                            { 
-                                name: connectedClient.name,
-                                img: connectedClient.img,
-                                passage,
-                                passageId,
-                                unique_key,
-                                opponentId: socket.id
+                                opponentId: us.id
                             });
                         }
                     })
@@ -86,22 +69,20 @@ const configuredSocketIO = socket => {
                         socket.emit('failed');
                         clientSocket.emit('failed');
                     });
-
-                break;
             }
-        }
+        });
     });
 
     socket.on('ready', (opponentId) => {
-        const connectedUser = allConnectedClients.filter(client => client.id === socket.id);
-        const opponent = allConnectedClients.filter(client => client.id === opponentId);
+        const us = allConnectedClients.get(socket.id);
+        const opponent = allConnectedClients.get(opponentId);
 
-        if (connectedUser.length !== 0) {
-            connectedUser[0].setState('ready');
+        if (us) {
+            us.setState('ready');
             
-            if (opponent.length !== 0 && opponent[0].state === 'ready') {
+            if (opponent && opponent.state === 'ready') {
                 socket.emit('start');
-                opponent[0].clientSocket.emit('start');
+                opponent.clientSocket.emit('start');
             }
         }
     });
@@ -111,7 +92,7 @@ const configuredSocketIO = socket => {
     });
 
     socket.on('disconnect', () => {
-        allConnectedClients = allConnectedClients.filter(client => client.id !== socket.id);
+        allConnectedClients.delete(socket.id);
     });
 };
 

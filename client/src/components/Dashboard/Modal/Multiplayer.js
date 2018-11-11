@@ -6,6 +6,7 @@ import ModalTitle from './ModalTitle';
 import HalfAndHalf from '../../common/HalfAndHalf';
 import Cursor from '../../styled/Cursor';
 import { setMultiplayerData } from '../../../actions/testActions';
+import { RESET_DATA } from '../../../actions/types';
 
 const Searching = styled.p`
     font-size: 20px;
@@ -23,6 +24,10 @@ class Multiplayer extends Component {
     componentDidMount() {
         const { socket } = this.props;
         
+        this.props.dispatch({
+            type: RESET_DATA
+        });
+
         socket.open();
 
         socket.on('connect', () => {
