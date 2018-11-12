@@ -31,3 +31,9 @@ export const Profile = Loadable({
     loading: Spinner,
     delay: 500
 });
+
+export const Invite = Loadable({
+    loader: () => import('../components/Invite/Invite'),
+    loading: Spinner,
+    delay: 500
+});

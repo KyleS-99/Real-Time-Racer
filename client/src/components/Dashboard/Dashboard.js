@@ -9,6 +9,7 @@ import Multiplayer from './Modal/Multiplayer';
 import { openModal } from '../../actions/modalActions';
 import { RESET_DATA } from '../../actions/types';
 import SocketContextConsumer from '../common/SocketContextConsumer';
+import guid from '../../utils/keyGenerator';
 
 import {
     Box,
@@ -190,12 +191,14 @@ class Dashboard extends Component {
                         <Title spacing="6px;">Play With Friends</Title>
                         <Message>Invite a friend to a race</Message>
                         <div>
-                            <Button 
-                                color="linear-gradient(135deg,#f761a1 10%,#8c1bab);"
-                            >
-                                START
-                            </Button>
-                            <ButtonBlur color="linear-gradient(135deg,#f761a1 10%,#8c1bab);" />
+                            <Link to={`/invite/${guid()}`}>
+                                <Button 
+                                    color="linear-gradient(135deg,#f761a1 10%,#8c1bab);"
+                                >
+                                    START
+                                </Button>
+                                <ButtonBlur color="linear-gradient(135deg,#f761a1 10%,#8c1bab);" />
+                            </Link>
                         </div>
                     </ContentContainer>
                 </Box>

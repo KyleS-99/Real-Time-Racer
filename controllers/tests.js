@@ -81,25 +81,29 @@ module.exports = {
     },
     practiceResult: async (req, res) => {
         const { user } = req;
-        const raceFound = 
+        const practiceRaceFound = 
             user[user.method]
             .practiceRaces
             .filter((race) => (race._id).toString() === req.params.raceId);
+        const multiplayerRaceFound = 
+            user[user.method]
+            .playerRaces
+            .filter((race) => (race._id).toString() === req.params.raceId);
         
         // If no race found
-        if (raceFound.length === 0) {
+        if (practiceRaceFound.length === 0 && multiplayerRaceFound.length === 0) {
             return res.status(404).json({ error: "No race with this ID." });
         }
 
         // Get passageId
-        const { passage: passageId } = raceFound[0];
+        const { passage: passageId } = practiceRaceFound.length === 0 ? multiplayerRaceFound[0] : practiceRaceFound[0];
 
         // race was found, now fetch the passage that was typed
         const passageDocument = await Passage.findById(passageId);
 
         // Data to send back
         const { passage, _id: id } = passageDocument;
-        const { wpm, accuracy } = raceFound[0];
+        const { wpm, accuracy } = practiceRaceFound.length === 0 ? multiplayerRaceFound[0] : practiceRaceFound[0];
         
         // Send back to client
         res.json({

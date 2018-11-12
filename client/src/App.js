@@ -17,7 +17,8 @@ import {
 	Dashboard,
 	Practice,
 	PracticeResult,
-	Profile
+	Profile,
+	Invite
 } from './code-split';
 
 import './App.css';
@@ -73,6 +74,7 @@ class App extends Component {
 								<PrivateRoute exact path="/race" component={Practice} />
 								<PrivateRoute exact path="/race/result/:raceId?" component={PracticeResult} />
 								<PrivateRoute exact path="/profile" component={Profile} />
+								<PrivateRoute exact path="/invite/:room" component={Invite} />
 							</Switch>
 						</div>
 					</BrowserRouter>
