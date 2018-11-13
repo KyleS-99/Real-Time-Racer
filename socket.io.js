@@ -95,7 +95,6 @@ const configuredSocketIO = socket => {
                     Passage.random()
                         .then((doc) => {
                             if (doc) {
-                                console.log(doc);
                                 const { passage, _id: passageId } = doc;
     
                                 // Emit opponent-found
