@@ -19,7 +19,7 @@ const Share = styled.p`
 `;
 
 const Url = styled.span`
-    padding: 5px 15px;
+    padding: 13px 15px;
     background: #eee;
     margin-top: 15px;
     font-size: 16px;
@@ -28,17 +28,52 @@ const Url = styled.span`
 `;
 
 class Invite extends Component {
-    state = {
-        opponentFound: false
+    constructor(props) {
+        super(props);
+
+        this.url = React.createRef();
+        this.state = {
+            opponentFound: false
+        };
+    }
+    copy = () => {
+        let range, selection;
+
+        if (window.getSelection && document.createRange) {
+            selection = window.getSelection();
+            range = document.createRange();
+            range.selectNodeContents(this.url.current);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        } else if (document.selection && document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToElementText(this.url.current);
+            range.select();
+        }
+
+        document.execCommand('copy');
+    }
+    componentDidMount() {
+
+    }
+    componentWillUnmount() {
+        if (!this.state.opponentFound) {
+            this.props.socket.disconnect();
+        }
     }
     render() {
         return (
             <React.Fragment>
                 <BackArrow />
                 <InviteContainer>
-                    <h1 style={{ textTransform: 'capitalize', fontSize: '25px', fontWeight: '300' }}>waiting for other players</h1>
+                    <h1 style={{ textTransform: 'capitalize', fontSize: '25px', fontWeight: '300' }}>waiting for opponent</h1>
                     <Share>share this url</Share>
-                    <Url>{window.location.origin + '/' + this.props.match.params.room}</Url>
+                    <Url 
+                        innerRef={this.url}
+                        onClick={this.copy}
+                    >
+                        {window.location.origin + '/' + this.props.match.params.room}
+                    </Url>
                 </InviteContainer>
             </React.Fragment>
         );
