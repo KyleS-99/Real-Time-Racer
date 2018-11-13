@@ -1,8 +1,8 @@
-const Client = function (socket, { name, img }) {
+const Client = function (socket, { name, img }, state = 'searching') {
     this.name = name;
     this.img = img;
     this.id = socket.id;
-    this.state = 'searching';
+    this.state = state;
     this.clientSocket = socket;
 
     this.setState = newState => {

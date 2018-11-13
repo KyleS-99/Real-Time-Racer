@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
 import BackArrow from '../common/BackArrow';
+import { setMultiplayerData } from '../../actions/testActions';
+import { RESET_DATA } from '../../actions/types';
 
 const InviteContainer = styled.div`
     width: 100%;
@@ -54,7 +58,31 @@ class Invite extends Component {
         document.execCommand('copy');
     }
     componentDidMount() {
+        const { socket } = this.props;
 
+        this.props.dispatch({
+            type: RESET_DATA
+        });
+
+        socket.connect();
+
+        socket.on('connect', () => {
+            socket.emit('private-race', { 
+                room: this.props.match.params.room,
+                name: `${this.props.auth.user.first} ${this.props.auth.user.last}`,
+                img: this.props.auth.user.img ? this.props.auth.user.img : "https://i.imgur.com/O4mhvZf.png"
+             });
+
+             socket.on('opponent-joined', (data) => {
+                this.setState({ opponentFound: true });
+                this.props.dispatch(setMultiplayerData(data));
+                setTimeout(() => {
+                    this.props.history.push('/race');
+                }, 500);
+            });
+
+            socket.on('failed', () => window.alert('failed'));
+        });
     }
     componentWillUnmount() {
         if (!this.state.opponentFound) {
@@ -72,7 +100,7 @@ class Invite extends Component {
                         innerRef={this.url}
                         onClick={this.copy}
                     >
-                        {window.location.origin + '/' + this.props.match.params.room}
+                        {window.location.origin + '/invite/' + this.props.match.params.room}
                     </Url>
                 </InviteContainer>
             </React.Fragment>
@@ -80,4 +108,8 @@ class Invite extends Component {
     }
 }
 
-export default Invite;
+const mapStateToProps = ({ auth }) => ({
+    auth
+});
+
+export default connect(mapStateToProps)(Invite);
