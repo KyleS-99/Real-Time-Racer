@@ -33,7 +33,7 @@ export const Profile = Loadable({
 });
 
 export const Invite = Loadable({
-    loader: () => import('../components/Invite/Invite'),
+    loader: () => import('../components/Invite/InviteContainer'),
     loading: Spinner,
     delay: 500
 });
