@@ -80,8 +80,6 @@ class Invite extends Component {
                     this.props.history.push('/race');
                 }, 500);
             });
-
-            socket.on('failed', () => window.alert('failed'));
         });
     }
     componentWillUnmount() {
