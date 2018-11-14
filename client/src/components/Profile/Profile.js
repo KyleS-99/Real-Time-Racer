@@ -7,6 +7,7 @@ import axios from 'axios';
 import BackArrow from '../common/BackArrow';
 import Race from './Race';
 import Spinner from '../common/Spinner';
+import NoRaces from './NoRaces';
 
 const ProfileContainer = styled.div`
     margin-top: 100px;
@@ -403,6 +404,7 @@ class Profile extends Component {
                     <Races>
                         {loading && <Spinner />}
                         {both && allRaces}
+                        {(both && allRaces.length === 0 && !loading) && <NoRaces />}
                         {practice && practiceRaces}
                         {player && playerRaces}
                     </Races>
