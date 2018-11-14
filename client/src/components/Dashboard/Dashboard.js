@@ -57,14 +57,13 @@ const Message = styled.p`
 `;
 
 const Button = styled.button`
-    margin-top: 60px;
+    margin-top: ${props => props.borderRadius === 'none' ? '0' : '60px'}
     width: 150px;
     height: 40px;
     background: #fff;
     border:none;
-    border-radius: 50px;
+    border-radius: ${props => props.borderRadius === 'none' ? 'none' : '50px'}
     color: #fff;
-    font-family: 'Work Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 300;
@@ -218,6 +217,22 @@ class Dashboard extends Component {
                                 START
                             </Button>
                             <ButtonBlur color="linear-gradient(0deg,#b224ef 0,#7579ff);" />
+                        </div>
+                    </ContentContainer>
+                </Box>
+
+                <Box>
+                    <ColorBorder color="linear-gradient(90deg,#92fe9d 0,#00c9ff);" />
+                    <Blur color="linear-gradient(90deg,#92fe9d 0,#00c9ff);" />
+                    <ContentContainer>
+                        <div>
+                            <Button 
+                                color="linear-gradient(90deg,#92fe9d 0,#00c9ff);"
+                                borderRadius="none"
+                            >
+                                Coming Soon
+                            </Button>
+                            <ButtonBlur color="linear-gradient(90deg,#92fe9d 0,#00c9ff);" />
                         </div>
                     </ContentContainer>
                 </Box>
