@@ -3,7 +3,7 @@ const Passage = require('../models/Passage');
 
 const calcHighAvgLow = (user, wpm) => {
     // Check to see if it's their first race
-    if (user[user.method].practiceRaces.length === 1 && user[user.method].playerRaces.length === 1) {
+    if (user[user.method].practiceRaces.length === 1 || user[user.method].playerRaces.length === 1) {
         user[user.method].high = wpm;
         user[user.method].low = wpm;
     }
