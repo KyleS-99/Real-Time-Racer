@@ -101,6 +101,10 @@ module.exports = {
         // race was found, now fetch the passage that was typed
         const passageDocument = await Passage.findById(passageId);
 
+        if (!passageDocument) {
+            return res.status(404).json({ error: "No race with this ID." });
+        }
+
         // Data to send back
         const { passage, _id: id } = passageDocument;
         const { wpm, accuracy } = practiceRaceFound.length === 0 ? multiplayerRaceFound[0] : practiceRaceFound[0];

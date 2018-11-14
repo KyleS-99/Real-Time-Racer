@@ -406,7 +406,9 @@ class Profile extends Component {
                         {both && allRaces}
                         {(both && allRaces.length === 0 && !loading) && <NoRaces />}
                         {practice && practiceRaces}
+                        {(practice && (practiceRaces.length === 0 || Object.keys(practiceRaces[0]).length === 0) && !loading) && <NoRaces />}
                         {player && playerRaces}
+                        {(player && (playerRaces.length === 0 || Object.keys(playerRaces[0]).length === 0) && !loading) && <NoRaces />}
                     </Races>
 
                     <ButtonContainer loading={loading}>
